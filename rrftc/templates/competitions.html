@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="jumbo">
+    <h2>Competitions<h2>
+  </div>
+  <h3>Add a Competition</h3>
+  <form action="{{ url_for('competitions') }}" method=post>
+    {{ form.hidden_tag() }}
+
+    {{ form.name.label }}
+    {{ form.name }}
+
+    {{ form.date.label }}
+    {{ form.date }}
+
+    {{ form.location.label }}
+    {{ form.location }}
+
+    {{ form.submit }}
+  </form>
+
+  <h3>Existing Competitions:</h3>
+  <table>
+    <thread>
+        <tr>
+            <th width="300px"><strong>Competition Name</strong></th>
+            <th width="300px"><strong>Competition Date</strong></th>
+            <th width="300px"><strong>Competition Location</strong></th>
+            <th><b>Actions</b></th>
+        </tr>
+    </thread>
+    {% for competition in competitions %}
+    <tr>
+        <td width="300px">{{  competition.Name }}</td>
+        <td width="300px">{{  competition.Date }}</td>
+        <td width="300px">{{  competition.Location }}</td>
+        <td>
+            <a href="{{  url_for('delete_entry', id = competition.id) }}">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
