@@ -1,7 +1,7 @@
 from rrftc import app
 from flask import render_template, request, flash, session, url_for, redirect
-from forms import SigninForm, CompetitionForm, ScoutForm
-from models import db, Competition, Scout
+from forms import SigninForm, CompetitionForm, ScoutForm, TeamForm
+from models import db, Competition, Scout, Team
 
 
 @app.route('/')
@@ -49,19 +49,40 @@ def signout():
     session.pop('username', None)
     return redirect(url_for('home'))
 
-'''
-@app.route('/addTeam')
-def addTeam():
-    return render_template('addTeam.html')
 
-@app.route('/teams')
+@app.route('/teams', methods = ['GET', 'POST'])
 def teams():
-    return render_template('teams.html')
 
-@app.route('/addCompetition')
-def addCompetition():
-    return render_template('addCompetition.html')
-'''
+    form = TeamForm()
+
+    if 'username' not in session:
+        return redirect(url_for('signin'))
+
+    user = session['username']
+
+    if user is None:
+        redirect(url_for('signin'))
+    else:
+        if request.method == 'POST':
+            if form.validate() == False:
+                return render_template('teams.html', form=form)
+            else:
+                newteam = Team(number=form.number.data, name=form.name.data, website=form.website.data)
+                db.session.add(newteam)
+                db.session.commit()
+                return redirect(url_for('teams'))
+
+        elif request.method == 'GET' :
+            teams = db.session.query(Team).all()
+            return render_template('teams.html', teams=teams, form=form)
+
+@app.route('/teams/delete/<int:id>',)
+def delete_team_entry(id):
+    team = Team.query.get(id)
+    db.session.delete(team)
+    db.session.commit()
+    return redirect(url_for('teams'))
+
 
 @app.route('/competitions', methods=['GET', 'POST'])
 def competitions():
@@ -90,7 +111,7 @@ def competitions():
             return render_template('competitions.html', competitions=competitions, form=form)
 
 @app.route('/competitions/delete/<int:id>',)
-def delete_entry(id):
+def delete_competition_entry(id):
     competition = Competition.query.get(id)
     db.session.delete(competition)
     db.session.commit()
@@ -142,6 +163,14 @@ def scouts():
         elif request.method == 'GET' :
             scouts = db.session.query(Scout).all()
             return render_template('scouts.html', scouts=scouts, form=form)
+
+
+@app.route('/scouts/delete/<int:id>',)
+def delete_scout_entry(id):
+    scout = Scout.query.get(id)
+    db.session.delete(scout)
+    db.session.commit()
+    return redirect(url_for('scouts'))
 '''
 
 @app.route('/addMatch')

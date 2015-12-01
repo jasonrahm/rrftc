@@ -99,7 +99,10 @@ class Scout(db.Model):
     CreateDate = db.Column(db.DateTime, nullable=False)
     LastModifiedDate = db.Column(db.DateTime, nullable=False)
 
-    def __init__(self, name, createdate=time.strftime('%Y-%m-%d %H:%M:%S'), moddate=time.strftime('%Y-%m-%d %H:%M:%S')):
+    def __init__(self,
+                 name,
+                 createdate=time.strftime('%Y-%m-%d %H:%M:%S'),
+                 moddate=time.strftime('%Y-%m-%d %H:%M:%S')):
         self.Name = name
         self.CreateDate = createdate
         self.LastModifiedDate = moddate
@@ -118,7 +121,12 @@ class Team(db.Model):
     CreateDate = db.Column(db.DateTime, nullable=False)
     LastModifiedDate = db.Column(db.DateTime, nullable=False)
 
-    def __init__(self, number, name, website, createdate, moddate):
+    def __init__(self,
+                 number,
+                 name,
+                 website,
+                 createdate=time.strftime('%Y-%m-%d %H:%M:%S'),
+                 moddate=time.strftime('%Y-%m-%d %H:%M:%S')):
         self.Number = number
         self.Name = name
         self.Website = website

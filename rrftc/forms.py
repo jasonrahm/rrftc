@@ -56,6 +56,7 @@ class TeamForm(Form):
     number = IntegerField('Number', [validators.DataRequired('Please enter the team number.')])
     name = StringField('Name', [validators.DataRequired('Please enter the team name.')])
     website = StringField('Website', [validators.DataRequired('Please enter the team website')])
+    submit = SubmitField('Add Team')
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)

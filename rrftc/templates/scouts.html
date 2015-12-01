@@ -14,8 +14,20 @@
   </form>
 
   <h3>Existing Scouts:</h3>
-  {% for scout in scouts %}
-    <strong>Name:</strong> {{ scout.Name }} <br>
-    <br>
-  {% endfor %}
+  <table>
+    <thread>
+        <tr>
+            <th width="300px"><strong>Scout Name</strong></th>
+            <th><b>Actions</b></th>
+        </tr>
+    </thread>
+    {% for scout in scouts %}
+    <tr>
+        <td width="300px">{{  scout.Name }}</td>
+        <td>
+            <a href="{{  url_for('delete_scout_entry', id = scout.id) }}">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+  </table>
 {% endblock %}
