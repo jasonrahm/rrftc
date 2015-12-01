@@ -1,6 +1,31 @@
 from flask_wtf import Form
-from wtforms import StringField, TextAreaField, SubmitField, PasswordField, IntegerField, validators, DateField
-#from models import __
+from wtforms import StringField, TextAreaField, SubmitField, PasswordField, IntegerField, validators, DateField, SelectField
+
+'''
+from models import Team, Scout, Competition
+
+def active_teams():
+    return Team.query.all()
+
+def active_scouts():
+    return Scout.query.all()
+
+def active_competitions():
+    return Competition.query.all()
+'''
+
+class CompetitionTeamForm(Form):
+    competition = SelectField('Competition', coerce=int)
+    team = SelectField('Team', coerce=int)
+
+    def __init__(self, *args, **kwargs):
+        Form.__init__(self, *args, **kwargs)
+
+    def validate(self):
+        if not Form.validate(self):
+            return False
+        else:
+            return True
 
 
 class SigninForm(Form):
