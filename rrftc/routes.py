@@ -112,18 +112,45 @@ def competitions():
 
 @app.route('/competitions/delete/<int:id>',)
 def delete_competition_entry(id):
-    competition = Competition.query.get(id)
-    db.session.delete(competition)
-    db.session.commit()
-    return redirect(url_for('competitions'))
+
+    user = session['username']
+    if user is None:
+        redirect(url_for('signin'))
+    else:
+        competition = Competition.query.get(id)
+        db.session.delete(competition)
+        db.session.commit()
+        return redirect(url_for('competitions'))
 
 @app.route('/competitions/<int:id>', methods=['GET', 'POST'])
 def manage_competition(id):
 
-    form = CompetitionTeamForm()
-    # should use current competition ID here instead of a selectfield, will refactor later
-    form.competition.choices = [(a.id, a.name) for a in Competition.query.order_by('name')]
-    form.team.choices = [(b.id, b.number) for b in Team.query.order_by('number')]
+    form = CompetitionTeamForm(request.values, competition=id)
+    comp = Competition.query.get(id)
+    form.competition = comp.Name
+    form.team.choices = [(a.id, a.Number) for a in Team.query.order_by('Number')]
+
+    user = session['username']
+
+    if user is None:
+        redirect(url_for('signin'))
+    else:
+        if request.method == 'POST':
+            if form.validate() == False:
+                return render_template('competitions_details.html', form=form, id=id)
+            else:
+                postdata = request.values
+                comp = int(postdata['competition'])
+                team = int(postdata['team'])
+
+                newteam = CompetitionTeam(competitions=comp, teams=team)
+                db.session.add(newteam)
+                db.session.commit()
+
+                return redirect(url_for('manage_competition', id=id))
+
+        elif request.method == 'GET':
+            return render_template('competition_details.html', form=form, id=id)
 
 
 '''

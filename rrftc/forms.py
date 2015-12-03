@@ -1,22 +1,25 @@
 from flask_wtf import Form
-from wtforms import StringField, TextAreaField, SubmitField, PasswordField, IntegerField, validators, DateField, SelectField
+from wtforms import StringField, SubmitField, PasswordField, IntegerField, validators, DateField, HiddenField, TextAreaField
+from wtforms_sqlalchemy.fields import QuerySelectField
 
+from models import Team
 '''
 from models import Team, Scout, Competition
 
-def active_teams():
-    return Team.query.all()
+def active_competitions():
+    return Competition.query.all()
 
 def active_scouts():
     return Scout.query.all()
 
-def active_competitions():
-    return Competition.query.all()
+def active_teams():
+    return Team.query.all()
 '''
 
 class CompetitionTeamForm(Form):
-    competition = SelectField('Competition', coerce=int)
-    team = SelectField('Team', coerce=int)
+    competition = HiddenField('Competition')
+    team = QuerySelectField(query_factory=lambda: Team.query.all(), get_label='Number')
+    submit = SubmitField('Add Team')
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)

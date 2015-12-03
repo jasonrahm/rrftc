@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="jumbo">
+    <h2>Competition: {{ form.competition }}<h2>
+  </div>
+  <h3>Add a team to this competition</h3>
+    <form action="{{ url_for('manage_competition', id=id) }}" method=post>
+    {{ form.hidden_tag() }}
+
+
+    {{ form.team.label }}
+    {{ form.team }}
+
+
+    {{ form.submit }}
+    </form>
+
+  <h3>Existing Teams:</h3>
+
+{% endblock %}

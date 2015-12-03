@@ -31,7 +31,9 @@
     </thread>
     {% for competition in competitions %}
     <tr>
-        <td width="300px">{{  competition.Name }}</td>
+        <td width="300px">
+            <a href="{{ url_for('manage_competition', id = competition.id) }}">{{  competition.Name }}</a>
+            </td>
         <td width="300px">{{  competition.Date }}</td>
         <td width="300px">{{  competition.Location }}</td>
         <td>

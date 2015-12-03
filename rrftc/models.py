@@ -14,6 +14,15 @@ class CompetitionTeam(db.Model):
     Competition = db.relationship(u'Competition')
     Team = db.relationship(u'Team')
 
+    def __init__(self, competitions, teams, createdate=time.strftime('%Y-%m-%d %H:%M:%S')):
+        self.Competitions = competitions
+        self.Teams = teams
+        self.CreateDate = createdate
+
+
+    def __repr__(self):
+        return '<CompetitionTeam %r>' % self.id
+
 
 class Competition(db.Model):
     __tablename__ = 'Competitions'
