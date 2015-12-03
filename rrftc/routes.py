@@ -137,7 +137,7 @@ def manage_competition(id):
     else:
         if request.method == 'POST':
             if form.validate() == False:
-                return render_template('competitions_details.html', form=form, id=id)
+                return render_template('competition_details.html', form=form, id=id)
             else:
                 postdata = request.values
                 comp = int(postdata['competition'])
