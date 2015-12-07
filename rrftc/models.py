@@ -21,7 +21,7 @@ class CompetitionTeam(db.Model):
 
 
     def __repr__(self):
-        return '<CompetitionTeam %r>' % self.id
+        return '<CompetitionTeam %r %r %r>' % (self.id, self.Competitions, self.Teams)
 
 
 class Competition(db.Model):
@@ -143,4 +143,4 @@ class Team(db.Model):
         self.LastModifiedDate = moddate
 
     def __repr__(self):
-        return '<Team %r>' % self.id
+        return '<Team %r %r %r>' % (self.id, self.Number, self.Name)

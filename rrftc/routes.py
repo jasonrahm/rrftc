@@ -150,7 +150,12 @@ def manage_competition(id):
                 return redirect(url_for('manage_competition', id=id))
 
         elif request.method == 'GET':
-            return render_template('competition_details.html', form=form, id=id)
+            teams = db.session.query(CompetitionTeam).filter(CompetitionTeam.Competitions == id).all()
+            team_list = []
+            for team in teams:
+                team_list.append(int(team.Teams))
+            team_data = db.session.query(Team).filter(Team.id.in_(team_list)).all()
+            return render_template('competition_details.html', form=form, id=id, team_data=team_data)
 
 
 '''

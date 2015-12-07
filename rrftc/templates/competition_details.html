@@ -15,6 +15,10 @@
     {{ form.submit }}
     </form>
 
-  <h3>Existing Teams:</h3>
-
+  <h3>Teams already in this competition:</h3>
+    <ul>
+        {% for team in team_data %}
+            <li>{{ team.Name }} ({{  team.Number }})</li>
+        {%  endfor %}
+    </ul>
 {% endblock %}
