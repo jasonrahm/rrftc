@@ -61,6 +61,16 @@ class Match(db.Model):
     Team2 = db.relationship(u'Team', primaryjoin='Match.RedTeam1 == Team.id')
     Team3 = db.relationship(u'Team', primaryjoin='Match.RedTeam2 == Team.id')
 
+    def __init__(self, competition, blueteam1, blueteam2, redteam1, redteam2):
+        self.Competition = competition
+        self.BlueTeam1 = blueteam1
+        self.BlueTeam2 = blueteam2
+        self.RedTeam1 = redteam1
+        self.RedTeam2 = redteam2
+
+    def __repr__(self):
+        return '<Match %r>' % self.id
+
 
 class Scouting(db.Model):
     __tablename__ = 'Scouting'

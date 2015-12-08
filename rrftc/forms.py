@@ -65,6 +65,24 @@ class CompetitionForm(Form):
         else:
             return True
 
+class MatchForm(Form):
+    competition = HiddenField ('Competition')
+    match = HiddenField('Match')
+    blueteam1 = QuerySelectField(query_factory=lambda: Team.query.all(), get_label='Number')
+    blueteam2 = QuerySelectField(query_factory=lambda: Team.query.all(), get_label='Number')
+    redteam1 = QuerySelectField(query_factory=lambda: Team.query.all(), get_label='Number')
+    redteam2 = QuerySelectField(query_factory=lambda: Team.query.all(), get_label='Number')
+    submit = SubmitField('Add Team')
+
+    def __init__(self, *args, **kwargs):
+        Form.__init__(self, *args, **kwargs)
+
+    def validate(self):
+        if not Form.validate(self):
+            return False
+        else:
+            return True
+
 
 class ScoutForm(Form):
     name = StringField('Name', [validators.DataRequired('Please enter the scout\'s name.')])
@@ -83,7 +101,7 @@ class ScoutForm(Form):
 class TeamForm(Form):
     number = IntegerField('Number', [validators.DataRequired('Please enter the team number.')])
     name = StringField('Name', [validators.DataRequired('Please enter the team name.')])
-    website = StringField('Website', [validators.DataRequired('Please enter the team website')])
+    website = StringField('Website', [validators.DataRequired('Please enter the team website')], default='http://')
     submit = SubmitField('Add Team')
 
     def __init__(self, *args, **kwargs):

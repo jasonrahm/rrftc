@@ -16,6 +16,7 @@
                 {% if 'username' in session %}
                 <li><a href="{{ url_for('adminPanel') }}">Admin Panel</a></li>
                 <li><a href="{{ url_for('scouts') }}">Scouts</a></li>
+                <li><a href="{{ url_for('teams') }}">Teams</a></li>
                 <li><a href="{{ url_for('competitions') }}">Competitions</a></li>
                 <li><a href="{{ url_for('signout') }}">Sign Out</a></li>
                 {% else %}

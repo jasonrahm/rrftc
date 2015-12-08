@@ -74,6 +74,7 @@ def teams():
 
         elif request.method == 'GET' :
             teams = db.session.query(Team).all()
+            teams = db.session.query(Team).order_by(Team.Number).all()
             return render_template('teams.html', teams=teams, form=form)
 
 @app.route('/teams/delete/<int:id>',)
@@ -155,6 +156,7 @@ def manage_competition(id):
             for team in teams:
                 team_list.append(int(team.Teams))
             team_data = db.session.query(Team).filter(Team.id.in_(team_list)).all()
+
             return render_template('competition_details.html', form=form, id=id, team_data=team_data)
 
 
