@@ -1,7 +1,7 @@
 from rrftc import app
 from flask import render_template, request, flash, session, url_for, redirect
-from forms import SigninForm, CompetitionForm, ScoutForm, TeamForm, CompetitionTeamForm
-from models import db, Competition, Scout, Team, CompetitionTeam
+from forms import SigninForm, CompetitionForm, ScoutForm, TeamForm, CompetitionTeamForm, ScoutingForm
+from models import db, Competition, Scout, Team, CompetitionTeam, Scouting
 
 
 @app.route('/')
@@ -221,8 +221,29 @@ def addMatch():
 @app.route('matches')
 def matches():
     return render_template('matches.html')
-
-@app.route('/scouting')
-def scouting():
-    return render_template('scouting.html')
 '''
+@app.route('/scouting', methods=['GET', 'POST'])
+def scouting():
+
+    form = ScoutingForm()
+
+    if 'username' not in session:
+        return redirect(url_for('signin'))
+
+    user = session['username']
+
+    if user is None:
+        redirect(url_for('signin'))
+    else:
+        if request.method == 'POST':
+            if form.validate() == False:
+                return render_template('scouting.html', form=form)
+            else:
+                #newteam = Team(number=form.number.data, name=form.name.data, website=form.website.data)
+                #db.session.add(newteam)
+                #db.session.commit()
+                return redirect(url_for('scouting'))
+
+        elif request.method == 'GET' :
+            reports = db.session.query(Scouting).all()
+            return render_template('scouting.html', reports=reports, form=form)

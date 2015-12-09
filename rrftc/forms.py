@@ -20,35 +20,35 @@ class ScoutingForm(Form):
     competition = QuerySelectField(query_factory=lambda: Competition.query.all(), get_label='Name')
     team = QuerySelectField(query_factory=lambda: Team.query.all(), get_label='Number')
     scout = QuerySelectField(query_factory=lambda: Scout.query.all(), get_label='Name')
-    rweight = IntegerField('Robot Weight', [validators.DataRequired('What is the robot\'s Weight?')], default=0)
-    rheight = IntegerField('Robot Height', [validators.DataRequired('What is the robot\'s Height?')], default=0)
-    auto = BooleanField('Autonomous?', default=False)
-    beacon = BooleanField('Push Beacon?', default=False)
-    aclimbers = BooleanField('Deliver Climbers?', default=False)
-    lclimber = BooleanField('Rescue Low Climber?', default=False)
-    mclimber = BooleanField('Rescue Mid Climber?', default=False)
-    hclimber = BooleanField('Rescue High Climber?', default=False)
-    fpark = BooleanField('Park on Floor?', default=False)
-    lpark = BooleanField('Park on Low Zone?', default=False)
-    mpark = BooleanField('Park on Mid Zone?', default=False)
-    hpark = BooleanField('Park on High Zone?', default=False)
-    climbheight = SelectField('Highest Zone Climbed', choices=[('Floor', 'Floor'),
+    rweight = IntegerField('Robot\'s Weight?', [validators.DataRequired('What is the robot\'s Weight?')], default=0)
+    rheight = IntegerField('Robot\'s Height?', [validators.DataRequired('What is the robot\'s Height?')], default=0)
+    auto = BooleanField('Is autonomous working?', default=False)
+    beacon = BooleanField('Can it push the beacon?', default=False)
+    aclimbers = BooleanField('Can it deliver climbers?', default=False)
+    lclimber = BooleanField('Can it release the low climber?', default=False)
+    mclimber = BooleanField('Can it release the mid climber?', default=False)
+    hclimber = BooleanField('Can it release the high climber?', default=False)
+    fpark = BooleanField('Can it park on the floor?', default=False)
+    lpark = BooleanField('Can it park on the low zone?', default=False)
+    mpark = BooleanField('Can it park on the mid zone?', default=False)
+    hpark = BooleanField('Can it park on the high zone?', default=False)
+    climbheight = SelectField('Highest zone climbed?', choices=[('Floor', 'Floor'),
                                                                ('Low Zone', 'Low Zone'),
                                                                ('Mid Zone', 'Mid Zone'),
                                                                ('High Zone', 'High Zone')])
-    debris = BooleanField('Can Score Debris?', default=False)
-    ldebrisscore = BooleanField('Can Score Debris in Low Zone?', default=False)
-    mdebrisscore = BooleanField('Can Score Debris in Mid Zone?', default=False)
-    hdebrisscore = BooleanField('Can Score Debris in High Zone?', default=False)
-    avgdebris = IntegerField('Average Debris Score?', [validators.DataRequired('How much debris is scored on average?')], default=0)
-    debrisscoringmethod = SelectField('How is Debris Handled?', choices=[('Climb', 'Climb'),
+    debris = BooleanField('Can it score debris?', default=False)
+    ldebrisscore = BooleanField('Can it score debris in low zone?', default=False)
+    mdebrisscore = BooleanField('Can it score debris in mid zone?', default=False)
+    hdebrisscore = BooleanField('Can it score debris in high zone?', default=False)
+    avgdebris = IntegerField('What is the average debris scored?', [validators.DataRequired('How much debris is scored on average?')], default=0)
+    debrisscoringmethod = SelectField('How is debris handled?', choices=[('Climb', 'Climb'),
                                                                          ('Launch', 'Launch'),
                                                                          ('Extend', 'Extend'),
                                                                          ('Other', 'Other')])
-    hang = BooleanField('Can the robot hang?', default=False)
-    allclear = BooleanField('Trigger All Clear?', default=False)
-    pof = TextAreaField('Points of Failure', [validators.DataRequired'Please enter possible points of failure:'], default='points of failure:')
-    comments = TextAreaField('Comments', [validators.DataRequired('Please enter comments:')], default='general comments:')
+    hang = BooleanField('Can it hang?', default=False)
+    allclear = BooleanField('Can it trigger the all clear?', default=False)
+    pof = TextAreaField('What are the perceived points of failure?', [validators.DataRequired('Please enter possible points of failure:')], default='points of failure:')
+    comments = TextAreaField('General Comments', [validators.DataRequired('Please enter comments:')], default='general comments:')
 
     submit = SubmitField('Add Report')
 
