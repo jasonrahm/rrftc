@@ -8,8 +8,8 @@
     {{ form.hidden_tag() }}
     {%  for field in form if field.widget.input_type != 'hidden' %}
         <div class="form-group">
-        {{ field.label(class_='control-label col-xs-5') }}
-            <div class="col-xs-5">
+        {{ field.label(class_='control-label col-xs-6') }}
+            <div class="col-xs-6">
             {{ field(class_='form-control') }}
             </div>
         </div>
