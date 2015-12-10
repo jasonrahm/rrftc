@@ -4,11 +4,15 @@
     <h2>Scouting<h2>
   </div>
   <h3>Scout a Team</h3>
-  <form action="{{ url_for('scouting') }}" method=post>
+  <form class='form-horizontal' action="{{ url_for('scouting') }}" method=post>
     {{ form.hidden_tag() }}
     {%  for field in form if field.widget.input_type != 'hidden' %}
-      {{ field.label }}
-      {{ field }}
+        <div class="form-group">
+        {{ field.label(class_='control-label col-xs-5') }}
+            <div class="col-xs-5">
+            {{ field(class_='form-control') }}
+            </div>
+        </div>
     {%  endfor %}
   </form>
 {% endblock %}

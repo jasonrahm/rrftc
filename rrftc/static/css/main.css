@@ -156,8 +156,7 @@ form input#submit:hover{
   width: 400px;
 }
   /* Signup form */
-form input#firstname,
-form input#lastname,
+form input#username,
 form input#password {
   width: 400px;
   background-color: #fafafa;
