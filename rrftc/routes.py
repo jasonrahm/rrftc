@@ -8,20 +8,6 @@ from models import db, Competition, Scout, Team, CompetitionTeam, Scouting
 def home():
     return render_template('home.html')
 
-@app.route('/adminPanel')
-def adminPanel():
-
-    if 'username' not in session:
-        return redirect(url_for('signin'))
-
-    user = session['username']
-    print user
-
-    if user is None:
-        redirect(url_for('signin'))
-    else:
-        return render_template('adminPanel.html')
-
 
 @app.route('/signin', methods = ['GET', 'POST'])
 def signin():
@@ -35,7 +21,7 @@ def signin():
             return render_template('signin.html', form=form)
         else:
             session['username'] = form.username.data
-            return redirect(url_for('adminPanel'))
+            return redirect(url_for('home'))
 
     elif request.method == 'GET':
         return render_template('signin.html', form=form)

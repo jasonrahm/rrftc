@@ -3,22 +3,28 @@
   <div class="jumbo">
     <h2>Competition: {{ form.competition }}<h2>
   </div>
-  <h3>Add a team to this competition</h3>
-    <form action="{{ url_for('manage_competition', id=id) }}" method=post>
+    <div class="row">
+    <div class="col-xs-4">
+  <h3>Add team:</h3>
+    <form class='form-horizontal' action="{{ url_for('manage_competition', id=id) }}" method=post>
     {{ form.hidden_tag() }}
 
-
-    {{ form.team.label }}
-    {{ form.team }}
-
-
-    {{ form.submit }}
+    <div class="form-group">
+    {{ form.team.label(class_='control-label col-xs-6') }}
+      <div class="col-xs-6">
+        {{ form.team(class_='form-control') }}<br>
+        {{ form.submit(class_='form-control')}}
+      </div>
+    </div>
     </form>
-
-  <h3>Teams already in this competition:</h3>
-    <ul>
+    </div>
+    <div class="col-xs-8">
+  <h3>Current teams:</h3>
+    <ul class="list">
         {% for team in team_data %}
             <li>{{ team.Name }} ({{  team.Number }})</li>
         {%  endfor %}
     </ul>
+    </div>
+    </div>
 {% endblock %}

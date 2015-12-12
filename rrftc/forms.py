@@ -44,11 +44,12 @@ class ScoutingForm(Form):
     debrisscoringmethod = SelectField('How is debris handled?', choices=[('Climb', 'Climb'),
                                                                          ('Launch', 'Launch'),
                                                                          ('Extend', 'Extend'),
-                                                                         ('Other', 'Other')])
+                                                                         ('Other', 'Other (add details in comments)')])
     hang = BooleanField('Can it hang?', default=False)
     allclear = BooleanField('Can it trigger the all clear?', default=False)
-    pof = TextAreaField('What are the perceived points of failure?', [validators.DataRequired('Please enter possible points of failure:')], default='points of failure:')
+    spof = TextAreaField('What are the perceived points of failure?', [validators.DataRequired('Please enter possible points of failure:')], default='points of failure:')
     comments = TextAreaField('General Comments', [validators.DataRequired('Please enter comments:')], default='general comments:')
+    watchlist = BooleanField('Add this team to the watch list?', default=False)
 
     submit = SubmitField('Add Report')
 

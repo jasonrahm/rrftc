@@ -1,7 +1,30 @@
 {% extends "layout.html" %}
 {% block content %}
-  <div class="jumbo">
-    <h2>Welcome to rrftc.<h2>
-    <h3>This is the home page.<h3>
-  </div>
+    <h2>FTC Competition Scouting</h2>
+    <p>Manage competitions, teams, and scouting with this application. After scouting is complete,
+        you can run reports for assistance with alliance selection. This application is a work in
+        progress. Match scoring is not yet supported, and validation/error correction is sorely
+        lacking. Submit bug reports and enhancement ideas to Jake or Mr. Rahm.</p>
+    <hr size="5">
+    {%  if 'username' in session %}
+    <h3>Management Workflow</h3>
+    <ol class="list">
+        <li>Add anyone that might be scouting</li>
+        <li>Add competition (if not already present)</li>
+        <li>Add team (if not already present)</li>
+        <li>Add teams to the appropriate competition</li>
+        <li>Scout all the teams</li>
+        <li>Run Initial Report (future)</li>
+        <li>Add Matches (future)</li>
+        <li>Score Matches (future)</li>
+        <li>Run Refined Reports (future)</li>
+    </ol>
+    <h3>Resources</h3>
+    <ul class="list-unstyled">
+        <li><a href="{{ url_for('scouts') }}">Scouts</a></li>
+        <li><a href="{{ url_for('teams') }}">Teams</a></li>
+        <li><a href="{{ url_for('competitions') }}">Competitions</a></li>
+        <li><a href="{{ url_for('scouting') }}">Scouting</a></li>
+    </ul>
+    {%  endif %}
 {% endblock %}

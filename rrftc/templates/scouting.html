@@ -1,9 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-  <div class="jumbo">
-    <h2>Scouting<h2>
-  </div>
-  <h3>Scout a Team</h3>
+  <h2>Scouting Form</h2>
   <form class='form-horizontal' action="{{ url_for('scouting') }}" method=post>
     {{ form.hidden_tag() }}
     {%  for field in form if field.widget.input_type != 'hidden' %}

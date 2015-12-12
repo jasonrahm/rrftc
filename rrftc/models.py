@@ -102,6 +102,7 @@ class Scouting(db.Model):
     CanTriggerAllClearSignal = db.Column(db.Boolean, nullable=False)
     PossiblePointsOfFailure = db.Column(db.Text, nullable=False)
     GeneralComments = db.Column(db.Text, nullable=False)
+    WatchList = db.Column(db.Boolean, nullable=False)
     CreateDate = db.Column(db.DateTime, nullable=False)
     LastModifiedDate = db.Column(db.DateTime, nullable=False)
 
