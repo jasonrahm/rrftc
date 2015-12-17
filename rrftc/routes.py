@@ -146,24 +146,6 @@ def manage_competition(id):
             return render_template('competition_details.html', form=form, id=id, team_data=team_data)
 
 
-'''
-    form = SigninForm()
-
-    if 'username' in session:
-        return redirect(url_for('adminPanel'))
-
-    if request.method == 'POST':
-        if form.validate() == False:
-            return render_template('signin.html', form=form)
-        else:
-            session['username'] = form.username.data
-            return redirect(url_for('adminPanel'))
-
-    elif request.method == 'GET':
-        return render_template('signin.html', form=form)
-'''
-
-
 
 @app.route('/scouts', methods=['GET', 'POST'])
 def scouts():
@@ -211,7 +193,10 @@ def matches():
 @app.route('/scouting', methods=['GET', 'POST'])
 def scouting():
 
-    form = ScoutingForm()
+    form = ScoutingForm(request.values)
+    form.competition.choices = [(a.id, a.Name) for a in Competition.query.order_by('Name')]
+    form.team.choices = [(a.id, a.Number) for a in Team.query.order_by('Number')]
+    form.scout.choices = [(a.id, a.Name) for a in Scout.query.order_by('Name')]
 
     if 'username' not in session:
         return redirect(url_for('signin'))
@@ -222,13 +207,24 @@ def scouting():
         redirect(url_for('signin'))
     else:
         if request.method == 'POST':
-            if form.validate() == False:
+            if not form.validate():
                 return render_template('scouting.html', form=form)
             else:
-                #newteam = Team(number=form.number.data, name=form.name.data, website=form.website.data)
-                #db.session.add(newteam)
+                postdata = request.values
+
+                competition = postdata['competition']
+                team = postdata['team']
+                scout = postdata['scout']
+                rweight = postdata['rweight']
+                rheight = postdata['rheight']
+                auto = postdata['auto']
+                print competition, team, scout, rweight, rheight, auto
+
+                #db.session.add(scoutingdata)
                 #db.session.commit()
                 return redirect(url_for('scouting'))
+
+
 
         elif request.method == 'GET' :
             reports = db.session.query(Scouting).all()

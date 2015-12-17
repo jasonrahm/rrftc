@@ -20,8 +20,8 @@ class ScoutingForm(Form):
     competition = QuerySelectField(query_factory=lambda: Competition.query.all(), get_label='Name')
     team = QuerySelectField(query_factory=lambda: Team.query.all(), get_label='Number')
     scout = QuerySelectField(query_factory=lambda: Scout.query.all(), get_label='Name')
-    rweight = IntegerField('Robot\'s Weight?', [validators.DataRequired('What is the robot\'s Weight?')], default=0)
-    rheight = IntegerField('Robot\'s Height?', [validators.DataRequired('What is the robot\'s Height?')], default=0)
+    rweight = IntegerField('Robot\'s Weight?', [validators.DataRequired('What is the robot\'s Weight?')], default=50)
+    rheight = IntegerField('Robot\'s Height?', [validators.DataRequired('What is the robot\'s Height?')], default=50)
     auto = BooleanField('Is autonomous working?', default=False)
     beacon = BooleanField('Can it push the beacon?', default=False)
     aclimbers = BooleanField('Can it deliver climbers?', default=False)
@@ -40,7 +40,7 @@ class ScoutingForm(Form):
     ldebrisscore = BooleanField('Can it score debris in low zone?', default=False)
     mdebrisscore = BooleanField('Can it score debris in mid zone?', default=False)
     hdebrisscore = BooleanField('Can it score debris in high zone?', default=False)
-    avgdebris = IntegerField('What is the average debris scored?', [validators.DataRequired('How much debris is scored on average?')], default=0)
+    avgdebris = IntegerField('What is the average debris scored?', [validators.DataRequired('How much debris is scored on average?')], default=50)
     debrisscoringmethod = SelectField('How is debris handled?', choices=[('Climb', 'Climb'),
                                                                          ('Launch', 'Launch'),
                                                                          ('Extend', 'Extend'),
