@@ -17,7 +17,7 @@ def signin():
         return redirect(url_for('adminPanel'))
 
     if request.method == 'POST':
-        if form.validate() == False:
+        if not form.validate():
             return render_template('signin.html', form=form)
         else:
             session['username'] = form.username.data
@@ -50,7 +50,7 @@ def teams():
         redirect(url_for('signin'))
     else:
         if request.method == 'POST':
-            if form.validate() == False:
+            if not form.validate():
                 return render_template('teams.html', form=form)
             else:
                 newteam = Team(number=form.number.data, name=form.name.data, website=form.website.data)
@@ -210,6 +210,7 @@ def scouting():
             if not form.validate():
                 return render_template('scouting.html', form=form)
             else:
+
                 postdata = request.values
 
                 competition = postdata['competition']

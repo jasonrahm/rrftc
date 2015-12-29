@@ -6,14 +6,14 @@
     <div class="row">
     <div class="col-xs-4">
   <h3>Add team:</h3>
-    <form class='form-horizontal' action="{{ url_for('manage_competition', id=id) }}" method=post>
+    <form class="form-horizontal" action="{{ url_for('manage_competition', id=id) }}" method="post">
     {{ form.hidden_tag() }}
 
     <div class="form-group">
-    {{ form.team.label(class_='control-label col-xs-6') }}
+    {{ form.team.label(class_="control-label col-xs-6") }}
       <div class="col-xs-6">
-        {{ form.team(class_='form-control') }}<br>
-        {{ form.submit(class_='form-control')}}
+        {{ form.team(class_="form-control") }}<br>
+        {{ form.submit(class_="form-control")}}
       </div>
     </div>
     </form>

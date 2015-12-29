@@ -1,13 +1,26 @@
 {% extends "layout.html" %}
+
 {% block content %}
+
+{% if form.errors %}
+    <ul>
+        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+            {% for error in field_errors %}
+                <li>{{ form[field_name].label }}: {{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+{% endif %}
+
+
   <h2>Scouting Form</h2>
-  <form class='form-horizontal' action="{{ url_for('scouting') }}" method=post>
+  <form class="form-horizontal" action="{{ url_for('scouting') }}" method="post">
     {{ form.hidden_tag() }}
     {%  for field in form if field.widget.input_type != 'hidden' %}
         <div class="form-group">
-        {{ field.label(class_='control-label col-xs-6') }}
+        {{ field.label(class_="control-label col-xs-6") }}
             <div class="col-xs-6">
-            {{ field(class_='form-control') }}
+            {{ field(class_="form-control") }}
             </div>
         </div>
     {%  endfor %}
