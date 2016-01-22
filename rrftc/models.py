@@ -110,6 +110,69 @@ class Scouting(db.Model):
     Scout1 = db.relationship(u'Scout')
     Team1 = db.relationship(u'Team')
 
+    def __init__(self,
+                 scout,
+                 team,
+                 comp,
+                 weight,
+                 height,
+                 autonomous,
+                 pushbeacon,
+                 deliverclimbers,
+                 lclimber,
+                 mclimber,
+                 hclimber,
+                 fpark,
+                 lpark,
+                 mpark,
+                 hpark,
+                 highestzone,
+                 scoredebris,
+                 ldebris,
+                 mdebris,
+                 hdebris,
+                 avgdebris,
+                 debrismethod,
+                 hang,
+                 allclear,
+                 spof,
+                 comments,
+                 watchlist,
+                 createdate=time.strftime('%Y-%m-%d %H:%M:%S'),
+                 moddate=time.strftime('%Y-%m-%d %H:%M:%S')):
+        self.Competition = comp
+        self.Team = team
+        self.Scout = scout
+        self.RobotWeight = weight
+        self.RobotHeight = height
+        self.IsAutonomous = autonomous
+        self.CanPushBeacon = pushbeacon
+        self.CanDeliverClimbers = deliverclimbers
+        self.DeliverClimberLow = lclimber
+        self.DeliverClimberMid = mclimber
+        self.DeliverClimberHigh = hclimber
+        self.CanParkOnFloor = fpark
+        self.CanParkOnLowZone = lpark
+        self.CanParkOnMidZone = mpark
+        self.CanParkOnHighZone = hpark
+        self.HighestZoneClimbed = highestzone
+        self.CanScoreDebris = scoredebris
+        self.CanScoreInLowZone = ldebris
+        self.CanScoreInMidZone = mdebris
+        self.CanScoreInHighZone = hdebris
+        self.DebrisAverageScore = avgdebris
+        self.DebrisScoringMethod = debrismethod
+        self.CanHang = hang
+        self.CanTriggerAllClearSignal = allclear
+        self.PossiblePointsOfFailure = spof
+        self.GeneralComments = comments
+        self.WatchList = watchlist
+        self.CreateDate = createdate
+        self.LastModifiedDate = moddate
+
+    def __repr__(self):
+        return '<Scouting Report %r>' % self.id
+
 
 class Scout(db.Model):
     __tablename__ = 'Scouts'

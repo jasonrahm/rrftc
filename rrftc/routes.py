@@ -212,17 +212,62 @@ def scouting():
             else:
 
                 postdata = request.values
-
+                # general data
                 competition = postdata['competition']
                 team = postdata['team']
                 scout = postdata['scout']
                 rweight = postdata['rweight']
                 rheight = postdata['rheight']
-                auto = postdata['auto']
-                print competition, team, scout, rweight, rheight, auto
+                # autonomous data
+                if 'auto' in request.form:
+                    auto = True
+                    #test other autonomous conditions for true/false
+                    beacon = True if 'beacon' in request.form else False
+                    aclimbers = True if 'aclimbers' in request.form else False
+                    lclimber = True if 'lclimber' in request.form else False
+                    mclimber = True if 'mclimber' in request.form else False
+                    hclimber = True if 'hclimber' in request.form else False
+                    fpark = True if 'fpark' in request.form else False
+                    mpark = True if 'mpark' in request.form else False
+                    hpark = True if 'hpark' in request.form else False
+                else:
+                    # set all autonomous to false
+                    auto = False
+                    beacon = False
+                    aclimbers = False
+                    lclimber = False
+                    mclimber = False
+                    hclimber = False
+                    fpark = False
+                    mpark = False
+                    hpark = False
+                climbheight = postdata['climbheight']
+                # teleop data
+                debris = True if 'debris' in request.form else False
+                ldebrisscore = True if 'ldebrisscore' in request.form else False
+                mdebrisscore = True if 'mdebrisscore' in request.form else False
+                hdebrisscore = True if 'hdebrisscore' in request.form else False
+                avgdebris = postdata['avgdebris']
+                debrisscoringmethod = postdata['debrisscoringmethod']
+                hang = True if 'hang' in request.form else False
+                # more general data
+                allclear = True if 'allclear' in request.form else False
+                spof = postdata['spof']
+                comments = postdata['comments']
+                watchlist = True if 'watchlist' in request.form else False
 
-                #db.session.add(scoutingdata)
+
+
+                print competition, team, scout, rweight, rheight
+                print auto, beacon, aclimbers, lclimber, mclimber, hclimber, fpark, mpark, hpark, climbheight
+                print debris, ldebrisscore, mdebrisscore, hdebrisscore, avgdebris, debrisscoringmethod, hang, allclear
+                print spof, comments, watchlist
+
+                #scoutingreport = Scouting(competitions=comp, teams=team)
+                #db.session.add(scoutingreport)
                 #db.session.commit()
+
+
                 return redirect(url_for('scouting'))
 
 
