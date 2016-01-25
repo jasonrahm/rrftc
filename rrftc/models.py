@@ -75,7 +75,7 @@ class Match(db.Model):
 class Scouting(db.Model):
     __tablename__ = 'Scouting'
 
-    id = db.Column(db.Boolean, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     Scout = db.Column(db.ForeignKey(u'Scouts.id'), nullable=False, index=True)
     Team = db.Column(db.ForeignKey(u'Teams.id'), nullable=False, index=True)
     Competition = db.Column(db.ForeignKey(u'Competitions.id'), nullable=False, index=True)
@@ -140,9 +140,9 @@ class Scouting(db.Model):
                  watchlist,
                  createdate=time.strftime('%Y-%m-%d %H:%M:%S'),
                  moddate=time.strftime('%Y-%m-%d %H:%M:%S')):
-        self.Competition = comp
-        self.Team = team
         self.Scout = scout
+        self.Team = team
+        self.Competition = comp
         self.RobotWeight = weight
         self.RobotHeight = height
         self.IsAutonomous = autonomous
