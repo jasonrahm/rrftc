@@ -3,7 +3,6 @@ from flask import render_template, request, flash, session, url_for, redirect
 from forms import SigninForm, CompetitionForm, ScoutForm, TeamForm, CompetitionTeamForm, ScoutingForm
 from models import db, Competition, Scout, Team, CompetitionTeam, Scouting
 
-
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -213,11 +212,11 @@ def scouting():
 
                 postdata = request.values
                 # general data
-                competition = postdata['competition']
-                team = postdata['team']
-                scout = postdata['scout']
-                rweight = postdata['rweight']
-                rheight = postdata['rheight']
+                competition = int(postdata['competition'])
+                team = int(postdata['team'])
+                scout = int(postdata['scout'])
+                rweight = float(postdata['rweight'])
+                rheight = float(postdata['rheight'])
                 # autonomous data
                 if 'auto' in request.form:
                     auto = True
@@ -228,6 +227,7 @@ def scouting():
                     mclimber = True if 'mclimber' in request.form else False
                     hclimber = True if 'hclimber' in request.form else False
                     fpark = True if 'fpark' in request.form else False
+                    lpark = True if 'lpark' in request.form else False
                     mpark = True if 'mpark' in request.form else False
                     hpark = True if 'hpark' in request.form else False
                 else:
@@ -239,6 +239,7 @@ def scouting():
                     mclimber = False
                     hclimber = False
                     fpark = False
+                    lpark = False
                     mpark = False
                     hpark = False
                 climbheight = postdata['climbheight']
@@ -247,7 +248,7 @@ def scouting():
                 ldebrisscore = True if 'ldebrisscore' in request.form else False
                 mdebrisscore = True if 'mdebrisscore' in request.form else False
                 hdebrisscore = True if 'hdebrisscore' in request.form else False
-                avgdebris = postdata['avgdebris']
+                avgdebris = int(postdata['avgdebris'])
                 debrisscoringmethod = postdata['debrisscoringmethod']
                 hang = True if 'hang' in request.form else False
                 # more general data
@@ -256,16 +257,39 @@ def scouting():
                 comments = postdata['comments']
                 watchlist = True if 'watchlist' in request.form else False
 
+                scoutingreport = Scouting(scout=scout,
+                                          team=team,
+                                          comp=competition,
+                                          weight=rweight,
+                                          height=rheight,
+                                          autonomous=auto,
+                                          pushbeacon=beacon,
+                                          deliverclimbers=aclimbers,
+                                          lclimber=lclimber,
+                                          mclimber=mclimber,
+                                          hclimber=hclimber,
+                                          fpark=fpark,
+                                          lpark=lpark,
+                                          mpark=mpark,
+                                          hpark=hpark,
+                                          highestzone=climbheight,
+                                          scoredebris=debris,
+                                          ldebris=ldebrisscore,
+                                          mdebris=mdebrisscore,
+                                          hdebris=hdebrisscore,
+                                          avgdebris=avgdebris,
+                                          debrismethod=debrisscoringmethod,
+                                          hang=hang,
+                                          allclear=allclear,
+                                          spof=spof,
+                                          comments=comments,
+                                          watchlist=watchlist)
 
 
-                print competition, team, scout, rweight, rheight
-                print auto, beacon, aclimbers, lclimber, mclimber, hclimber, fpark, mpark, hpark, climbheight
-                print debris, ldebrisscore, mdebrisscore, hdebrisscore, avgdebris, debrisscoringmethod, hang, allclear
-                print spof, comments, watchlist
 
-                #scoutingreport = Scouting(competitions=comp, teams=team)
-                #db.session.add(scoutingreport)
-                #db.session.commit()
+
+                db.session.add(scoutingreport)
+                db.session.commit()
 
 
                 return redirect(url_for('scouting'))
