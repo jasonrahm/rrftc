@@ -16,13 +16,14 @@
                 <a class="navbar-brand">rrftc</a>
             </div>
             <div>
-                <ul class="menu">
+                <ul class="nav navbar-nav">
                     <li><a href="{{ url_for('home') }}">Home</a></li>
                     {% if 'username' in session %}
                     <li><a href="{{ url_for('scouts') }}">Scouts</a></li>
                     <li><a href="{{ url_for('teams') }}">Teams</a></li>
                     <li><a href="{{ url_for('competitions') }}">Competitions</a></li>
                     <li><a href="{{ url_for('scouting') }}">Scouting</a></li>
+                    <li><a href="{{ url_for('reporting') }}">Reporting</a></li>
                     <li><a href="{{ url_for('signout') }}">Sign Out</a></li>
                     {% else %}
                     <li><a href="{{ url_for('signin') }}">Sign In</a></li>

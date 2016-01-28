@@ -3,6 +3,7 @@ from flask import render_template, request, flash, session, url_for, redirect
 from forms import SigninForm, CompetitionForm, ScoutForm, TeamForm, CompetitionTeamForm, ScoutingForm, ReportingForm
 from models import db, Competition, Scout, Team, CompetitionTeam, Scouting
 
+
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -24,6 +25,7 @@ def signin():
 
     elif request.method == 'GET':
         return render_template('signin.html', form=form)
+
 
 @app.route('/signout')
 def signout():
@@ -62,6 +64,7 @@ def teams():
             teams = db.session.query(Team).order_by(Team.Number).all()
             return render_template('teams.html', teams=teams, form=form)
 
+
 @app.route('/teams/<int:id>', methods = ['GET'])
 def team(id):
     if 'username' not in session:
@@ -93,6 +96,10 @@ def reporting():
             if not form.validate():
                 return render_template('reporting.html', form=form)
             else:
+                result = db.engine.execute("select Team, (IsAutonomous*10) + (CanPushBeacon*5) + (CanDeliverClimbers*5) + (DeliverClimberLow*3) + (DeliverClimberMid*5) + (DeliverClimberHigh*7) + (CanParkOnFloor*4) + (CanParkOnLowZone*6) + (CanParkOnMidZone*8) + (CanParkOnHighZone*10) + (CanScoreDebris*10) + (CanScoreInLowZone*6) + (CanScoreInMidZone*8) + (CanScoreInHighZone*10) + (DebrisAverageScore*0) + (CanHang*10) + (CanTriggerAllClearSignal*8) AS Score FROM Scouting WHERE Competition = 15 ORDER BY Score DESC")
+                teams = []
+                for row in result:
+                    print row[0], row[1]
                 return redirect(url_for('reporting'))
 
         elif request.method == 'GET':

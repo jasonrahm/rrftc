@@ -1,8 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-  <div class="jumbo">
-    <h2>Teams<h2>
-  </div>
+
   <h3>Add a Team</h3>
   <form action="{{ url_for('teams') }}" method="post">
     {{ form.hidden_tag() }}
