@@ -1,6 +1,6 @@
 from rrftc import app
 from flask import render_template, request, flash, session, url_for, redirect
-from forms import SigninForm, CompetitionForm, ScoutForm, TeamForm, CompetitionTeamForm, ScoutingForm
+from forms import SigninForm, CompetitionForm, ScoutForm, TeamForm, CompetitionTeamForm, ScoutingForm, ReportingForm
 from models import db, Competition, Scout, Team, CompetitionTeam, Scouting
 
 @app.route('/')
@@ -58,9 +58,45 @@ def teams():
                 return redirect(url_for('teams'))
 
         elif request.method == 'GET' :
-            teams = db.session.query(Team).all()
+            #teams = db.session.query(Team).all()
             teams = db.session.query(Team).order_by(Team.Number).all()
             return render_template('teams.html', teams=teams, form=form)
+
+@app.route('/teams/<int:id>', methods = ['GET'])
+def team(id):
+    if 'username' not in session:
+        return redirect(url_for('signin'))
+
+    user = session['username']
+    if user is None:
+        redirect(url_for('signin'))
+    else:
+        team = db.session.query(Team).filter(Team.id == id).all()
+        reports = db.session.query(Scouting).filter(Scouting.Team == id).all()
+
+        return render_template('team.html', id=id, reports=reports, team=team)
+
+
+@app.route('/reporting', methods=['GET', 'POST'])
+def reporting():
+
+    form = ReportingForm()
+
+    if 'username' not in session:
+        return redirect(url_for('signin'))
+
+    user = session['username']
+    if user is None:
+        redirect(url_for('signin'))
+    else:
+        if request.method == 'POST':
+            if not form.validate():
+                return render_template('reporting.html', form=form)
+            else:
+                return redirect(url_for('reporting'))
+
+        elif request.method == 'GET':
+            return render_template('reporting.html', form=form)
 
 @app.route('/teams/delete/<int:id>',)
 def delete_team_entry(id):
@@ -179,16 +215,7 @@ def delete_scout_entry(id):
     db.session.delete(scout)
     db.session.commit()
     return redirect(url_for('scouts'))
-'''
 
-@app.route('/addMatch')
-def addMatch():
-    return render_template('addMatch.html')
-
-@app.route('matches')
-def matches():
-    return render_template('matches.html')
-'''
 @app.route('/scouting', methods=['GET', 'POST'])
 def scouting():
 
@@ -299,3 +326,15 @@ def scouting():
         elif request.method == 'GET' :
             reports = db.session.query(Scouting).all()
             return render_template('scouting.html', reports=reports, form=form)
+
+
+'''
+
+@app.route('/addMatch')
+def addMatch():
+    return render_template('addMatch.html')
+
+@app.route('matches')
+def matches():
+    return render_template('matches.html')
+'''

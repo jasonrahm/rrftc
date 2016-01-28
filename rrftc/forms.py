@@ -62,6 +62,38 @@ class ScoutingForm(Form):
         else:
             return True
 
+
+class ReportingForm(Form):
+    auto = IntegerField('Autonomous (Priority 1 - 10)', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    beacon = IntegerField('Beacon', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    aclimbers = IntegerField('Climber Delivery', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    lclimber = IntegerField('Low Climber Release', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    mclimber = IntegerField('Mid Climber Release', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    hclimber = IntegerField('High Climber Release', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    fpark = IntegerField('Floor Parking', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    lpark = IntegerField('Low Zone Parking', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    mpark = IntegerField('Mid Zone Parking', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    hpark = IntegerField('High Zone Parking', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    debris = IntegerField('Debris Scoring', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    ldebrisscore = IntegerField('Low Zone Debris', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    mdebrisscore = IntegerField('Mid Zone Debris', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    hdebrisscore = IntegerField('High Zone Debris', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    avgdebris = IntegerField('Debris Scoring Threshold', [validators.DataRequired('How much debris is scored on average?')], default=1)
+    hang = IntegerField('Hanging', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    allclear = IntegerField('All Clear', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+
+    submit = SubmitField('Get Report')
+
+    def __init__(self, *args, **kwargs):
+        Form.__init__(self, *args, **kwargs)
+
+    def validate(self):
+        if not Form.validate(self):
+            return False
+        else:
+            return True
+
+
 class CompetitionTeamForm(Form):
     competition = HiddenField('Competition')
     team = QuerySelectField(query_factory=lambda: Team.query.all(), get_label='Number')

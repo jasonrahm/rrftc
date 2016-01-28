@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="jumbo">
+    <h2>Team: {{ team }}<h2>
+  </div>
+  {% for report in reports  %}
+      Report: {{  report.id  }}, Competition: {{ report.Competition1.Name }}, (Scout: {{ report.Scout1.Name }})<br>
+  {% endfor %}
+
+{% endblock %}
