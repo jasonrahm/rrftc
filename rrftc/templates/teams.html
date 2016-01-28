@@ -31,7 +31,7 @@
     </thread>
     {% for team in teams %}
     <tr>
-        <td width="300px">{{  team.Number }}</td>
+        <td width="300px"><a href="{{ url_for('team', id = team.id) }}">{{  team.Number }}</a></td>
         <td width="300px">{{  team.Name }}</td>
         <td width="300px">{{  team.Website }}</td>
         <td>
