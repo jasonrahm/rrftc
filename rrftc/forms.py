@@ -64,7 +64,7 @@ class ScoutingForm(Form):
 
 
 class ReportingForm(Form):
-    auto = IntegerField('Autonomous (Priority 1 - 10)', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    auto = IntegerField('Autonomous', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
     beacon = IntegerField('Beacon', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
     aclimbers = IntegerField('Climber Delivery', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
     lclimber = IntegerField('Low Climber Release', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
@@ -121,7 +121,7 @@ class SigninForm(Form):
         if not Form.validate(self):
             return False
 
-        if self.username.data.lower() == 'admin' and self.password.data == 'roboraiders':
+        if self.username.data.lower() == 'admin' and self.password.data == 'admin':
             return True
         else:
             self.username.errors.append('Invalid username or password')
