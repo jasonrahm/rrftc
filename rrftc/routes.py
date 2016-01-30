@@ -9,7 +9,7 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/signin', methods = ['GET', 'POST'])
+@app.route('/signin', methods=['GET', 'POST'])
 def signin():
     form = SigninForm()
 
@@ -34,10 +34,11 @@ def signout():
         redirect(url_for('signin'))
 
     session.pop('username', None)
+    session['report'] = ''
     return redirect(url_for('home'))
 
 
-@app.route('/teams', methods = ['GET', 'POST'])
+@app.route('/teams', methods=['GET', 'POST'])
 def teams():
 
     form = TeamForm()
@@ -96,13 +97,35 @@ def reporting():
             if not form.validate():
                 return render_template('reporting.html', form=form)
             else:
-                result = db.engine.execute("select Team, (IsAutonomous*10) + (CanPushBeacon*5) + (CanDeliverClimbers*5) + (DeliverClimberLow*3) + (DeliverClimberMid*5) + (DeliverClimberHigh*7) + (CanParkOnFloor*4) + (CanParkOnLowZone*6) + (CanParkOnMidZone*8) + (CanParkOnHighZone*10) + (CanScoreDebris*10) + (CanScoreInLowZone*6) + (CanScoreInMidZone*8) + (CanScoreInHighZone*10) + (DebrisAverageScore*0) + (CanHang*10) + (CanTriggerAllClearSignal*8) AS Score FROM Scouting WHERE Competition = 15 ORDER BY Score DESC")
+                sql_text = '''select Team, Scout,
+                              (IsAutonomous*%d) +
+                              (CanPushBeacon*%d) +
+                              (CanDeliverClimbers*%d) +
+                              (DeliverClimberLow*%d) +
+                              (DeliverClimberMid*%d) +
+                              (DeliverClimberHigh*%d) +
+                              (CanParkOnFloor*%d) +
+                              (CanParkOnLowZone*%d) +
+                              (CanParkOnMidZone*%d) +
+                              (CanParkOnHighZone*%d) +
+                              (CanScoreDebris*%d) +
+                              (CanScoreInLowZone*%d) +
+                              (CanScoreInMidZone*%d) +
+                              (CanScoreInHighZone*%d) +
+                              (DebrisAverageScore*%d) +
+                              (CanHang*%d) +
+                              (CanTriggerAllClearSignal*%d)
+                              AS Score FROM Scouting WHERE Competition = %d ORDER BY Score DESC''' % (10, 10, 10, 5, 5, 10, 5, 8, 8, 9, 0, 1, 2, 3, 4, 5, 6, 15)
+                print sql_text
+                result =db.engine.execute(sql_text)
                 teams = []
                 for row in result:
-                    print row[0], row[1]
+                    teams.append([row[0], row[1], row[2]])
+                session['report'] = teams
                 return redirect(url_for('reporting'))
 
         elif request.method == 'GET':
+            print "Report: %s" % session['report']
             return render_template('reporting.html', form=form)
 
 @app.route('/teams/delete/<int:id>',)

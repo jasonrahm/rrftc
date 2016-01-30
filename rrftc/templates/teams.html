@@ -1,37 +1,59 @@
 {% extends "layout.html" %}
 {% block content %}
 
-  <h3>Add a Team</h3>
-  <form action="{{ url_for('teams') }}" method="post">
+        {% if form.errors %}
+    <ul>
+        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+            {% for error in field_errors %}
+                <li>{{ form[field_name].label }}: {{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+{% endif %}
+
+  <h2>Add a Team</h2>
+  <form class="form-horizontal" action="{{ url_for('teams') }}" method="post">
     {{ form.hidden_tag() }}
 
-    {{ form.number.label }}
-    {{ form.number }}<br>
+      <div class="form-group">
+    {{ form.number.label(class_="control-label col-xs-6") }}
+          <div class="col-xs-6">
+          {{ form.number(class_="form-control") }}
+              </div>
+     </div>
 
-    {{ form.name.label }}
-    {{ form.name }}<br>
+      <div class="form-group">
+    {{ form.name.label(class_="control-label col-xs-6") }}
+          <div class="col-xs-6">
+          {{ form.name(class_="form-control") }}
+              </div>
+     </div>
 
-    {{ form.website.label }}
-    {{ form.website }}<br>
+      <div class="form-group">
+    {{ form.website.label(class_="control-label col-xs-6") }}
+          <div class="col-xs-6">
+          {{ form.website(class_="form-control") }}
+              </div>
+     </div>
 
-    {{ form.submit }}
+      <div class="form-group">
+         <div class="col-xs-12">{{ form.submit(class_="form-control") }} </div>
+      </div>
   </form>
-
-  <h3>Existing Teams:</h3>
-  <table>
+    <hr size="2">
+  <h2>Existing Teams:</h2>
+  <table class="table table-responsive">
     <thread>
         <tr>
-            <th width="300px"><strong>Team Number</strong></th>
-            <th width="300px"><strong>Team Name</strong></th>
-            <th width="300px"><strong>Team Website</strong></th>
+            <th><strong>Team Number</strong></th>
+            <th><strong>Team Name</strong></th>
             <th><b>Actions</b></th>
         </tr>
     </thread>
     {% for team in teams %}
     <tr>
-        <td width="300px"><a href="{{ url_for('team', id = team.id) }}">{{  team.Number }}</a></td>
-        <td width="300px">{{  team.Name }}</td>
-        <td width="300px">{{  team.Website }}</td>
+        <td><a href="{{ url_for('team', id = team.id) }}">{{  team.Number }}</a></td>
+        <td>{{  team.Name }}</td>
         <td>
             <a href="{{  url_for('delete_team_entry', id = team.id) }}">Delete</a>
         </td>

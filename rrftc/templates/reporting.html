@@ -13,8 +13,11 @@
 {% endif %}
 
 
-  <h2>Reporting Form</h2>
+  <h3>Reporting Form</h3>
   <h5>Select priority range 1 through 10.</h5>
+    {% for team in teams %}
+        {{ team }}
+    {% endfor %}
   <form class="form-horizontal" action="{{ url_for('reporting') }}" method="post">
     {{ form.hidden_tag() }}
     {%  for field in form if field.widget.input_type != 'hidden' %}

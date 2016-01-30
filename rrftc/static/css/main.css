@@ -27,11 +27,12 @@ div.jumbo {
      -moz-border-radius: 6px;
           border-radius: 6px;
 }
-
 h2 {
   text-align: center;
 }
-
+h3 {
+  text-align: center;
+}
 h5 {
   text-align: center;
 }
