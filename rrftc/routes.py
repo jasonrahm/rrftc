@@ -21,6 +21,7 @@ def signin():
             return render_template('signin.html', form=form)
         else:
             session['username'] = form.username.data
+            flash('Login Successful.')
             return redirect(url_for('home'))
 
     elif request.method == 'GET':
@@ -35,6 +36,8 @@ def signout():
 
     session.pop('username', None)
     session['report'] = ''
+
+    flash('You have been logged out.')
     return redirect(url_for('home'))
 
 
@@ -58,6 +61,8 @@ def teams():
                 newteam = Team(number=form.number.data, name=form.name.data, website=form.website.data)
                 db.session.add(newteam)
                 db.session.commit()
+
+                flash('Team successfully added.')
                 return redirect(url_for('teams'))
 
         elif request.method == 'GET' :
@@ -66,7 +71,7 @@ def teams():
             return render_template('teams.html', teams=teams, form=form)
 
 
-@app.route('/teams/<int:id>', methods = ['GET'])
+@app.route('/teams/<int:id>', methods=['GET'])
 def team(id):
     if 'username' not in session:
         return redirect(url_for('signin'))
@@ -153,6 +158,7 @@ def reporting():
         elif request.method == 'GET':
             return render_template('reporting.html', form=form)
 
+
 @app.route('/report')
 def report():
     if 'username' not in session:
@@ -169,11 +175,14 @@ def report():
         else:
             return render_template('report.html', data=data)
 
+
 @app.route('/teams/delete/<int:id>',)
 def delete_team_entry(id):
     team = Team.query.get(id)
     db.session.delete(team)
     db.session.commit()
+
+    flash('Team deleted.')
     return redirect(url_for('teams'))
 
 
@@ -197,11 +206,14 @@ def competitions():
                 newcomp = Competition(name=form.name.data, date=form.date.data, location=form.location.data)
                 db.session.add(newcomp)
                 db.session.commit()
+
+                flash('Competition successfully added.')
                 return redirect(url_for('competitions'))
 
         elif request.method == 'GET' :
             competitions = db.session.query(Competition).all()
             return render_template('competitions.html', competitions=competitions, form=form)
+
 
 @app.route('/competitions/delete/<int:id>',)
 def delete_competition_entry(id):
@@ -213,7 +225,10 @@ def delete_competition_entry(id):
         competition = Competition.query.get(id)
         db.session.delete(competition)
         db.session.commit()
+
+        flash('Competition deleted.')
         return redirect(url_for('competitions'))
+
 
 @app.route('/competitions/<int:id>', methods=['GET', 'POST'])
 def manage_competition(id):
@@ -240,6 +255,7 @@ def manage_competition(id):
                 db.session.add(newteam)
                 db.session.commit()
 
+                flash('Team successfully added to the competition.')
                 return redirect(url_for('manage_competition', id=id))
 
         elif request.method == 'GET':
@@ -250,7 +266,6 @@ def manage_competition(id):
             team_data = db.session.query(Team).filter(Team.id.in_(team_list)).all()
 
             return render_template('competition_details.html', form=form, id=id, team_data=team_data)
-
 
 
 @app.route('/scouts', methods=['GET', 'POST'])
@@ -273,6 +288,8 @@ def scouts():
                 newscout = Scout(name=form.name.data)
                 db.session.add(newscout)
                 db.session.commit()
+
+                flash('Scout successfully added.')
                 return redirect(url_for('scouts'))
 
         elif request.method == 'GET' :
@@ -285,7 +302,10 @@ def delete_scout_entry(id):
     scout = Scout.query.get(id)
     db.session.delete(scout)
     db.session.commit()
+
+    flash('Scout deleted.')
     return redirect(url_for('scouts'))
+
 
 @app.route('/scouting', methods=['GET', 'POST'])
 def scouting():
@@ -383,24 +403,17 @@ def scouting():
                                           comments=comments,
                                           watchlist=watchlist)
 
-
-
-
                 db.session.add(scoutingreport)
                 db.session.commit()
 
-
+                flash('Scouting report successfully added.')
                 return redirect(url_for('scouting'))
-
-
 
         elif request.method == 'GET' :
             reports = db.session.query(Scouting).all()
             return render_template('scouting.html', reports=reports, form=form)
 
-
 '''
-
 @app.route('/addMatch')
 def addMatch():
     return render_template('addMatch.html')
