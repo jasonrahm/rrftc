@@ -64,6 +64,7 @@ class ScoutingForm(Form):
 
 
 class ReportingForm(Form):
+    competition = QuerySelectField(query_factory=lambda: Competition.query.all(), get_label='Name')
     auto = IntegerField('Autonomous', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
     beacon = IntegerField('Beacon', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
     aclimbers = IntegerField('Climber Delivery', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
