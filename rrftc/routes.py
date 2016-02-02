@@ -84,7 +84,8 @@ def team(id):
 @app.route('/reporting', methods=['GET', 'POST'])
 def reporting():
 
-    form = ReportingForm()
+    form = ReportingForm(request.values)
+    form.competition.choices = [(a.id, a.Name) for a in Competition.query.order_by('Name')]
 
     if 'username' not in session:
         return redirect(url_for('signin'))
@@ -97,6 +98,7 @@ def reporting():
             if not form.validate():
                 return render_template('reporting.html', form=form)
             else:
+                postdata = request.values
                 sql_text = '''select Team, Scout,
                               (IsAutonomous*%d) +
                               (CanPushBeacon*%d) +
@@ -115,18 +117,49 @@ def reporting():
                               (DebrisAverageScore*%d) +
                               (CanHang*%d) +
                               (CanTriggerAllClearSignal*%d)
-                              AS Score FROM Scouting WHERE Competition = %d ORDER BY Score DESC''' % (10, 10, 10, 5, 5, 10, 5, 8, 8, 9, 0, 1, 2, 3, 4, 5, 6, 15)
-                print sql_text
+                              AS Score FROM Scouting WHERE Competition = %d ORDER BY Score DESC''' % (int(postdata['auto']),
+                                                                                                      int(postdata['beacon']),
+                                                                                                      int(postdata['aclimbers']),
+                                                                                                      int(postdata['lclimber']),
+                                                                                                      int(postdata['mclimber']),
+                                                                                                      int(postdata['hclimber']),
+                                                                                                      int(postdata['fpark']),
+                                                                                                      int(postdata['lpark']),
+                                                                                                      int(postdata['mpark']),
+                                                                                                      int(postdata['hpark']),
+                                                                                                      int(postdata['debris']),
+                                                                                                      int(postdata['ldebrisscore']),
+                                                                                                      int(postdata['mdebrisscore']),
+                                                                                                      int(postdata['hdebrisscore']),
+                                                                                                      int(postdata['avgdebris']),
+                                                                                                      int(postdata['hang']),
+                                                                                                      int(postdata['allclear']),
+                                                                                                      int(postdata['competition']))
                 result =db.engine.execute(sql_text)
                 teams = []
                 for row in result:
                     teams.append([row[0], row[1], row[2]])
                 session['report'] = teams
-                return redirect(url_for('reporting'))
+                return redirect(url_for('report'))
 
         elif request.method == 'GET':
-            print "Report: %s" % session['report']
             return render_template('reporting.html', form=form)
+
+@app.route('/report')
+def report():
+    if 'username' not in session:
+        return redirect(url_for('signin'))
+
+    user = session['username']
+
+    if user is None:
+        redirect(url_for('signin'))
+    else:
+        data = session['report']
+        if data == '':
+            redirect(url_for('reporting'))
+        else:
+            return render_template('report.html', data=data)
 
 @app.route('/teams/delete/<int:id>',)
 def delete_team_entry(id):
