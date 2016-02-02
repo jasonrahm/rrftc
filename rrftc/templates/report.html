@@ -5,9 +5,22 @@
 
   <h3>Initial Report</h3>
     <h4 class="text-center">Teams To Watch by Score</h4>
+    <table class="table table-responsive table-striped">
+    <thead>
+        <tr>
+            <th>Team</th>
+            <th>Score</th>
+            <th>Scout</th>
+        </tr>
+    </thead>
     {% for x in data %}
-        {{ x }}<br>
+        <tr>
+            <td>{{ x[0] }}</td>
+            <td>{{ x[2] }}</td>
+            <td>{{ x[1] }}</td>
+        </tr>
     {% endfor %}
+    </table>
     <h4 class="text-center">Teams on Watch List</h4>
 
 {% endblock %}
