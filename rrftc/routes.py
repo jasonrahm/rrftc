@@ -99,7 +99,7 @@ def reporting():
                 return render_template('reporting.html', form=form)
             else:
                 postdata = request.values
-                sql_text = '''select Team, Scout,
+                sql_text = '''select Teams.Name,Scouts.Name,
                               (IsAutonomous*%d) +
                               (CanPushBeacon*%d) +
                               (CanDeliverClimbers*%d) +
@@ -117,7 +117,15 @@ def reporting():
                               (DebrisAverageScore*%d) +
                               (CanHang*%d) +
                               (CanTriggerAllClearSignal*%d)
-                              AS Score FROM Scouting WHERE Competition = %d ORDER BY Score DESC''' % (int(postdata['auto']),
+                              AS Score
+                              FROM Scouting
+                              INNER JOIN Teams
+                                On Scouting.Team = Teams.id
+                              INNER JOIN Scouts
+                                On Scouting.Scout = Scouts.id
+                              WHERE Competition = %d
+                              ORDER BY Score
+                              DESC''' % (int(postdata['auto']),
                                                                                                       int(postdata['beacon']),
                                                                                                       int(postdata['aclimbers']),
                                                                                                       int(postdata['lclimber']),
