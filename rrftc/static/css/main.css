@@ -5,10 +5,6 @@ body {
   color: #444;
 }
 
-/*
- * Create dark grey header with a white logo
- */
-
 
 
 /*
@@ -16,10 +12,12 @@ body {
  */
 
 .container {
-  width: 375px;
+  width: 350px;
   margin: 0 auto;
 }
-
+textarea#comments.form-control {
+  height: 175px;
+}
 
 h2 {
   text-align: center;

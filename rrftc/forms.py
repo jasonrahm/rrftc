@@ -20,35 +20,37 @@ class ScoutingForm(Form):
     competition = QuerySelectField(query_factory=lambda: Competition.query.all(), get_label='Name')
     team = QuerySelectField(query_factory=lambda: Team.query.all(), get_label='Number')
     scout = QuerySelectField(query_factory=lambda: Scout.query.all(), get_label='Name')
-    rweight = IntegerField('Robot\'s Weight?', [validators.DataRequired('What is the robot\'s Weight?')], default=50)
-    rheight = IntegerField('Robot\'s Height?', [validators.DataRequired('What is the robot\'s Height?')], default=50)
-    auto = BooleanField('Is autonomous working?', default=False)
+    rweight = IntegerField('Robot\'s Weight?', [validators.DataRequired('What is the robot\'s Weight?')], default=1)
+    rheight = IntegerField('Robot\'s Height?', [validators.DataRequired('What is the robot\'s Height?')], default=1)
+    auto = BooleanField('Can it do autonomous?', default=False)
     beacon = BooleanField('Can it push the beacon?', default=False)
     aclimbers = BooleanField('Can it deliver climbers?', default=False)
     lclimber = BooleanField('Can it release the low climber?', default=False)
-    mclimber = BooleanField('Can it release the mid climber?', default=False)
+    mclimber = BooleanField('Can it release the middle climber?', default=False)
     hclimber = BooleanField('Can it release the high climber?', default=False)
     fpark = BooleanField('Can it park on the floor?', default=False)
     lpark = BooleanField('Can it park on the low zone?', default=False)
-    mpark = BooleanField('Can it park on the mid zone?', default=False)
+    mpark = BooleanField('Can it park on the middle zone?', default=False)
     hpark = BooleanField('Can it park on the high zone?', default=False)
-    climbheight = SelectField('Highest zone climbed?', choices=[('Floor', 'Floor'),
+    climbheight = SelectField('What is the highest zone climbed?', choices=[('Floor', 'Floor'),
                                                                ('Low Zone', 'Low Zone'),
                                                                ('Mid Zone', 'Mid Zone'),
                                                                ('High Zone', 'High Zone')])
     debris = BooleanField('Can it score debris?', default=False)
     ldebrisscore = BooleanField('Can it score debris in low zone?', default=False)
-    mdebrisscore = BooleanField('Can it score debris in mid zone?', default=False)
+    mdebrisscore = BooleanField('Can it score debris in middle zone?', default=False)
     hdebrisscore = BooleanField('Can it score debris in high zone?', default=False)
-    avgdebris = IntegerField('What is the average debris scored?', [validators.DataRequired('How much debris is scored on average?')], default=50)
-    debrisscoringmethod = SelectField('How is debris handled?', choices=[('Climb', 'Climb'),
+    avgdebris = IntegerField('What is the average debris score?', [validators.DataRequired('How much debris is scored on average?')], default=50)
+    debrisscoringmethod = SelectField('How is debris handled?', choices=[('None', 'None'),
+                                                                         ('Push', 'Push'),
+                                                                         ('Climb', 'Climb'),
                                                                          ('Launch', 'Launch'),
                                                                          ('Extend', 'Extend'),
                                                                          ('Other', 'Other (add details in comments)')])
     hang = BooleanField('Can it hang?', default=False)
     allclear = BooleanField('Can it trigger the all clear?', default=False)
     spof = TextAreaField('What are the perceived points of failure?', [validators.DataRequired('Please enter possible points of failure:')], default='points of failure:')
-    comments = TextAreaField('General Comments', [validators.DataRequired('Please enter comments:')], default='general comments:')
+    comments = TextAreaField('General Comments', [validators.DataRequired('Please enter comments:')], default='Parking Accuracy:\nBeacon Accuracy:\nDelivery Accuracy:\nZipline Accuracy:\nHang Accuracy:\nAll Clear Accuracy:\n\nGeneral Comments:')
     watchlist = BooleanField('Add this team to the watch list?', default=False)
 
     submit = SubmitField('Add Report')
@@ -65,23 +67,23 @@ class ScoutingForm(Form):
 
 class ReportingForm(Form):
     competition = QuerySelectField(query_factory=lambda: Competition.query.all(), get_label='Name')
-    auto = IntegerField('Autonomous', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    beacon = IntegerField('Beacon', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    aclimbers = IntegerField('Climber Delivery', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    lclimber = IntegerField('Low Climber Release', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    mclimber = IntegerField('Mid Climber Release', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    hclimber = IntegerField('High Climber Release', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    fpark = IntegerField('Floor Parking', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    lpark = IntegerField('Low Zone Parking', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    mpark = IntegerField('Mid Zone Parking', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    hpark = IntegerField('High Zone Parking', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    debris = IntegerField('Debris Scoring', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    ldebrisscore = IntegerField('Low Zone Debris', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    mdebrisscore = IntegerField('Mid Zone Debris', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    hdebrisscore = IntegerField('High Zone Debris', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    avgdebris = IntegerField('Debris Scoring Threshold', [validators.DataRequired('How much debris is scored on average?')], default=1)
-    hang = IntegerField('Hanging', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    allclear = IntegerField('All Clear', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    auto = IntegerField('Can it do autonomous?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    beacon = IntegerField('Can it push the beacon?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    aclimbers = IntegerField('Can it deliver climbers?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    lclimber = IntegerField('Can it release the low climber?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    mclimber = IntegerField('Can it release the middle climber?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    hclimber = IntegerField('Can it release the high climber?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    fpark = IntegerField('Can it park on the floor?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    lpark = IntegerField('Can it park on the low zone?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    mpark = IntegerField('Can it park on the middle zone?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    hpark = IntegerField('Can it park on the high zone?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    debris = IntegerField('Can it score debris?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    ldebrisscore = IntegerField('Can it score in the low zone?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    mdebrisscore = IntegerField('Can it score in the middle zone?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    hdebrisscore = IntegerField('Can it score in the high zone?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    avgdebris = IntegerField('What is the average debris score?', [validators.DataRequired('How much debris is scored on average?')], default=1)
+    hang = IntegerField('Can it hang?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    allclear = IntegerField('Can it trigger the all clear?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
 
     submit = SubmitField('Get Report')
 
@@ -131,7 +133,7 @@ class SigninForm(Form):
 
 class CompetitionForm(Form):
     name = StringField('Name', [validators.DataRequired('Please enter the competition name.')])
-    date = DateField('Date', [validators.DataRequired('Please enter the competition date.')])
+    date = DateField('Date', [validators.DataRequired('Please enter the competition date.')], format='%Y-%m-%d')
     location = StringField('Location', [validators.DataRequired('Please enter the competition location.')])
     submit = SubmitField('Add Competition')
 

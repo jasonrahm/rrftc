@@ -15,9 +15,9 @@
     </thead>
     {% for x in data %}
         <tr>
-            <td>{{ x[0] }}</td>
-            <td>{{ x[2] }}</td>
             <td>{{ x[1] }}</td>
+            <td><a href="{{  url_for('get_individual_report', id = x[0]) }}">{{ x[3] }}</a></td>
+            <td>{{ x[2] }}</td>
         </tr>
     {% endfor %}
     </table>

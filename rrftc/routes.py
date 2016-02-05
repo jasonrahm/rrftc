@@ -104,7 +104,7 @@ def reporting():
                 return render_template('reporting.html', form=form)
             else:
                 postdata = request.values
-                sql_text = '''select Teams.Name,Scouts.Name,
+                sql_text = '''select Scouting.id, Teams.Name,Scouts.Name,
                               (IsAutonomous*%d) +
                               (CanPushBeacon*%d) +
                               (CanDeliverClimbers*%d) +
@@ -119,7 +119,13 @@ def reporting():
                               (CanScoreInLowZone*%d) +
                               (CanScoreInMidZone*%d) +
                               (CanScoreInHighZone*%d) +
-                              (DebrisAverageScore*%d) +
+                              ((CASE
+                                  WHEN DebrisAverageScore<=25 THEN 1
+                                  WHEN DebrisAverageScore<=50 THEN 2
+                                  WHEN DebrisAverageScore<=75 THEN 3
+                                  WHEN DebrisAverageScore<=100 THEN 4
+                                  ELSE 5
+                                END)*%d) +
                               (CanHang*%d) +
                               (CanTriggerAllClearSignal*%d)
                               AS Score
@@ -151,7 +157,7 @@ def reporting():
                 result =db.engine.execute(sql_text)
                 teams = []
                 for row in result:
-                    teams.append([row[0], row[1], row[2]])
+                    teams.append([row[0], row[1], row[2], row[3]])
                 session['report'] = teams
                 return redirect(url_for('report'))
 
@@ -174,6 +180,12 @@ def report():
             redirect(url_for('reporting'))
         else:
             return render_template('report.html', data=data)
+
+
+@app.route('/report/<int:id>',)
+def get_individual_report(id):
+    data = Scouting.query.get(id)
+    return render_template('report_details.html', data=data)
 
 
 @app.route('/teams/delete/<int:id>',)
@@ -335,31 +347,19 @@ def scouting():
                 scout = int(postdata['scout'])
                 rweight = float(postdata['rweight'])
                 rheight = float(postdata['rheight'])
+
                 # autonomous data
-                if 'auto' in request.form:
-                    auto = True
-                    #test other autonomous conditions for true/false
-                    beacon = True if 'beacon' in request.form else False
-                    aclimbers = True if 'aclimbers' in request.form else False
-                    lclimber = True if 'lclimber' in request.form else False
-                    mclimber = True if 'mclimber' in request.form else False
-                    hclimber = True if 'hclimber' in request.form else False
-                    fpark = True if 'fpark' in request.form else False
-                    lpark = True if 'lpark' in request.form else False
-                    mpark = True if 'mpark' in request.form else False
-                    hpark = True if 'hpark' in request.form else False
-                else:
-                    # set all autonomous to false
-                    auto = False
-                    beacon = False
-                    aclimbers = False
-                    lclimber = False
-                    mclimber = False
-                    hclimber = False
-                    fpark = False
-                    lpark = False
-                    mpark = False
-                    hpark = False
+                auto = True if 'auto' in request.form else False
+                beacon = True if 'beacon' in request.form else False
+                aclimbers = True if 'aclimbers' in request.form else False
+                lclimber = True if 'lclimber' in request.form else False
+                mclimber = True if 'mclimber' in request.form else False
+                hclimber = True if 'hclimber' in request.form else False
+                fpark = True if 'fpark' in request.form else False
+                lpark = True if 'lpark' in request.form else False
+                mpark = True if 'mpark' in request.form else False
+                hpark = True if 'hpark' in request.form else False
+
                 climbheight = postdata['climbheight']
                 # teleop data
                 debris = True if 'debris' in request.form else False
