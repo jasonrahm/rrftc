@@ -104,7 +104,7 @@ def reporting():
                 return render_template('reporting.html', form=form)
             else:
                 postdata = request.values
-                sql_text = '''select Scouting.id, Teams.Name,Scouts.Name,
+                sql_text = '''select Scouting.id, Teams.Name, Teams.Number, Scouts.Name,
                               (IsAutonomous*%d) +
                               (CanPushBeacon*%d) +
                               (CanDeliverClimbers*%d) +
@@ -157,8 +157,23 @@ def reporting():
                 result =db.engine.execute(sql_text)
                 teams = []
                 for row in result:
-                    teams.append([row[0], row[1], row[2], row[3]])
+                    teams.append([row[0], row[1], row[2], row[3], row[4]])
                 session['report'] = teams
+
+                sql_text1 = '''select Scouting.id, Teams.Name, Teams.Number, Scouts.Name
+                              FROM Scouting
+                              INNER JOIN Teams
+                                  On Scouting.Team = Teams.id
+                              INNER JOIN Scouts
+                                  On Scouting.Scout = Scouts.id
+                              WHERE (Competition = %d AND WatchList = 1)''' % int(postdata['competition'])
+
+                result1 = db.engine.execute(sql_text1)
+                teams1 = []
+                for row in result1:
+                    teams1.append([row[0], row[1], row[2], row[3]])
+                session['watchlist'] = teams1
+
                 return redirect(url_for('report'))
 
         elif request.method == 'GET':
@@ -179,7 +194,8 @@ def report():
         if data == '':
             redirect(url_for('reporting'))
         else:
-            return render_template('report.html', data=data)
+            watchlist = session['watchlist']
+            return render_template('report.html', data=data, watchlist=watchlist)
 
 
 @app.route('/report/<int:id>',)
