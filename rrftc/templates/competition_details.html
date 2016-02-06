@@ -18,10 +18,18 @@
     </form>
 <hr size="2">
   <h2>Current teams:</h2>
-    <ul class="list">
+    <table class="table table-responsive table-striped">
+        <thead>
+            <tr>
+                <th>Team Number</th>
+                <th>Team</th>
+            </tr>
+        </thead>
         {% for team in team_data %}
-            <li>{{ team.Name }} ({{  team.Number }})</li>
+            <tr>
+                <td>{{ team.Number }}</td>
+                <td>{{ team.Name }}</td>
+            </tr>
         {%  endfor %}
-    </ul>
-
+    </table>
 {% endblock %}
