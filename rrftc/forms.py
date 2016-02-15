@@ -1,27 +1,32 @@
 from flask_wtf import Form
-from wtforms import StringField, SubmitField, PasswordField, IntegerField, validators, DateField, HiddenField, TextAreaField, SelectField, BooleanField
+from wtforms import StringField, SubmitField, PasswordField, IntegerField, validators, DateField, HiddenField, \
+    TextAreaField, SelectField, BooleanField
 from wtforms_sqlalchemy.fields import QuerySelectField
 
 from models import Team, Scout, Competition
-'''
-from models import Team, Scout, Competition
 
-def active_competitions():
-    return Competition.query.all()
 
-def active_scouts():
-    return Scout.query.all()
+class MatchScoutingForm(Form):
+    competition = QuerySelectField(query_factory=lambda: Competition.query.all(), get_label='Name')
+    team = QuerySelectField(query_factory=lambda: Team.query.all(), get_label='Number')
+    scout = QuerySelectField(query_factory=lambda: Scout.query.all(), get_label='Name')
+    move = BooleanField('Did the robot move?', default=False)
+    win = BooleanField('Did the robot win?', default=False)
+    score = BooleanField('Did the robot score?', default=False)
+    cycles = IntegerField('How many scoring cycles?', choices=[(-1, '0'),
+                                                               (1, '1'),
+                                                               (2, '2'),
+                                                               (3, '3'),
+                                                               (4, '4'),
+                                                               (5, '5')])
+    hang = BooleanField('Did the robot hang?', default=False)
+    trigger = BooleanField('Did the robot trigger the climbers?', default=False)
 
-def active_teams():
-    return Team.query.all()
-'''
 
 class ScoutingForm(Form):
     competition = QuerySelectField(query_factory=lambda: Competition.query.all(), get_label='Name')
     team = QuerySelectField(query_factory=lambda: Team.query.all(), get_label='Number')
     scout = QuerySelectField(query_factory=lambda: Scout.query.all(), get_label='Name')
-    rweight = IntegerField('Robot\'s Weight?', [validators.DataRequired('What is the robot\'s Weight?')], default=1)
-    rheight = IntegerField('Robot\'s Height?', [validators.DataRequired('What is the robot\'s Height?')], default=1)
     auto = BooleanField('Can it do autonomous?', default=False)
     beacon = BooleanField('Can it push the beacon?', default=False)
     aclimbers = BooleanField('Can it deliver climbers?', default=False)
@@ -40,7 +45,11 @@ class ScoutingForm(Form):
     ldebrisscore = BooleanField('Can it score debris in low zone?', default=False)
     mdebrisscore = BooleanField('Can it score debris in middle zone?', default=False)
     hdebrisscore = BooleanField('Can it score debris in high zone?', default=False)
-    avgdebris = IntegerField('What is the average debris score?', [validators.DataRequired('How much debris is scored on average?')], default=50)
+    avgdebris = SelectField('How many scoring cycles can it do?', choices=[(1,'1'),
+                                                                            (2,'2'),
+                                                                            (3,'3'),
+                                                                            (4,'4'),
+                                                                            (5,'5')], coerce=int)
     debrisscoringmethod = SelectField('How is debris handled?', choices=[('None', 'None'),
                                                                          ('Push', 'Push'),
                                                                          ('Climb', 'Climb'),
@@ -67,23 +76,23 @@ class ScoutingForm(Form):
 
 class ReportingForm(Form):
     competition = QuerySelectField(query_factory=lambda: Competition.query.all(), get_label='Name')
-    auto = IntegerField('Can it do autonomous?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    beacon = IntegerField('Can it push the beacon?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    aclimbers = IntegerField('Can it deliver climbers?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    lclimber = IntegerField('Can it release the low climber?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    mclimber = IntegerField('Can it release the middle climber?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    hclimber = IntegerField('Can it release the high climber?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    fpark = IntegerField('Can it park on the floor?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    lpark = IntegerField('Can it park on the low zone?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    mpark = IntegerField('Can it park on the middle zone?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    hpark = IntegerField('Can it park on the high zone?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    debris = IntegerField('Can it score debris?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    ldebrisscore = IntegerField('Can it score in the low zone?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    mdebrisscore = IntegerField('Can it score in the middle zone?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    hdebrisscore = IntegerField('Can it score in the high zone?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    avgdebris = IntegerField('What is the average debris score?', [validators.DataRequired('How much debris is scored on average?')], default=1)
-    hang = IntegerField('Can it hang?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
-    allclear = IntegerField('Can it trigger the all clear?', [validators.NumberRange(message='Range should be between 1 and 10.', min=1, max=10)], default=1)
+    auto = SelectField('Can it do autonomous?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    beacon = SelectField('Can it push the beacon?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    aclimbers = SelectField('Can it deliver climbers?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    lclimber = SelectField('Can it release the low climber?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    mclimber = SelectField('Can it release the middle climber?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    hclimber = SelectField('Can it release the high climber?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    fpark = SelectField('Can it park on the floor?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    lpark = SelectField('Can it park on the low zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    mpark = SelectField('Can it park on the middle zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    hpark = SelectField('Can it park on the high zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    debris = SelectField('Can it score debris?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    ldebrisscore = SelectField('Can it score in the low zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    mdebrisscore = SelectField('Can it score in the middle zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    hdebrisscore = SelectField('Can it score in the high zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    avgdebris = SelectField('What is the average debris score?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    hang = SelectField('Can it hang?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    allclear = SelectField('Can it trigger the all clear?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
 
     submit = SubmitField('Get Report')
 

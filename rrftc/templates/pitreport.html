@@ -16,7 +16,7 @@
     {% for x in data %}
         <tr>
             <td>{{ x[2] }}: {{ x[1] }}</td>
-            <td><a href="{{  url_for('get_individual_report', id = x[0]) }}">{{ x[4] }}</a></td>
+            <td><a href="{{  url_for('get_individual_pitreport', id = x[0]) }}">{{ x[4] }}</a></td>
             <td>{{ x[3] }}</td>
         </tr>
     {% endfor %}
@@ -34,7 +34,7 @@
     {% for x in watchlist %}
         <tr>
             <td>{{ x[2] }}: {{ x[1] }}</td>
-            <td><a href="{{ url_for('get_individual_report', id = x[0]) }}">Click Here</a></td>
+            <td><a href="{{ url_for('get_individual_pitreport', id = x[0]) }}">Click Here</a></td>
             <td>{{ x[3] }}</td>
         </tr>
     {% endfor %}

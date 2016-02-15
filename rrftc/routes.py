@@ -86,8 +86,8 @@ def team(id):
         return render_template('team.html', id=id, reports=reports, team=team)
 
 
-@app.route('/reporting', methods=['GET', 'POST'])
-def reporting():
+@app.route('/pit-reporting', methods=['GET', 'POST'])
+def pit_reporting():
 
     form = ReportingForm(request.values)
     form.competition.choices = [(a.id, a.Name) for a in Competition.query.order_by('Name')]
@@ -101,7 +101,7 @@ def reporting():
     else:
         if request.method == 'POST':
             if not form.validate():
-                return render_template('reporting.html', form=form)
+                return render_template('pitreporting.html', form=form)
             else:
                 postdata = request.values
                 sql_text = '''select Scouting.id, Teams.Name, Teams.Number, Scouts.Name,
@@ -174,14 +174,14 @@ def reporting():
                     teams1.append([row[0], row[1], row[2], row[3]])
                 session['watchlist'] = teams1
 
-                return redirect(url_for('report'))
+                return redirect(url_for('pit_report'))
 
         elif request.method == 'GET':
-            return render_template('reporting.html', form=form)
+            return render_template('pitreporting.html', form=form)
 
 
-@app.route('/report')
-def report():
+@app.route('/pit-report')
+def pit_report():
     if 'username' not in session:
         return redirect(url_for('signin'))
 
@@ -192,16 +192,16 @@ def report():
     else:
         data = session['report']
         if data == '':
-            redirect(url_for('reporting'))
+            redirect(url_for('pit_reporting'))
         else:
             watchlist = session['watchlist']
-            return render_template('report.html', data=data, watchlist=watchlist)
+            return render_template('pitreport.html', data=data, watchlist=watchlist)
 
 
-@app.route('/report/<int:id>',)
-def get_individual_report(id):
+@app.route('/pit-report/<int:id>',)
+def get_individual_pitreport(id):
     data = Scouting.query.get(id)
-    return render_template('report_details.html', data=data)
+    return render_template('pitreport_details.html', data=data)
 
 
 @app.route('/teams/delete/<int:id>',)
@@ -264,7 +264,7 @@ def manage_competition(id):
     form = CompetitionTeamForm(request.values, competition=id)
     comp = Competition.query.get(id)
     form.competition = comp.Name
-    form.team.choices = [(a.id, a.Number) for a in Team.query.order_by('Number')]
+    form.team.choices = [(a.id, a.Number) for a in Team.query.all()]
 
     user = session['username']
 
@@ -291,7 +291,7 @@ def manage_competition(id):
             team_list = []
             for team in teams:
                 team_list.append(int(team.Teams))
-            team_data = db.session.query(Team).filter(Team.id.in_(team_list)).all()
+            team_data = db.session.query(Team).filter(Team.id.in_(team_list)).order_by(Team.Number).all()
 
             return render_template('competition_details.html', form=form, id=id, team_data=team_data)
 
@@ -335,8 +335,8 @@ def delete_scout_entry(id):
     return redirect(url_for('scouts'))
 
 
-@app.route('/scouting', methods=['GET', 'POST'])
-def scouting():
+@app.route('/pit-scouting', methods=['GET', 'POST'])
+def pit_scouting():
 
     form = ScoutingForm(request.values)
     form.competition.choices = [(a.id, a.Name) for a in Competition.query.order_by('Name')]
@@ -353,7 +353,7 @@ def scouting():
     else:
         if request.method == 'POST':
             if not form.validate():
-                return render_template('scouting.html', form=form)
+                return render_template('pitscouting.html', form=form)
             else:
 
                 postdata = request.values
@@ -361,8 +361,6 @@ def scouting():
                 competition = int(postdata['competition'])
                 team = int(postdata['team'])
                 scout = int(postdata['scout'])
-                rweight = float(postdata['rweight'])
-                rheight = float(postdata['rheight'])
 
                 # autonomous data
                 auto = True if 'auto' in request.form else False
@@ -394,8 +392,6 @@ def scouting():
                 scoutingreport = Scouting(scout=scout,
                                           team=team,
                                           comp=competition,
-                                          weight=rweight,
-                                          height=rheight,
                                           autonomous=auto,
                                           pushbeacon=beacon,
                                           deliverclimbers=aclimbers,
@@ -423,18 +419,8 @@ def scouting():
                 db.session.commit()
 
                 flash('Scouting report successfully added.')
-                return redirect(url_for('scouting'))
+                return redirect(url_for('pit_scouting'))
 
         elif request.method == 'GET' :
             reports = db.session.query(Scouting).all()
-            return render_template('scouting.html', reports=reports, form=form)
-
-'''
-@app.route('/addMatch')
-def addMatch():
-    return render_template('addMatch.html')
-
-@app.route('matches')
-def matches():
-    return render_template('matches.html')
-'''
+            return render_template('pitscouting.html', reports=reports, form=form)

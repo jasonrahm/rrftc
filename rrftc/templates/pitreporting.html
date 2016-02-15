@@ -14,11 +14,10 @@
 
 
   <h3>Reporting Form</h3>
-  <h5>Select priority range 1 through 10.</h5>
     {% for team in teams %}
         {{ team }}
     {% endfor %}
-  <form class="form-horizontal" action="{{ url_for('reporting') }}" method="post">
+  <form class="form-horizontal" action="{{ url_for('pit_reporting') }}" method="post">
     {{ form.hidden_tag() }}
     {%  for field in form if field.widget.input_type != 'hidden' %}
         {% if field.name == 'submit' %}
@@ -26,8 +25,8 @@
             <div class="col-xs-12">{{ field(class_='form-control') }}</div></div>
         {% else %}
             <div class="form-group">
-                {{ field.label(class_="control-label col-xs-6") }}
-                <div class="col-xs-6">
+                {{ field.label(class_="control-label col-xs-8") }}
+                <div class="col-xs-4">
                     {{ field(class_="form-control") }}
                 </div>
             </div>
@@ -35,3 +34,4 @@
     {%  endfor %}
   </form>
 {% endblock %}
+<p>&nbps;</p>

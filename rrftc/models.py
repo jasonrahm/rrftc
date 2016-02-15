@@ -45,31 +45,52 @@ class Competition(db.Model):
         return '<Competition %r>' % self.id
 
 
-class Match(db.Model):
-    __tablename__ = 'Matches'
+class MatchScouting(db.Model):
+    __tablename__ = 'MatchScouting'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    Scout = db.Column(db.ForeignKey(u'Scouts.id'), nullable=False, index=True)
+    Team = db.Column(db.ForeignKey(u'Teams.id'), nullable=False, index=True)
     Competition = db.Column(db.ForeignKey(u'Competitions.id'), nullable=False, index=True)
-    BlueTeam1 = db.Column(db.ForeignKey(u'Teams.id'), nullable=False, index=True)
-    BlueTeam2 = db.Column(db.ForeignKey(u'Teams.id'), nullable=False, index=True)
-    RedTeam1 = db.Column(db.ForeignKey(u'Teams.id'), nullable=False, index=True)
-    RedTeam2 = db.Column(db.ForeignKey(u'Teams.id'), nullable=False, index=True)
+    DidRobotMove = db.Column(db.Boolean, nullable=False)
+    DidRobotWin = db.Column(db.Boolean, nullable=False)
+    DidRobotScore = db.Column(db.Boolean, nullable=False)
+    HowManyCycles = db.Column(db.Integer, nullable=False)
+    DidRobotHang = db.Column(db.Boolean, nullable=False)
+    DidRobotTriggerClimbers = db.Column(db.Boolean, nullable=False)
+    CreateDate = db.Column(db.DateTime, nullable=False)
+    LastModifiedDate = db.Column(db.DateTime, nullable=False)
 
-    Team = db.relationship(u'Team', primaryjoin='Match.BlueTeam1 == Team.id')
-    Team1 = db.relationship(u'Team', primaryjoin='Match.BlueTeam2 == Team.id')
     Competition1 = db.relationship(u'Competition')
-    Team2 = db.relationship(u'Team', primaryjoin='Match.RedTeam1 == Team.id')
-    Team3 = db.relationship(u'Team', primaryjoin='Match.RedTeam2 == Team.id')
+    Scout1 = db.relationship(u'Scout')
+    Team1 = db.relationship(u'Team')
 
-    def __init__(self, competition, blueteam1, blueteam2, redteam1, redteam2):
-        self.Competition = competition
-        self.BlueTeam1 = blueteam1
-        self.BlueTeam2 = blueteam2
-        self.RedTeam1 = redteam1
-        self.RedTeam2 = redteam2
+    def __init__(self,
+                 scout,
+                 team,
+                 comp,
+                 move,
+                 win,
+                 score,
+                 cycles,
+                 hang,
+                 trigger,
+                 createdate=time.strftime('%Y-%m-%d %H:%M:%S'),
+                 moddate=time.strftime('%Y-%m-%d %H:%M:%S')):
+        self.Scout = scout
+        self.Team = team
+        self.Competition = comp
+        self.DidRobotMove = move
+        self.DidRobotWin - win
+        self.DidRobotScore = score
+        self.HowManyCycles = cycles
+        self.DidRobotHang = hang
+        self.DidRobotTriggerClimbers = trigger
+        self.CreateDate = createdate
+        self.LastModifiedDate = moddate
 
     def __repr__(self):
-        return '<Match %r>' % self.id
+        return '<Match Scouting Report %r>' % self.id
 
 
 class Scouting(db.Model):
@@ -79,8 +100,6 @@ class Scouting(db.Model):
     Scout = db.Column(db.ForeignKey(u'Scouts.id'), nullable=False, index=True)
     Team = db.Column(db.ForeignKey(u'Teams.id'), nullable=False, index=True)
     Competition = db.Column(db.ForeignKey(u'Competitions.id'), nullable=False, index=True)
-    RobotWeight = db.Column(db.Float, nullable=False)
-    RobotHeight = db.Column(db.Float, nullable=False)
     IsAutonomous = db.Column(db.Boolean, nullable=False)
     CanPushBeacon = db.Column(db.Boolean, nullable=False)
     CanDeliverClimbers = db.Column(db.Boolean, nullable=False)
@@ -114,8 +133,6 @@ class Scouting(db.Model):
                  scout,
                  team,
                  comp,
-                 weight,
-                 height,
                  autonomous,
                  pushbeacon,
                  deliverclimbers,
@@ -143,8 +160,6 @@ class Scouting(db.Model):
         self.Scout = scout
         self.Team = team
         self.Competition = comp
-        self.RobotWeight = weight
-        self.RobotHeight = height
         self.IsAutonomous = autonomous
         self.CanPushBeacon = pushbeacon
         self.CanDeliverClimbers = deliverclimbers
