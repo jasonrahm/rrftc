@@ -445,7 +445,6 @@ def match_scouting():
                 return render_template('matchscouting.html', form=form)
             else:
                 postdata = request.values
-                print postdata
                 competition = int(postdata['competition'])
                 team = int(postdata['team'])
                 scout = int(postdata['scout'])
