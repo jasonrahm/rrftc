@@ -54,7 +54,7 @@ class MatchScouting(db.Model):
     Competition = db.Column(db.ForeignKey(u'Competitions.id'), nullable=False, index=True)
     DidRobotMove = db.Column(db.Boolean, nullable=False)
     DidRobotWin = db.Column(db.Boolean, nullable=False)
-    DidRobotScore = db.Column(db.Boolean, nullable=False)
+    DidRobotScoreCycles = db.Column(db.Boolean, nullable=False)
     HowManyCycles = db.Column(db.Integer, nullable=False)
     DidRobotHang = db.Column(db.Boolean, nullable=False)
     DidRobotTriggerClimbers = db.Column(db.Boolean, nullable=False)
@@ -81,8 +81,8 @@ class MatchScouting(db.Model):
         self.Team = team
         self.Competition = comp
         self.DidRobotMove = move
-        self.DidRobotWin - win
-        self.DidRobotScore = score
+        self.DidRobotWin = win
+        self.DidRobotScoreCycles = score
         self.HowManyCycles = cycles
         self.DidRobotHang = hang
         self.DidRobotTriggerClimbers = trigger

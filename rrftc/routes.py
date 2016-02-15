@@ -1,7 +1,8 @@
 from rrftc import app
 from flask import render_template, request, flash, session, url_for, redirect
-from forms import SigninForm, CompetitionForm, ScoutForm, TeamForm, CompetitionTeamForm, ScoutingForm, ReportingForm
-from models import db, Competition, Scout, Team, CompetitionTeam, Scouting
+from forms import SigninForm, CompetitionForm, ScoutForm, TeamForm, CompetitionTeamForm, ScoutingForm, \
+    ReportingForm, MatchScoutingForm, MatchReportingForm
+from models import db, Competition, Scout, Team, CompetitionTeam, Scouting, MatchScouting
 
 
 @app.route('/')
@@ -158,7 +159,7 @@ def pit_reporting():
                 teams = []
                 for row in result:
                     teams.append([row[0], row[1], row[2], row[3], row[4]])
-                session['report'] = teams
+                session['pitreport'] = teams
 
                 sql_text1 = '''select Scouting.id, Teams.Name, Teams.Number, Scouts.Name
                               FROM Scouting
@@ -190,7 +191,7 @@ def pit_report():
     if user is None:
         redirect(url_for('signin'))
     else:
-        data = session['report']
+        data = session['pitreport']
         if data == '':
             redirect(url_for('pit_reporting'))
         else:
@@ -355,13 +356,11 @@ def pit_scouting():
             if not form.validate():
                 return render_template('pitscouting.html', form=form)
             else:
-
                 postdata = request.values
                 # general data
                 competition = int(postdata['competition'])
                 team = int(postdata['team'])
                 scout = int(postdata['scout'])
-
                 # autonomous data
                 auto = True if 'auto' in request.form else False
                 beacon = True if 'beacon' in request.form else False
@@ -422,5 +421,131 @@ def pit_scouting():
                 return redirect(url_for('pit_scouting'))
 
         elif request.method == 'GET' :
-            reports = db.session.query(Scouting).all()
-            return render_template('pitscouting.html', reports=reports, form=form)
+            return render_template('pitscouting.html', form=form)
+
+
+@app.route('/match-scouting', methods=['GET', 'POST'])
+def match_scouting():
+
+    form = MatchScoutingForm(request.values)
+    form.competition.choices = [(a.id, a.Name) for a in Competition.query.order_by('Name')]
+    form.team.choices = [(a.id, a.Number) for a in Team.query.order_by('Number')]
+    form.scout.choices = [(a.id, a.Name) for a in Scout.query.order_by('Name')]
+
+    if 'username' not in session:
+        return redirect(url_for('signin'))
+
+    user = session['username']
+
+    if user is None:
+        redirect(url_for('signin'))
+    else:
+        if request.method == 'POST':
+            if not form.validate():
+                return render_template('matchscouting.html', form=form)
+            else:
+                postdata = request.values
+                print postdata
+                competition = int(postdata['competition'])
+                team = int(postdata['team'])
+                scout = int(postdata['scout'])
+
+                move = True if 'move' in request.form else False
+                win = True if 'win' in request.form else False
+                score = True if 'score' in request.form else False
+                cycles = postdata['cycles']
+                hang = True if 'hang' in request.form else False
+                trigger = True if 'trigger' in request.form else False
+
+                matchscoutingreport = MatchScouting(scout=scout,
+                                                    team=team,
+                                                    comp=competition,
+                                                    move=move,
+                                                    win=win,
+                                                    score=score,
+                                                    cycles=cycles,
+                                                    hang=hang,
+                                                    trigger=trigger)
+                db.session.add(matchscoutingreport)
+                db.session.commit()
+
+                flash('Match scouting report successfully added.')
+                return redirect(url_for('match_scouting'))
+
+        elif request.method == 'GET':
+            return render_template('matchscouting.html', form=form)
+
+
+@app.route('/match-reporting', methods=['GET', 'POST'])
+def match_reporting():
+
+    form = MatchReportingForm(request.values)
+    form.competition.choices = [(a.id, a.Name) for a in Competition.query.order_by('Name')]
+
+    if 'username' not in session:
+        return redirect(url_for('signin'))
+
+    user = session['username']
+    if user is None:
+        redirect(url_for('signin'))
+    else:
+        if request.method == 'POST':
+            if not form.validate():
+                return render_template('matchreporting.html', form=form)
+            else:
+                postdata = request.values
+                sql_text = '''select MatchScouting.id, Teams.Name, Teams.Number, Scouts.Name,
+                              (DidRobotMove*%d) +
+                              (DidRobotWin*%d) +
+                              (DidRobotScoreCycles*%d) +
+                              (HowManyCycles*%d) +
+                              (DidRobotHang*%d) +
+                              (DidRobotTriggerClimbers*%d)
+                              AS Score
+                              FROM MatchScouting
+                              INNER JOIN Teams
+                                On MatchScouting.Team = Teams.id
+                              INNER JOIN Scouts
+                                On MatchScouting.Scout = Scouts.id
+                              WHERE Competition = %d
+                              ORDER BY Score
+                              DESC''' % (int(postdata['move']),
+                                         int(postdata['win']),
+                                         int(postdata['score']),
+                                         int(postdata['cycles']),
+                                         int(postdata['hang']),
+                                         int(postdata['trigger']),
+                                         int(postdata['competition']))
+                result = db.engine.execute(sql_text)
+                teams = []
+                for row in result:
+                    teams.append([row[0], row[1], row[2], row[3], row[4]])
+                session['matchreport'] = teams
+
+                return redirect(url_for('match_report'))
+
+        elif request.method == 'GET':
+            return render_template('matchreporting.html', form=form)
+
+
+@app.route('/match-report')
+def match_report():
+    if 'username' not in session:
+        return redirect(url_for('signin'))
+
+    user = session['username']
+
+    if user is None:
+        redirect(url_for('signin'))
+    else:
+        data = session['matchreport']
+        if data == '':
+            redirect(url_for('match_reporting'))
+        else:
+            return render_template('matchreport.html', data=data)
+
+
+@app.route('/match-report/<int:id>',)
+def get_individual_matchreport(id):
+    data = MatchScouting.query.get(id)
+    return render_template('matchreport_details.html', data=data)

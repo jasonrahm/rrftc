@@ -13,14 +13,25 @@ class MatchScoutingForm(Form):
     move = BooleanField('Did the robot move?', default=False)
     win = BooleanField('Did the robot win?', default=False)
     score = BooleanField('Did the robot score?', default=False)
-    cycles = IntegerField('How many scoring cycles?', choices=[(-1, '0'),
+    cycles = SelectField('How many scoring cycles?', choices=[(-1, '0'),
                                                                (1, '1'),
                                                                (2, '2'),
                                                                (3, '3'),
                                                                (4, '4'),
-                                                               (5, '5')])
+                                                               (5, '5')], coerce=int)
     hang = BooleanField('Did the robot hang?', default=False)
     trigger = BooleanField('Did the robot trigger the climbers?', default=False)
+
+    submit = SubmitField('Add Report')
+
+    def __init__(self, *args, **kwargs):
+        Form.__init__(self, *args, **kwargs)
+
+    def validate(self):
+        if not Form.validate(self):
+            return False
+        else:
+            return True
 
 
 class ScoutingForm(Form):
@@ -63,6 +74,27 @@ class ScoutingForm(Form):
     watchlist = BooleanField('Add this team to the watch list?', default=False)
 
     submit = SubmitField('Add Report')
+
+    def __init__(self, *args, **kwargs):
+        Form.__init__(self, *args, **kwargs)
+
+    def validate(self):
+        if not Form.validate(self):
+            return False
+        else:
+            return True
+
+
+class MatchReportingForm(Form):
+    competition = QuerySelectField(query_factory=lambda: Competition.query.all(), get_label='Name')
+    move = SelectField('Did the robot move?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    win = SelectField('Did the robot win?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    score = SelectField('Did the robot score?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    cycles = SelectField('How many scoring cycles?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    hang = SelectField('Did the robot hang?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    trigger = SelectField('Did the robot trigger the climbers?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+
+    submit = SubmitField('Get Report')
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
@@ -145,24 +177,6 @@ class CompetitionForm(Form):
     date = DateField('Date', [validators.DataRequired('Please enter the competition date.')], format='%Y-%m-%d')
     location = StringField('Location', [validators.DataRequired('Please enter the competition location.')])
     submit = SubmitField('Add Competition')
-
-    def __init__(self, *args, **kwargs):
-        Form.__init__(self, *args, **kwargs)
-
-    def validate(self):
-        if not Form.validate(self):
-            return False
-        else:
-            return True
-
-class MatchForm(Form):
-    competition = HiddenField ('Competition')
-    match = HiddenField('Match')
-    blueteam1 = QuerySelectField(query_factory=lambda: Team.query.all(), get_label='Number')
-    blueteam2 = QuerySelectField(query_factory=lambda: Team.query.all(), get_label='Number')
-    redteam1 = QuerySelectField(query_factory=lambda: Team.query.all(), get_label='Number')
-    redteam2 = QuerySelectField(query_factory=lambda: Team.query.all(), get_label='Number')
-    submit = SubmitField('Add Team')
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)

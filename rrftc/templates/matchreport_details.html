@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h3>Match Report Details</h3>
+    <table class="table table-responsive table-bordered">
+        <thead>
+            <th>Field</th>
+            <th>Value</th>
+        </thead>
+        <tr>
+            <td>Team</td>
+            <td>tbd</td>
+        </tr>
+        <tr>
+            <td>Did the robot move?</td>
+            <td>{{ data.DidRobotMove  }}</td>
+        </tr>
+        <tr>
+            <td>Did the robot win?</td>
+            <td>{{ data.DidRobotWin }}</td>
+        </tr>
+        <tr>
+            <td>Did the robot score?</td>
+            <td>{{ data.DidRobotScoreCycles }}</td>
+        </tr>
+        <tr>
+            <td>How many scoring cycles?</td>
+            <td>{{ data.HowManyCycles }}</td>
+        </tr>
+            <tr>
+            <td>Did the robot hang?</td>
+            <td>{{ data.DidRobotHang }}</td>
+        </tr>
+        <tr>
+            <td>Did the robot trigger the climbers?</td>
+            <td>{{ data.DidRobotTriggerClimbers }}</td>
+        </tr>
+    </table>
+{% endblock %}
