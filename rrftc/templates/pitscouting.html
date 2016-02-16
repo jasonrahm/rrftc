@@ -17,8 +17,13 @@
   <form class="form-horizontal" action="{{ url_for('pit_scouting') }}" method="post">
     {{ form.hidden_tag() }}
     {%  for field in form if field.widget.input_type != 'hidden' %}
+        {% if field.name == 'beacon' %}
+            <div class="form-group" id="beacon">
+                {{ field.label(class_="control-label col-xs-8") }}
+                <div class="col-xs-4">
+                    {{ field(class_="form-control") }}</div></div>
 
-        {%  if (field.name == 'spof' or field.name == 'comments') %}
+        {%  elif (field.name == 'spof' or field.name == 'comments') %}
             <div class="form-group">
             <div class="col-xs-12">{{ field(class_='form-control') }}</div></div>
         {% elif field.name == 'submit' %}
