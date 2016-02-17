@@ -13,7 +13,7 @@
 {% endif %}
 
 
-  <h2>Match Scouting Form</h2>
+  <h3>Match Scouting Form</h3>
   <form class="form-horizontal" action="{{ url_for('match_scouting') }}" method="post">
     {{ form.hidden_tag() }}
     {%  for field in form if field.widget.input_type != 'hidden' %}
@@ -23,10 +23,10 @@
             <div class="col-xs-12">{{ field(class_='form-control') }}</div></div>
         {%  else %}
             <div class="form-group">
-                {{ field.label(class_="control-label col-xs-8") }}
-                <div class="col-xs-4">
+                <div class="col-xs-5">
                     {{ field(class_="form-control") }}
                 </div>
+                {{ field.label(class_="control-label col-xs-7") }}
             </div>
         {% endif %}
     {%  endfor %}

@@ -18,7 +18,8 @@ class MatchScoutingForm(Form):
                                                                (2, '2'),
                                                                (3, '3'),
                                                                (4, '4'),
-                                                               (5, '5')], coerce=int)
+                                                               (5, '5')
+                                                               (6, '6')], coerce=int)
     hang = BooleanField('Did the robot hang?', default=False)
     trigger = BooleanField('Did the robot trigger the climbers?', default=False)
 
