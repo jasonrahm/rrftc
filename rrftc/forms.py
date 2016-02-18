@@ -18,7 +18,7 @@ class MatchScoutingForm(Form):
                                                                (2, '2'),
                                                                (3, '3'),
                                                                (4, '4'),
-                                                               (5, '5')
+                                                               (5, '5'),
                                                                (6, '6')], coerce=int)
     hang = BooleanField('Did the robot hang?', default=False)
     trigger = BooleanField('Did the robot trigger the climbers?', default=False)
@@ -35,46 +35,87 @@ class MatchScoutingForm(Form):
             return True
 
 
-class ScoutingForm(Form):
+class PitScoutingForm(Form):
     competition = QuerySelectField(query_factory=lambda: Competition.query.all(), get_label='Name')
     team = QuerySelectField(query_factory=lambda: Team.query.all(), get_label='Number')
     scout = QuerySelectField(query_factory=lambda: Scout.query.all(), get_label='Name')
-    auto = BooleanField('Can it do autonomous?', default=False)
-    beacon = BooleanField('Can it push the beacon?', default=False)
-    aclimbers = BooleanField('Can it deliver climbers?', default=False)
-    lclimber = BooleanField('Can it release the low climber?', default=False)
-    mclimber = BooleanField('Can it release the middle climber?', default=False)
-    hclimber = BooleanField('Can it release the high climber?', default=False)
-    fpark = BooleanField('Can it park on the floor?', default=False)
-    lpark = BooleanField('Can it park on the low zone?', default=False)
-    mpark = BooleanField('Can it park on the middle zone?', default=False)
-    hpark = BooleanField('Can it park on the high zone?', default=False)
-    climbheight = SelectField('What is the highest zone climbed?', choices=[('Floor', 'Floor'),
-                                                               ('Low Zone', 'Low Zone'),
-                                                               ('Mid Zone', 'Mid Zone'),
-                                                               ('High Zone', 'High Zone')])
-    debris = BooleanField('Can it score debris?', default=False)
-    ldebrisscore = BooleanField('Can it score debris in low zone?', default=False)
-    mdebrisscore = BooleanField('Can it score debris in middle zone?', default=False)
-    hdebrisscore = BooleanField('Can it score debris in high zone?', default=False)
-    avgdebris = SelectField('How many scoring cycles can it do?', choices=[(1,'1'),
-                                                                            (2,'2'),
-                                                                            (3,'3'),
-                                                                            (4,'4'),
-                                                                            (5,'5')], coerce=int)
-    debrisscoringmethod = SelectField('How is debris handled?', choices=[('None', 'None'),
-                                                                         ('Push', 'Push'),
-                                                                         ('Climb', 'Climb'),
-                                                                         ('Launch', 'Launch'),
-                                                                         ('Extend', 'Extend'),
-                                                                         ('Other', 'Other (add details in comments)')])
-    hang = BooleanField('Can it hang?', default=False)
-    allclear = BooleanField('Can it trigger the all clear?', default=False)
-    spof = TextAreaField('What are the perceived points of failure?', [validators.DataRequired('Please enter possible points of failure:')], default='points of failure:')
-    comments = TextAreaField('General Comments', [validators.DataRequired('Please enter comments:')], default='Parking Accuracy:\nBeacon Accuracy:\nDelivery Accuracy:\nZipline Accuracy:\nHang Accuracy:\nAll Clear Accuracy:\n\nGeneral Comments:')
-    watchlist = BooleanField('Add this team to the watch list?', default=False)
+    auto_offense = BooleanField('Autonomous?', default=False)
+    auto_defense = BooleanField('Defensive Autonomous?', default=False)
+    a_climbers = BooleanField('Deliver Climbers?', default=False)
+    a_climbers_acc = SelectField('Climber Accuracy', choices=[(-1, 'NA'),
+                                                              (1, '1% - 25%'),
+                                                              (2, '26% - 50%'),
+                                                              (3, '51% - 75%'),
+                                                              (4, '76% - 100%')], coerce=int)
+    beacon = BooleanField('Push Beacon?', default=False)
+    a_floorpark = BooleanField('Park on Floor?', default=False)
+    a_lowpark = BooleanField('Park on Low Zone?', default=False)
+    a_midpark = BooleanField('Park on Mid Zone?', default=False)
+    a_midpark_acc = SelectField('Mid Park Accuracy', choices=[(-1, 'NA'),
+                                                              (1, '1% - 25%'),
+                                                              (2, '26% - 50%'),
+                                                              (3, '51% - 75%'),
+                                                              (4, '76% - 100%')], coerce=int)
+    a_highpark = BooleanField('Park on High Zone?', default=False)
+    a_highpark_acc = SelectField('High Park Accuracy', choices=[(-1, 'NA'),
+                                                              (1, '1% - 25%'),
+                                                              (2, '26% - 50%'),
+                                                              (3, '51% - 75%'),
+                                                              (4, '76% - 100%')], coerce=int)
+    cycles = SelectField('Debris Scoring Cycles', choices=[(-1,'0'),
+                                                           (1,'1'),
+                                                           (2,'2'),
+                                                           (3,'3'),
+                                                           (4,'4'),
+                                                           (5,'5'),
+                                                           (6,'6')], coerce=int)
+    scorelow = BooleanField('Score in Low Zone?', default=False)
+    scoremid = BooleanField('Score in Mid Zone?', default=False)
+    scorehigh = BooleanField('Score in High Zone?', default=False)
+    t_climbers = BooleanField('Deliver Climbers?', default=False)
+    t_climbers_acc = SelectField('Climber Accuracy', choices=[(-1, 'NA'),
+                                                              (1, '1% - 25%'),
+                                                              (2, '26% - 50%'),
+                                                              (3, '51% - 75%'),
+                                                              (4, '76% - 100%')], coerce=int)
+    lowclimber = BooleanField('Release Low Climber?', default=False)
+    lowclimber_acc = SelectField('Low Climber Accuracy', choices=[(-1, 'NA'),
+                                                              (1, '1% - 25%'),
+                                                              (2, '26% - 50%'),
+                                                              (3, '51% - 75%'),
+                                                              (4, '76% - 100%')], coerce=int)
+    midclimber = BooleanField('Release Mid Climber?', default=False)
+    midclimber_acc = SelectField('Mid Climber Accuracy', choices=[(-1, 'NA'),
+                                                              (1, '1% - 25%'),
+                                                              (2, '26% - 50%'),
+                                                              (3, '51% - 75%'),
+                                                              (4, '76% - 100%')], coerce=int)
+    highclimber = BooleanField('Release High Climber?', default=False)
+    highclimber_acc = SelectField('High Climber Accuracy', choices=[(-1, 'NA'),
+                                                              (1, '1% - 25%'),
+                                                              (2, '26% - 50%'),
+                                                              (3, '51% - 75%'),
+                                                              (4, '76% - 100%')], coerce=int)
+    t_floorpark = BooleanField('Park on Floor?', default=False)
+    t_lowpark = BooleanField('Park on Low Zone?', default=False)
+    t_midpark = BooleanField('Park on Mid Zone?', default=False)
+    t_midpark_acc = SelectField('Mid Park Accuracy', choices=[(-1, 'NA'),
+                                                              (1, '1% - 25%'),
+                                                              (2, '26% - 50%'),
+                                                              (3, '51% - 75%'),
+                                                              (4, '76% - 100%')], coerce=int)
+    t_highpark = BooleanField('Park on High Zone?', default=False)
+    t_highpark_acc = SelectField('High Park Accuracy', choices=[(-1, 'NA'),
+                                                              (1, '1% - 25%'),
+                                                              (2, '26% - 50%'),
+                                                              (3, '51% - 75%'),
+                                                              (4, '76% - 100%')], coerce=int)
+    hang = BooleanField('Can Hang?', default=False)
+    allclear = BooleanField('Trigger All Clear?', default=False)
+    comments = TextAreaField('General Comments', [validators.DataRequired('Please enter comments')], default='Comments:')
+    watchlist = BooleanField('Add to Watch List?', default=False)
 
-    submit = SubmitField('Add Report')
+    submit = SubmitField('Add Pit Scouting Report')
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
@@ -107,25 +148,30 @@ class MatchReportingForm(Form):
             return True
 
 
-class ReportingForm(Form):
+class PitReportingForm(Form):
     competition = QuerySelectField(query_factory=lambda: Competition.query.all(), get_label='Name')
-    auto = SelectField('Can it do autonomous?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    beacon = SelectField('Can it push the beacon?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    aclimbers = SelectField('Can it deliver climbers?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    lclimber = SelectField('Can it release the low climber?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    mclimber = SelectField('Can it release the middle climber?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    hclimber = SelectField('Can it release the high climber?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    fpark = SelectField('Can it park on the floor?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    lpark = SelectField('Can it park on the low zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    mpark = SelectField('Can it park on the middle zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    hpark = SelectField('Can it park on the high zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    debris = SelectField('Can it score debris?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    ldebrisscore = SelectField('Can it score in the low zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    mdebrisscore = SelectField('Can it score in the middle zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    hdebrisscore = SelectField('Can it score in the high zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    avgdebris = SelectField('What is the average debris score?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    hang = SelectField('Can it hang?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    allclear = SelectField('Can it trigger the all clear?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    auto_offense = SelectField('Autonomous?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    auto_defense = SelectField('Defensive Autonomous?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    a_climbers = SelectField('Deliver Climbers?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    beacon = SelectField('Push Beacon?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    a_floorpark = SelectField('Park on Floor?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    a_lowpark = SelectField('Park on Low Zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    a_midpark = SelectField('Park on Mid Zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    a_highpark = SelectField('Park on High Zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    cycles = SelectField('Debris Scoring Cycles', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    scorelow = SelectField('Score in Low Zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    scoremid = SelectField('Score in Mid Zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    scorehigh = SelectField('Score in High Zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    t_climbers = SelectField('Deliver Climbers?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    lowclimber = SelectField('Release Low Climber', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    midclimber = SelectField('Release Mid Climber?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    highclimber = SelectField('Release High Climber?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    t_floorpark = SelectField('Park on Floor?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    t_lowpark = SelectField('Park on Low Zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    t_midpark = SelectField('Park on Mid Zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    t_highpark = SelectField('Park on High Zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    hang = SelectField('Can Hang?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    allclear = SelectField('Trigger All Clear?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
 
     submit = SubmitField('Get Report')
 

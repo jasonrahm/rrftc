@@ -16,29 +16,172 @@
   <h3>Pit Scouting Form</h3>
   <form class="form-horizontal" action="{{ url_for('pit_scouting') }}" method="post">
     {{ form.hidden_tag() }}
-    {%  for field in form if field.widget.input_type != 'hidden' %}
-        {% if field.name == 'beacon' %}
-            <div class="form-group" id="beacon">
-                <div class="col-xs-5">
-                    {{ field(class_="form-control") }}
+
+    <div class="row">
+        <div class="col-md-12 col-sm-6 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title">Scouting Header</h3>
                 </div>
-                {{ field.label(class_="control-label col-xs-7") }}
+                <div class="panel-body">
+                    <div class="form-group">
+                        {{ form.competition.label }} {{ form.competition }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.team.label }} {{ form.team }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.scout.label }} {{ form.scout }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-6 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title">Autonomous</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        {{ form.auto_offense.label }} {{ form.auto_offense }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.auto_defense.label }} {{ form.auto_defense }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.a_climbers.label }} {{ form.a_climbers }}
+                    </div>
+                    <div class="form-group" id="a_climbers_acc">
+                        {{ form.a_climbers_acc.label }} {{ form.a_climbers_acc }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.a_floorpark.label }} {{ form.a_floorpark }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.a_lowpark.label }} {{ form.a_lowpark }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.a_midpark.label }} {{ form.a_midpark }}
+                    </div>
+                    <div class="form-group" id="a_midpark_acc">
+                        {{ form.a_midpark_acc.label }} {{ form.a_midpark_acc }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.a_highpark.label }} {{ form.a_highpark }}
+                    </div>
+                    <div class="form-group" id="a_highpark_acc">
+                        {{ form.a_highpark_acc.label }} {{ form.a_highpark_acc }}
+                    </div>
                 </div>
 
-        {%  elif (field.name == 'spof' or field.name == 'comments') %}
-            <div class="form-group">
-            <div class="col-xs-12">{{ field(class_='form-control') }}</div></div>
-        {% elif field.name == 'submit' %}
-            <div class="form-group">
-            <div class="col-xs-12">{{ field(class_='form-control') }}</div></div>
-        {%  else %}
-            <div class="form-group">
-                <div class="col-xs-5">
-                    {{ field(class_="form-control") }}
-                </div>
-                {{ field.label(class_="control-label col-xs-7") }}
             </div>
-        {% endif %}
-    {%  endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-6 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title">Teleop</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        {{ form.cycles.label }} {{ form.cycles }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.scorelow.label }} {{ form.scorelow }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.scoremid.label }} {{ form.scoremid }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.scorehigh.label }} {{ form.scorehigh }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.t_climbers.label }} {{ form.t_climbers }}
+                    </div>
+                    <div class="form-group" id="t_climbers_acc">
+                        {{ form.t_climbers_acc.label }} {{ form.t_climbers_acc }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.lowclimber.label }} {{ form.lowclimber }}
+                    </div>
+                    <div class="form-group" id="lowclimber_acc">
+                        {{ form.lowclimber_acc.label }} {{ form.lowclimber_acc }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.midclimber.label }} {{ form.midclimber }}
+                    </div>
+                    <div class="form-group" id="midclimber_acc">
+                        {{ form.midclimber_acc.label }} {{ form.midclimber_acc }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.highclimber.label }} {{ form.highclimber }}
+                    </div>
+                    <div class="form-group" id="highclimber_acc">
+                        {{ form.highclimber_acc.label }} {{ form.highclimber_acc }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.t_floorpark.label }} {{ form.t_floorpark }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.t_lowpark.label }} {{ form.t_lowpark }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.t_midpark.label }} {{ form.t_midpark }}
+                    </div>
+                    <div class="form-group" id="t_midpark_acc">
+                        {{ form.t_midpark_acc.label }} {{ form.t_midpark_acc }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.t_highpark.label }} {{ form.t_highpark }}
+                    </div>
+                    <div class="form-group" id="t_highpark_acc">
+                        {{ form.t_highpark_acc.label }} {{ form.t_highpark_acc }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-6 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title">End Game</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        {{ form.hang.label }} {{ form.hang }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.allclear.label }} {{ form.allclear }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+      <div class="row">
+        <div class="col-md-12 col-sm-6 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title"></h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        {{ form.comments }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.watchlist.label }} {{ form.watchlist }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form.submit }}
+    </div>
   </form>
 {% endblock %}

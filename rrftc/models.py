@@ -3,6 +3,7 @@ import time
 
 db = SQLAlchemy()
 
+
 class CompetitionTeam(db.Model):
     __tablename__ = 'CompetitionTeams'
 
@@ -18,7 +19,6 @@ class CompetitionTeam(db.Model):
         self.Competitions = competitions
         self.Teams = teams
         self.CreateDate = createdate
-
 
     def __repr__(self):
         return '<CompetitionTeam %r %r %r>' % (self.id, self.Competitions, self.Teams)
@@ -93,100 +93,138 @@ class MatchScouting(db.Model):
         return '<Match Scouting Report %r>' % self.id
 
 
-class Scouting(db.Model):
-    __tablename__ = 'Scouting'
+class PitScouting(db.Model):
+    __tablename__ = 'PitScouting'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    Scout = db.Column(db.ForeignKey(u'Scouts.id'), nullable=False, index=True)
-    Team = db.Column(db.ForeignKey(u'Teams.id'), nullable=False, index=True)
     Competition = db.Column(db.ForeignKey(u'Competitions.id'), nullable=False, index=True)
-    IsAutonomous = db.Column(db.Boolean, nullable=False)
+    Team = db.Column(db.ForeignKey(u'Teams.id'), nullable=False, index=True)
+    Scout = db.Column(db.ForeignKey(u'Scouts.id'), nullable=False, index=True)
+    #autonomous
+    CanDoAutonomous = db.Column(db.Boolean, nullable=False)
+    DefensiveAutonomous = db.Column(db.Boolean, nullable=False)
+    a_CanDeliverClimbers = db.Column(db.Boolean, nullable=False)
+    a_CanDeliverClimbers_accuracy = db.Column(db.Integer, nullable=False)
     CanPushBeacon = db.Column(db.Boolean, nullable=False)
-    CanDeliverClimbers = db.Column(db.Boolean, nullable=False)
-    DeliverClimberLow = db.Column(db.Boolean, nullable=False)
-    DeliverClimberMid = db.Column(db.Boolean, nullable=False)
-    DeliverClimberHigh = db.Column(db.Boolean, nullable=False)
-    CanParkOnFloor = db.Column(db.Boolean, nullable=False)
-    CanParkOnLowZone = db.Column(db.Boolean, nullable=False)
-    CanParkOnMidZone = db.Column(db.Boolean, nullable=False)
-    CanParkOnHighZone = db.Column(db.Boolean, nullable=False)
-    HighestZoneClimbed = db.Column(db.String(120), nullable=False)
-    CanScoreDebris = db.Column(db.Boolean, nullable=False)
-    CanScoreInLowZone = db.Column(db.Boolean, nullable=False)
-    CanScoreInMidZone = db.Column(db.Boolean, nullable=False)
-    CanScoreInHighZone = db.Column(db.Boolean, nullable=False)
-    DebrisAverageScore = db.Column(db.Integer, nullable=False)
-    DebrisScoringMethod = db.Column(db.String(120), nullable=False)
+    a_CanParkFloor = db.Column(db.Boolean, nullable=False)
+    a_CanParkLow = db.Column(db.Boolean, nullable=False)
+    a_CanParkMid = db.Column(db.Boolean, nullable=False)
+    a_CanParkMid_accuracy = db.Column(db.Integer, nullable=False)
+    a_CanParkHigh = db.Column(db.Boolean, nullable=False)
+    a_CanParkHigh_accuracy = db.Column(db.Integer, nullable=False)
+    #teleop
+    DebrisScoringCycles = db.Column(db.Integer, nullable=False)
+    CanScoreLow = db.Column(db.Boolean, nullable=False)
+    CanScoreMid = db.Column(db.Boolean, nullable=False)
+    CanScoreHigh = db.Column(db.Boolean, nullable=False)
+    t_CanDeliverClimbers = db.Column(db.Boolean, nullable=False)
+    t_CanDeliverClimbers_accuracy = db.Column(db.Integer, nullable=False)
+    CanReleaseLowClimber = db.Column(db.Boolean, nullable=False)
+    CanReleaseLowClimber_accuracy = db.Column(db.Integer, nullable=False)
+    CanReleaseMidClimber = db.Column(db.Boolean, nullable=False)
+    CanReleaseMidClimber_accuracy = db.Column(db.Integer, nullable=False)
+    CanReleaseHighClimber = db.Column(db.Boolean, nullable=False)
+    CanReleaseHighClimber_accuracy = db.Column(db.Integer, nullable=False)
+    t_CanParkFloor = db.Column(db.Boolean, nullable=False)
+    t_CanParkLow = db.Column(db.Boolean, nullable=False)
+    t_CanParkMid = db.Column(db.Boolean, nullable=False)
+    t_CanParkMid_accuracy = db.Column(db.Integer, nullable=False)
+    t_CanParkHigh = db.Column(db.Boolean, nullable=False)
+    t_CanParkHigh_accuracy = db.Column(db.Integer, nullable=False)
+    #endgame
     CanHang = db.Column(db.Boolean, nullable=False)
-    CanTriggerAllClearSignal = db.Column(db.Boolean, nullable=False)
-    PossiblePointsOfFailure = db.Column(db.Text, nullable=False)
-    GeneralComments = db.Column(db.Text, nullable=False)
-    WatchList = db.Column(db.Boolean, nullable=False)
+    CanTriggerAllClear = db.Column(db.Boolean, nullable=False)
+    #general
+    Comments = db.Column(db.Text, nullable=False)
+    AddToWatchList = db.Column(db.Boolean, nullable=False)
+    #timestamps
     CreateDate = db.Column(db.DateTime, nullable=False)
     LastModifiedDate = db.Column(db.DateTime, nullable=False)
-
+    #relational table info
+    Team1 = db.relationship(u'Team')
     Competition1 = db.relationship(u'Competition')
     Scout1 = db.relationship(u'Scout')
-    Team1 = db.relationship(u'Team')
 
     def __init__(self,
-                 scout,
-                 team,
                  comp,
-                 autonomous,
-                 pushbeacon,
-                 deliverclimbers,
-                 lclimber,
-                 mclimber,
-                 hclimber,
-                 fpark,
-                 lpark,
-                 mpark,
-                 hpark,
-                 highestzone,
-                 scoredebris,
-                 ldebris,
-                 mdebris,
-                 hdebris,
-                 avgdebris,
-                 debrismethod,
+                 team,
+                 scout,
+                 auto_offense,
+                 auto_defense,
+                 a_climbers,
+                 a_climbers_acc,
+                 beacon,
+                 a_floorpark,
+                 a_lowpark,
+                 a_midpark,
+                 a_midpark_acc,
+                 a_highpark,
+                 a_highpark_acc,
+                 cycles,
+                 scorelow,
+                 scoremid,
+                 scorehigh,
+                 t_climbers,
+                 t_climbers_acc,
+                 lowclimber,
+                 lowclimber_acc,
+                 midclimber,
+                 midclimber_acc,
+                 highclimber,
+                 highclimber_acc,
+                 t_floorpark,
+                 t_lowpark,
+                 t_midpark,
+                 t_midpark_acc,
+                 t_highpark,
+                 t_highpark_acc,
                  hang,
                  allclear,
-                 spof,
                  comments,
                  watchlist,
                  createdate=time.strftime('%Y-%m-%d %H:%M:%S'),
                  moddate=time.strftime('%Y-%m-%d %H:%M:%S')):
-        self.Scout = scout
-        self.Team = team
         self.Competition = comp
-        self.IsAutonomous = autonomous
-        self.CanPushBeacon = pushbeacon
-        self.CanDeliverClimbers = deliverclimbers
-        self.DeliverClimberLow = lclimber
-        self.DeliverClimberMid = mclimber
-        self.DeliverClimberHigh = hclimber
-        self.CanParkOnFloor = fpark
-        self.CanParkOnLowZone = lpark
-        self.CanParkOnMidZone = mpark
-        self.CanParkOnHighZone = hpark
-        self.HighestZoneClimbed = highestzone
-        self.CanScoreDebris = scoredebris
-        self.CanScoreInLowZone = ldebris
-        self.CanScoreInMidZone = mdebris
-        self.CanScoreInHighZone = hdebris
-        self.DebrisAverageScore = avgdebris
-        self.DebrisScoringMethod = debrismethod
+        self.Team = team
+        self.Scout = scout
+        self.CanDoAutonomous = auto_offense
+        self.DefensiveAutonomous = auto_defense
+        self.a_CanDeliverClimbers = a_climbers
+        self.a_CanDeliverClimbers_accuracy = a_climbers_acc
+        self.CanPushBeacon = beacon
+        self.a_CanParkFloor = a_floorpark
+        self.a_CanParkLow = a_lowpark
+        self.a_CanParkMid = a_midpark
+        self.a_CanParkMid_accuracy = a_midpark_acc
+        self.a_CanParkHigh = a_highpark
+        self.a_CanParkHigh_accuracy = a_highpark_acc
+        self.DebrisScoringCycles = cycles
+        self.CanScoreLow = scorelow
+        self.CanScoreMid = scoremid
+        self.CanScoreHigh = scorehigh
+        self.t_CanDeliverClimbers = t_climbers
+        self.t_CanDeliverClimbers_accuracy = t_climbers_acc
+        self.CanReleaseLowClimber = lowclimber
+        self.CanReleaseLowClimber_accuracy = lowclimber_acc
+        self.CanReleaseMidClimber = midclimber
+        self.CanReleaseMidClimber_accuracy = midclimber_acc
+        self.CanReleaseHighClimber = highclimber
+        self.CanReleaseHighClimber_accuracy = highclimber_acc
+        self.t_CanParkFloor = t_floorpark
+        self.t_CanParkLow = t_lowpark
+        self.t_CanParkMid = t_midpark
+        self.t_CanParkMid_accuracy = t_midpark_acc
+        self.t_CanParkHigh = t_highpark
+        self.t_CanParkHigh_accuracy = t_highpark_acc
         self.CanHang = hang
-        self.CanTriggerAllClearSignal = allclear
-        self.PossiblePointsOfFailure = spof
-        self.GeneralComments = comments
-        self.WatchList = watchlist
+        self.CanTriggerAllClear = allclear
+        self.Comments = comments
+        self.AddToWatchList = watchlist
         self.CreateDate = createdate
         self.LastModifiedDate = moddate
 
     def __repr__(self):
-        return '<Scouting Report %r>' % self.id
+        return '<Pit Scouting Report %r>' % self.id
 
 
 class Scout(db.Model):
