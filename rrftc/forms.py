@@ -1,7 +1,7 @@
 from flask_wtf import Form
 from wtforms import StringField, SubmitField, PasswordField, IntegerField, validators, DateField, HiddenField, \
     TextAreaField, SelectField, BooleanField
-from wtforms_sqlalchemy.fields import QuerySelectField, QuerySelectMultipleField
+from wtforms_sqlalchemy.fields import QuerySelectField
 
 from models import Team, Scout, Competition
 
@@ -187,7 +187,7 @@ class PitReportingForm(Form):
 
 class CompetitionTeamForm(Form):
     competition = HiddenField('Competition')
-    team = QuerySelectMultipleField(query_factory=lambda: Team.query.all(), get_label='Number')
+    team = QuerySelectField(query_factory=lambda: Team.query.all(), get_label='Number')
     submit = SubmitField('Add Team')
 
     def __init__(self, *args, **kwargs):
