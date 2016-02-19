@@ -21,17 +21,17 @@
         <div class="col-md-12 col-sm-6 col-xs-12">
             <div class="panel panel-default">
                 <div class="panel-heading clearfix">
-                    <h3 class="panel-title">Scouting Header</h3>
+                    <h3 class="panel-title">Scouting Information</h3>
                 </div>
                 <div class="panel-body">
                     <div class="form-group">
-                        {{ form.competition.label }} {{ form.competition }}
+                        {{ form.competition }} {{ form.competition.label }}
                     </div>
                     <div class="form-group">
-                        {{ form.team.label }} {{ form.team }}
+                        {{ form.team }} {{ form.team.label }}
                     </div>
                     <div class="form-group">
-                        {{ form.scout.label }} {{ form.scout }}
+                        {{ form.scout }} {{ form.scout.label }}
                     </div>
                 </div>
             </div>
@@ -45,34 +45,37 @@
                 </div>
                 <div class="panel-body">
                     <div class="form-group">
-                        {{ form.auto_offense.label }} {{ form.auto_offense }}
+                        {{ form.auto_offense }} {{ form.auto_offense.label }}
                     </div>
                     <div class="form-group">
-                        {{ form.auto_defense.label }} {{ form.auto_defense }}
+                        {{ form.auto_defense }} {{ form.auto_defense.label }}
                     </div>
                     <div class="form-group">
-                        {{ form.a_climbers.label }} {{ form.a_climbers }}
+                        {{ form.a_climbers }} {{ form.a_climbers.label }}
                     </div>
                     <div class="form-group" id="a_climbers_acc">
-                        {{ form.a_climbers_acc.label }} {{ form.a_climbers_acc }}
+                        {{ form.a_climbers_acc }}
                     </div>
                     <div class="form-group">
-                        {{ form.a_floorpark.label }} {{ form.a_floorpark }}
+                        {{ form.beacon }} {{ form.beacon.label }}
                     </div>
                     <div class="form-group">
-                        {{ form.a_lowpark.label }} {{ form.a_lowpark }}
+                        {{ form.a_floorpark }} {{ form.a_floorpark.label }}
                     </div>
                     <div class="form-group">
-                        {{ form.a_midpark.label }} {{ form.a_midpark }}
+                        {{ form.a_lowpark }} {{ form.a_lowpark.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.a_midpark }} {{ form.a_midpark.label }}
                     </div>
                     <div class="form-group" id="a_midpark_acc">
-                        {{ form.a_midpark_acc.label }} {{ form.a_midpark_acc }}
+                        {{ form.a_midpark_acc }}
                     </div>
                     <div class="form-group">
-                        {{ form.a_highpark.label }} {{ form.a_highpark }}
+                        {{ form.a_highpark }} {{ form.a_highpark.label }}
                     </div>
                     <div class="form-group" id="a_highpark_acc">
-                        {{ form.a_highpark_acc.label }} {{ form.a_highpark_acc }}
+                        {{ form.a_highpark_acc }}
                     </div>
                 </div>
 
@@ -87,58 +90,58 @@
                 </div>
                 <div class="panel-body">
                     <div class="form-group">
-                        {{ form.cycles.label }} {{ form.cycles }}
+                        {{ form.cycles }} {{ form.cycles.label }}
                     </div>
                     <div class="form-group">
-                        {{ form.scorelow.label }} {{ form.scorelow }}
+                        {{ form.scorelow }} {{ form.scorelow.label }}
                     </div>
                     <div class="form-group">
-                        {{ form.scoremid.label }} {{ form.scoremid }}
+                        {{ form.scoremid }} {{ form.scoremid.label }}
                     </div>
                     <div class="form-group">
-                        {{ form.scorehigh.label }} {{ form.scorehigh }}
+                        {{ form.scorehigh }} {{ form.scorehigh.label }}
                     </div>
                     <div class="form-group">
-                        {{ form.t_climbers.label }} {{ form.t_climbers }}
+                        {{ form.t_climbers }} {{ form.t_climbers.label }}
                     </div>
                     <div class="form-group" id="t_climbers_acc">
-                        {{ form.t_climbers_acc.label }} {{ form.t_climbers_acc }}
+                        {{ form.t_climbers_acc }}
                     </div>
                     <div class="form-group">
-                        {{ form.lowclimber.label }} {{ form.lowclimber }}
+                        {{ form.lowclimber }} {{ form.lowclimber.label }}
                     </div>
                     <div class="form-group" id="lowclimber_acc">
-                        {{ form.lowclimber_acc.label }} {{ form.lowclimber_acc }}
+                        {{ form.lowclimber_acc }}
                     </div>
                     <div class="form-group">
-                        {{ form.midclimber.label }} {{ form.midclimber }}
+                        {{ form.midclimber }} {{ form.midclimber.label }}
                     </div>
                     <div class="form-group" id="midclimber_acc">
-                        {{ form.midclimber_acc.label }} {{ form.midclimber_acc }}
+                        {{ form.midclimber_acc }}
                     </div>
                     <div class="form-group">
-                        {{ form.highclimber.label }} {{ form.highclimber }}
+                        {{ form.highclimber }} {{ form.highclimber.label }}
                     </div>
                     <div class="form-group" id="highclimber_acc">
-                        {{ form.highclimber_acc.label }} {{ form.highclimber_acc }}
+                        {{ form.highclimber_acc }}
                     </div>
                     <div class="form-group">
-                        {{ form.t_floorpark.label }} {{ form.t_floorpark }}
+                        {{ form.t_floorpark }} {{ form.t_floorpark.label }}
                     </div>
                     <div class="form-group">
-                        {{ form.t_lowpark.label }} {{ form.t_lowpark }}
+                        {{ form.t_lowpark }} {{ form.t_lowpark.label }}
                     </div>
                     <div class="form-group">
-                        {{ form.t_midpark.label }} {{ form.t_midpark }}
+                        {{ form.t_midpark }} {{ form.t_midpark.label }}
                     </div>
                     <div class="form-group" id="t_midpark_acc">
-                        {{ form.t_midpark_acc.label }} {{ form.t_midpark_acc }}
+                        {{ form.t_midpark_acc }}
                     </div>
                     <div class="form-group">
-                        {{ form.t_highpark.label }} {{ form.t_highpark }}
+                        {{ form.t_highpark }} {{ form.t_highpark.label }}
                     </div>
                     <div class="form-group" id="t_highpark_acc">
-                        {{ form.t_highpark_acc.label }} {{ form.t_highpark_acc }}
+                        {{ form.t_highpark_acc }}
                     </div>
                 </div>
 
@@ -153,10 +156,10 @@
                 </div>
                 <div class="panel-body">
                     <div class="form-group">
-                        {{ form.hang.label }} {{ form.hang }}
+                        {{ form.hang }} {{ form.hang.label }}
                     </div>
                     <div class="form-group">
-                        {{ form.allclear.label }} {{ form.allclear }}
+                        {{ form.allclear }} {{ form.allclear.label }}
                     </div>
                 </div>
             </div>
@@ -167,21 +170,21 @@
         <div class="col-md-12 col-sm-6 col-xs-12">
             <div class="panel panel-default">
                 <div class="panel-heading clearfix">
-                    <h3 class="panel-title"></h3>
+                    <h3 class="panel-title">General Information</h3>
                 </div>
                 <div class="panel-body">
                     <div class="form-group">
                         {{ form.comments }}
                     </div>
                     <div class="form-group">
-                        {{ form.watchlist.label }} {{ form.watchlist }}
+                        {{ form.watchlist }} {{ form.watchlist.label }}
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="form-group">
-        {{ form.submit }}
+        <div class="col-xs-12">{{ form.submit(class="form-control") }}</div>
     </div>
   </form>
 {% endblock %}

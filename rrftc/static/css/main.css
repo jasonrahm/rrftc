@@ -5,7 +5,14 @@ body {
   color: #444;
 }
 
-
+.form-group {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.row {
+  font-size: 12px;
+  line-height: 18px;
+}
 
 /*
  * Center the body content
@@ -15,8 +22,13 @@ body {
   width: 350px;
   margin: 0 auto;
 }
-textarea#comments.form-control {
-  height: 175px;
+textarea#comments {
+  height: 100px;
+  display: block;
+  width: 100%;
+  padding: 6px 12px;
+  border: 1px solid #ccc
+  border-radius: 4px;
 }
 
 h2 {
@@ -36,6 +48,14 @@ h5 {
   width: 400px;
 }
 
-#beacon.form-group {
+div#a_climbers_acc.form-group,
+div#a_midpark_acc.form-group,
+div#a_highpark_acc.form-group,
+div#t_climbers_acc.form-group,
+div#lowclimber_acc.form-group,
+div#midclimber_acc.form-group,
+div#highclimber_acc.form-group,
+div#t_midpark_acc.form-group,
+div#t_highpark_acc.form-group {
   display: none;
 }

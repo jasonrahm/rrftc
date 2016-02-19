@@ -14,24 +14,124 @@
 
 
   <h3>Pit Reporting Form</h3>
-    {% for team in teams %}
-        {{ team }}
-    {% endfor %}
   <form class="form-horizontal" action="{{ url_for('pit_reporting') }}" method="post">
     {{ form.hidden_tag() }}
-    {%  for field in form if field.widget.input_type != 'hidden' %}
-        {% if field.name == 'submit' %}
-          <div class="form-group">
-            <div class="col-xs-12">{{ field(class_='form-control') }}</div></div>
-        {% else %}
-            <div class="form-group">
-                <div class="col-xs-5">
-                    {{ field(class_="form-control") }}
+    <div class="row">
+        <div class="col-md-12 col-sm-6 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title">Scouting Information</h3>
                 </div>
-                {{ field.label(class_="control-label col-xs-7") }}
+                <div class="panel-body">
+                    <div class="form-group">
+                        {{ form.competition }} {{ form.competition.label }}
+                    </div>
+                </div>
             </div>
-        {% endif %}
-    {%  endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-6 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title">Autonomous</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        {{ form.auto_offense }} {{ form.auto_offense.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.auto_defense }} {{ form.auto_defense.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.a_climbers }} {{ form.a_climbers.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.beacon }} {{ form.beacon.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.a_floorpark }} {{ form.a_floorpark.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.a_lowpark }} {{ form.a_lowpark.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.a_midpark }} {{ form.a_floorpark.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.a_highpark }} {{ form.a_lowpark.label }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-6 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title">Teleop</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        {{ form.cycles }} {{ form.cycles.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.scorelow }} {{ form.scorelow.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.scoremid }} {{ form.scoremid.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.scorehigh }} {{ form.scorehigh.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.t_climbers }} {{ form.t_climbers.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.lowclimber }} {{ form.lowclimber.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.midclimber }} {{ form.midclimber.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.highclimber }} {{ form.highclimber.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.t_floorpark }} {{ form.t_floorpark.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.t_lowpark }} {{ form.t_lowpark.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.t_midpark }} {{ form.t_floorpark.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.t_highpark }} {{ form.t_lowpark.label }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-6 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title">End Game/h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        {{ form.hang }} {{ form.hang.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.allclear }} {{ form.allclear.label }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-12">{{ form.submit(class="form-control") }}</div>
+    </div>
   </form>
 {% endblock %}
 <p>&nbps;</p>

@@ -42,7 +42,7 @@ class PitScoutingForm(Form):
     auto_offense = BooleanField('Autonomous?', default=False)
     auto_defense = BooleanField('Defensive Autonomous?', default=False)
     a_climbers = BooleanField('Deliver Climbers?', default=False)
-    a_climbers_acc = SelectField('Climber Accuracy', choices=[(-1, 'NA'),
+    a_climbers_acc = SelectField('Climber Accuracy', choices=[(-1, '0%'),
                                                               (1, '1% - 25%'),
                                                               (2, '26% - 50%'),
                                                               (3, '51% - 75%'),
@@ -51,13 +51,13 @@ class PitScoutingForm(Form):
     a_floorpark = BooleanField('Park on Floor?', default=False)
     a_lowpark = BooleanField('Park on Low Zone?', default=False)
     a_midpark = BooleanField('Park on Mid Zone?', default=False)
-    a_midpark_acc = SelectField('Mid Park Accuracy', choices=[(-1, 'NA'),
+    a_midpark_acc = SelectField('Mid Park Accuracy', choices=[(-1, '0%'),
                                                               (1, '1% - 25%'),
                                                               (2, '26% - 50%'),
                                                               (3, '51% - 75%'),
                                                               (4, '76% - 100%')], coerce=int)
     a_highpark = BooleanField('Park on High Zone?', default=False)
-    a_highpark_acc = SelectField('High Park Accuracy', choices=[(-1, 'NA'),
+    a_highpark_acc = SelectField('High Park Accuracy', choices=[(-1, '0%'),
                                                               (1, '1% - 25%'),
                                                               (2, '26% - 50%'),
                                                               (3, '51% - 75%'),
@@ -73,25 +73,25 @@ class PitScoutingForm(Form):
     scoremid = BooleanField('Score in Mid Zone?', default=False)
     scorehigh = BooleanField('Score in High Zone?', default=False)
     t_climbers = BooleanField('Deliver Climbers?', default=False)
-    t_climbers_acc = SelectField('Climber Accuracy', choices=[(-1, 'NA'),
+    t_climbers_acc = SelectField('Climber Accuracy', choices=[(-1, '0%'),
                                                               (1, '1% - 25%'),
                                                               (2, '26% - 50%'),
                                                               (3, '51% - 75%'),
                                                               (4, '76% - 100%')], coerce=int)
     lowclimber = BooleanField('Release Low Climber?', default=False)
-    lowclimber_acc = SelectField('Low Climber Accuracy', choices=[(-1, 'NA'),
+    lowclimber_acc = SelectField('Low Climber Accuracy', choices=[(-1, '0%'),
                                                               (1, '1% - 25%'),
                                                               (2, '26% - 50%'),
                                                               (3, '51% - 75%'),
                                                               (4, '76% - 100%')], coerce=int)
     midclimber = BooleanField('Release Mid Climber?', default=False)
-    midclimber_acc = SelectField('Mid Climber Accuracy', choices=[(-1, 'NA'),
+    midclimber_acc = SelectField('Mid Climber Accuracy', choices=[(-1, '0%'),
                                                               (1, '1% - 25%'),
                                                               (2, '26% - 50%'),
                                                               (3, '51% - 75%'),
                                                               (4, '76% - 100%')], coerce=int)
     highclimber = BooleanField('Release High Climber?', default=False)
-    highclimber_acc = SelectField('High Climber Accuracy', choices=[(-1, 'NA'),
+    highclimber_acc = SelectField('High Climber Accuracy', choices=[(-1, '0%'),
                                                               (1, '1% - 25%'),
                                                               (2, '26% - 50%'),
                                                               (3, '51% - 75%'),
@@ -99,13 +99,13 @@ class PitScoutingForm(Form):
     t_floorpark = BooleanField('Park on Floor?', default=False)
     t_lowpark = BooleanField('Park on Low Zone?', default=False)
     t_midpark = BooleanField('Park on Mid Zone?', default=False)
-    t_midpark_acc = SelectField('Mid Park Accuracy', choices=[(-1, 'NA'),
+    t_midpark_acc = SelectField('Mid Park Accuracy', choices=[(-1, '0%'),
                                                               (1, '1% - 25%'),
                                                               (2, '26% - 50%'),
                                                               (3, '51% - 75%'),
                                                               (4, '76% - 100%')], coerce=int)
     t_highpark = BooleanField('Park on High Zone?', default=False)
-    t_highpark_acc = SelectField('High Park Accuracy', choices=[(-1, 'NA'),
+    t_highpark_acc = SelectField('High Park Accuracy', choices=[(-1, '0%'),
                                                               (1, '1% - 25%'),
                                                               (2, '26% - 50%'),
                                                               (3, '51% - 75%'),

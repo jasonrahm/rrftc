@@ -11,72 +11,108 @@
             <td>tbd</td>
         </tr>
         <tr>
-            <td>Can it do autonomous?</td>
-            <td>{{ data.IsAutonomous  }}</td>
+            <td>Autonomous?</td>
+            <td>{{ data.CanDoAutonomous  }}</td>
         </tr>
         <tr>
-            <td>Can it push the beacon?</td>
+            <td>Defensive Autonomous?</td>
+            <td>{{ data.DefensiveAutonomous }}</td>
+        </tr>
+        <tr>
+            <td>Can it deliver climbers? (a)</td>
+            <td>{{ data.a_CanDeliverClimbers }}</td>
+        </tr>
+        <tr>
+            <td>Climber delivery accuracy (a)</td>
+            <td>{{ data.a_CanDeliverClimbers_accuracy }}</td>
+        </tr>
+            <tr>
+            <td>Can it push the beacon? (a)</td>
             <td>{{ data.CanPushBeacon }}</td>
         </tr>
         <tr>
-            <td>Can it deliver climbers?</td>
-            <td>{{ data.CanDeliverClimbers }}</td>
+            <td>Can it park on the floor? (a)</td>
+            <td>{{ data.a_CanParkFloor }}</td>
         </tr>
         <tr>
-            <td>Can it release the low climber?</td>
-            <td>{{ data.DeliverClimberLow }}</td>
-        </tr>
-            <tr>
-            <td>Can it release the middle climber?</td>
-            <td>{{ data.DeliverClimberMid }}</td>
+            <td>Can it park on the low zone? (a)</td>
+            <td>{{ data.a_CanParkLow }}</td>
         </tr>
         <tr>
-            <td>Can it release the high climber?</td>
-            <td>{{ data.DeliverClimberHigh }}</td>
+            <td>Can it park on the mid zone? (a)</td>
+            <td>{{ data.a_CanParkMid }}</td>
         </tr>
         <tr>
-            <td>Can it park on the floor?</td>
-            <td>{{ data.CanParkOnFloor }}</td>
+            <td>Mid zone parking accuracy (a)</td>
+            <td>{{ data.a_CanParkMid_accuracy }}</td>
         </tr>
         <tr>
-            <td>Can it park on the low zone?</td>
-            <td>{{ data.CanParkOnLowZone }}</td>
-        </tr>
-            <tr>
-            <td>Can it park on the middle zone?</td>
-            <td>{{ data.CanParkOnMidZone }}</td>
+            <td>Can it park on the high zone? (a)</td>
+            <td>{{ data.a_CanParkHigh }}</td>
         </tr>
         <tr>
-            <td>Can it park on the high zone?</td>
-            <td>{{ data.CanParkOnHighZone }}</td>
+            <td>High zone parking accuracy (a)</td>
+            <td>{{ data.a_CanParkHigh_accuracy }}</td>
         </tr>
         <tr>
-            <td>What is the highest zone climbed?</td>
-            <td>{{ data.HighestZoneClimbed }}</td>
+            <td>Debris Scoring Cycles? (t)</td>
+            <td>{{ data.DebrisScoringCycles }}</td>
         </tr>
         <tr>
-            <td>Can it score debris?</td>
-            <td>{{ data.CanScoreDebris }}</td>
+            <td>Can it score in the low zone? (t)</td>
+            <td>{{ data.CanScoreLow }}</td>
         </tr>
         <tr>
-            <td>Can it score in the low zone?</td>
-            <td>{{ data.CanScoreInLowZone }}</td>
-        </tr>
-            <tr>
-            <td>Can it score in the middle zone?</td>
-            <td>{{ data.CanScoreInMidZone }}</td>
+            <td>Can it score in the mid zone? (t)</td>
+            <td>{{ data.CanScoreMid }}</td>
         </tr>
         <tr>
-            <td>Can it score in the high zone?</td>
-            <td>{{ data.CanScoreInHighZone }}</td>
+            <td>Can it score in the high zone? (t)</td>
+            <td>{{ data.CanScoreHigh }}</td>
         </tr>
         <tr>
-            <td>What is the average debris score?</td>
-            <td>{{ data.DebrisAverageScore }}</td>
+            <td>Can it release the low climber? (t)</td>
+            <td>{{ data.CanReleaseLowClimber }}</td>
         </tr>
         <tr>
-            <td>How is debris handled?</td>
-            <td>{{ data.DebrisScoringMethod }}</td>
+            <td>Low climber release accuracy (t)</td>
+            <td>{{ data.CanReleaseLowClimber_accuracy }}</td>
+        </tr>
+        <tr>
+            <td>Can it release the mid climber? (t)</td>
+            <td>{{ data.CanReleaseMidClimber }}</td>
+        </tr>
+        <tr>
+            <td>Mid climber release accuracy (t)</td>
+            <td>{{ data.CanReleaseMidClimber_accuracy }}</td>
+        </tr>
+        <tr>
+            <td>Can it release the high climber? (t)</td>
+            <td>{{ data.CanReleaseHighClimber }}</td>
+        </tr>
+        <tr>
+            <td>High climber release accuracy (t)</td>
+            <td>{{ data.CanReleaseHighClimber_accuracy }}</td>
+        </tr>
+        <tr>
+            <td>Can it park on the low zone? (t)</td>
+            <td>{{ data.t_CanParkLow }}</td>
+        </tr>
+        <tr>
+            <td>Can it park on the mid zone? (t)</td>
+            <td>{{ data.t_CanParkMid }}</td>
+        </tr>
+        <tr>
+            <td>Mid zone parking accuracy (t)</td>
+            <td>{{ data.t_CanParkMid_accuracy }}</td>
+        </tr>
+        <tr>
+            <td>Can it park on the high zone? (t)</td>
+            <td>{{ data.t_CanParkHigh }}</td>
+        </tr>
+        <tr>
+            <td>High zone parking accuracy (t)</td>
+            <td>{{ data.t_CanParkHigh_accuracy }}</td>
         </tr>
         <tr>
             <td>Can it hang?</td>
@@ -84,19 +120,15 @@
         </tr>
         <tr>
             <td>Can it trigger the all clear?</td>
-            <td>{{ data.CanTriggerAllClearSignal }}</td>
+            <td>{{ data.CanTriggerAllClear }}</td>
         </tr>
         <tr>
-            <td>Points of Failure?</td>
-            <td>{{ data.PossiblePointsOfFailure }}</td>
+            <td>Comments?</td>
+            <td>{{ data.Comments }}</td>
         </tr>
         <tr>
-            <td>Comments</td>
-            <td>{{ data.GeneralComments }}</td>
-        </tr>
-        <tr>
-            <td>On the watch list?</td>
-            <td>{{ data.WatchList }}</td>
+            <td>Add to Watch List?</td>
+            <td>{{ data.AddToWatchList }}</td>
         </tr>
     </table>
 {% endblock %}

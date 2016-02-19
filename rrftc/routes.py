@@ -224,7 +224,7 @@ def pit_report():
 
 @app.route('/pit-report/<int:id>',)
 def get_individual_pitreport(id):
-    data = Scouting.query.get(id)
+    data = PitScouting.query.get(id)
     return render_template('pitreport_details.html', data=data)
 
 
