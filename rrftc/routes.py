@@ -36,7 +36,8 @@ def signout():
         redirect(url_for('signin'))
 
     session.pop('username', None)
-    session['report'] = ''
+    session['pitreport'] = ''
+    session['matchreport'] = ''
 
     flash('You have been logged out.')
     return redirect(url_for('home'))
