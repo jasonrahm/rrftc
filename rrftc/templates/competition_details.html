@@ -1,8 +1,15 @@
 {% extends "layout.html" %}
-{% block content %}
-    <h2>{{ form.competition }}<h2>
 
-  <h2>Add a team:</h2>
+{% block content %}
+
+  <h2>{{ form.competition }}<h2>
+
+  <h3>Add a team:</h3>
+
+  {% for message in form.team.errors %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+
     <form class="form-horizontal" action="{{ url_for('manage_competition', id=id) }}" method="post">
     {{ form.hidden_tag() }}
 
@@ -17,7 +24,7 @@
       </div>
     </form>
 <hr size="2">
-  <h2>Current teams:</h2>
+  <h3>Current teams:</h3>
     <table class="table table-responsive table-striped">
         <thead>
             <tr>

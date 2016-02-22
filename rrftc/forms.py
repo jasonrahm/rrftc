@@ -3,7 +3,7 @@ from wtforms import StringField, SubmitField, PasswordField, IntegerField, valid
     TextAreaField, SelectField, BooleanField
 from wtforms_sqlalchemy.fields import QuerySelectField
 
-from models import Team, Scout, Competition
+from models import Team, Scout, Competition, CompetitionTeam
 
 
 class MatchScoutingForm(Form):
@@ -196,6 +196,11 @@ class CompetitionTeamForm(Form):
     def validate(self):
         if not Form.validate(self):
             return False
+
+        checkteam = CompetitionTeam.query.filter_by(Teams=self.team.data.id).first()
+        if checkteam:
+            self.team.errors.append("Team is already part of this competition")
+            return False
         else:
             return True
 
@@ -260,6 +265,11 @@ class TeamForm(Form):
 
     def validate(self):
         if not Form.validate(self):
+            return False
+
+        checkteam = Team.query.filter_by(Number=self.number.data).first()
+        if checkteam:
+            self.number.errors.append("Team is already in the system.")
             return False
         else:
             return True

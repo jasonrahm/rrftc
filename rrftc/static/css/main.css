@@ -59,3 +59,6 @@ div#t_midpark_acc.form-group,
 div#t_highpark_acc.form-group {
   display: none;
 }
+label {
+  font-size: 14px;
+}

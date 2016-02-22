@@ -12,6 +12,12 @@
 {% endif %}
 
   <h2>Add a Team</h2>
+
+
+  {% for message in form.number.errors %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+
   <form class="form-horizontal" action="{{ url_for('teams') }}" method="post">
     {{ form.hidden_tag() }}
 

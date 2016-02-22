@@ -53,12 +53,14 @@ def teams():
 
     user = session['username']
 
+    teams = db.session.query(Team).order_by(Team.Number).all()
+
     if user is None:
         redirect(url_for('signin'))
     else:
         if request.method == 'POST':
             if not form.validate():
-                return render_template('teams.html', form=form)
+                return render_template('teams.html', teams=teams, form=form)
             else:
                 newteam = Team(number=form.number.data, name=form.name.data, website=form.website.data)
                 db.session.add(newteam)
@@ -68,8 +70,6 @@ def teams():
                 return redirect(url_for('teams'))
 
         elif request.method == 'GET' :
-            #teams = db.session.query(Team).all()
-            teams = db.session.query(Team).order_by(Team.Number).all()
             return render_template('teams.html', teams=teams, form=form)
 
 
@@ -293,12 +293,18 @@ def manage_competition(id):
 
     user = session['username']
 
+    teams = db.session.query(CompetitionTeam).filter(CompetitionTeam.Competitions == id).all()
+    team_list = []
+    for team in teams:
+        team_list.append(int(team.Teams))
+    team_data = db.session.query(Team).filter(Team.id.in_(team_list)).order_by(Team.Number).all()
+
     if user is None:
         redirect(url_for('signin'))
     else:
         if request.method == 'POST':
-            if form.validate() == False:
-                return render_template('competition_details.html', form=form, id=id)
+            if not form.validate():
+                return render_template('competition_details.html', form=form, id=id, team_data=team_data)
             else:
                 postdata = request.values
                 comp = int(postdata['competition'])
@@ -312,12 +318,6 @@ def manage_competition(id):
                 return redirect(url_for('manage_competition', id=id))
 
         elif request.method == 'GET':
-            teams = db.session.query(CompetitionTeam).filter(CompetitionTeam.Competitions == id).all()
-            team_list = []
-            for team in teams:
-                team_list.append(int(team.Teams))
-            team_data = db.session.query(Team).filter(Team.id.in_(team_list)).order_by(Team.Number).all()
-
             return render_template('competition_details.html', form=form, id=id, team_data=team_data)
 
 
@@ -335,7 +335,7 @@ def scouts():
         redirect(url_for('signin'))
     else:
         if request.method == 'POST':
-            if form.validate() == False:
+            if not form.validate():
                 return render_template('scouts.html', form=form)
             else:
                 newscout = Scout(name=form.name.data)
