@@ -10,8 +10,9 @@ class MatchScoutingForm(Form):
     competition = QuerySelectField(query_factory=lambda: Competition.query.all(), get_label='Name')
     team = QuerySelectField(query_factory=lambda: Team.query.all(), get_label='Number')
     scout = QuerySelectField(query_factory=lambda: Scout.query.all(), get_label='Name')
+    match = IntegerField('Match Number?', [validators.DataRequired('Please enter the match number')], default=1)
     move = BooleanField('Did the robot move?', default=False)
-    win = BooleanField('Did the robot win?', default=False)
+    climbers = BooleanField('Deliver climbers?', default=False)
     score = BooleanField('Did the robot score?', default=False)
     cycles = SelectField('How many scoring cycles?', choices=[(-1, '0'),
                                                                (1, '1'),
@@ -20,8 +21,15 @@ class MatchScoutingForm(Form):
                                                                (4, '4'),
                                                                (5, '5'),
                                                                (6, '6')], coerce=int)
+    scorelow = BooleanField('Score in low zone?', default=False)
+    scoremid = BooleanField('Score in mid zone?', default=False)
+    scorehigh = BooleanField('Score in high zone?', default=False)
+    climberlow = BooleanField('Release low climber?', default=False)
+    climbermid = BooleanField('Release mid climber?', default=False)
+    climberhigh = BooleanField('Release high climber?', default=False)
     hang = BooleanField('Did the robot hang?', default=False)
     trigger = BooleanField('Did the robot trigger the climbers?', default=False)
+    win = BooleanField('Did the robot win?', default=False)
 
     submit = SubmitField('Add Report')
 
@@ -130,11 +138,18 @@ class PitScoutingForm(Form):
 class MatchReportingForm(Form):
     competition = QuerySelectField(query_factory=lambda: Competition.query.all(), get_label='Name')
     move = SelectField('Did the robot move?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    win = SelectField('Did the robot win?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    climbers = SelectField('Deliver climbers?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
     score = SelectField('Did the robot score?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
     cycles = SelectField('How many scoring cycles?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    scorelow = SelectField('Score in the low zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    scoremid = SelectField('Score in the mid zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    scorehigh = SelectField('Score in the high zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    climberlow = SelectField('Release low climber?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    climbermid = SelectField('Release mid climber?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    climberhigh = SelectField('Release high climber?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
     hang = SelectField('Did the robot hang?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    trigger = SelectField('Did the robot trigger the climbers?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    trigger = SelectField('Did the robot trigger the all clear?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    win = SelectField('Did the robot win?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
 
     submit = SubmitField('Get Report')
 

@@ -52,12 +52,21 @@ class MatchScouting(db.Model):
     Scout = db.Column(db.ForeignKey(u'Scouts.id'), nullable=False, index=True)
     Team = db.Column(db.ForeignKey(u'Teams.id'), nullable=False, index=True)
     Competition = db.Column(db.ForeignKey(u'Competitions.id'), nullable=False, index=True)
+    MatchNumber = db.Column(db.Integer, nullable=False)
     DidRobotMove = db.Column(db.Boolean, nullable=False)
-    DidRobotWin = db.Column(db.Boolean, nullable=False)
+    DeliverClimbers = db.Column(db.Boolean, nullable=False)
+
     DidRobotScoreCycles = db.Column(db.Boolean, nullable=False)
     HowManyCycles = db.Column(db.Integer, nullable=False)
+    ScoreLowZone = db.Column(db.Boolean, nullable=False)
+    ScoreMidZone = db.Column(db.Boolean, nullable=False)
+    ScoreHighZone = db.Column(db.Boolean, nullable=False)
+    ReleaseLowClimber = db.Column(db.Boolean, nullable=False)
+    ReleaseMidClimber = db.Column(db.Boolean, nullable=False)
+    ReleaseHighClimber = db.Column(db.Boolean, nullable=False)
     DidRobotHang = db.Column(db.Boolean, nullable=False)
     DidRobotTriggerClimbers = db.Column(db.Boolean, nullable=False)
+    DidRobotWin = db.Column(db.Boolean, nullable=False)
     CreateDate = db.Column(db.DateTime, nullable=False)
     LastModifiedDate = db.Column(db.DateTime, nullable=False)
 
@@ -69,23 +78,39 @@ class MatchScouting(db.Model):
                  scout,
                  team,
                  comp,
+                 match,
                  move,
-                 win,
+                 climbers,
                  score,
                  cycles,
+                 scorelow,
+                 scoremid,
+                 scorehigh,
+                 lowclimber,
+                 midclimber,
+                 highclimber,
                  hang,
                  trigger,
+                 win,
                  createdate=time.strftime('%Y-%m-%d %H:%M:%S'),
                  moddate=time.strftime('%Y-%m-%d %H:%M:%S')):
         self.Scout = scout
         self.Team = team
         self.Competition = comp
+        self.MatchNumber = match
         self.DidRobotMove = move
-        self.DidRobotWin = win
+        self.DeliverClimbers = climbers
         self.DidRobotScoreCycles = score
         self.HowManyCycles = cycles
+        self.ScoreLowZone = scorelow
+        self.ScoreMidZone = scoremid
+        self.ScoreHighZone = scorehigh
+        self.ReleaseLowClimber = lowclimber
+        self.ReleaseMidClimber = midclimber
+        self.ReleaseHighClimber = highclimber
         self.DidRobotHang = hang
         self.DidRobotTriggerClimbers = trigger
+        self.DidRobotWin = win
         self.CreateDate = createdate
         self.LastModifiedDate = moddate
 

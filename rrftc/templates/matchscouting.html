@@ -15,20 +15,104 @@
 
   <h3>Match Scouting Form</h3>
   <form class="form-horizontal" action="{{ url_for('match_scouting') }}" method="post">
-    {{ form.hidden_tag() }}
-    {%  for field in form if field.widget.input_type != 'hidden' %}
-
-        {% if field.name == 'submit' %}
-            <div class="form-group">
-            <div class="col-xs-12">{{ field(class_='form-control') }}</div></div>
-        {%  else %}
-            <div class="form-group">
-                <div class="col-xs-5">
-                    {{ field(class_="form-control") }}
+      {{ form.hidden_tag() }}
+      <div class="row">
+        <div class="col-md-12 col-sm-6 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title">Scouting Information</h3>
                 </div>
-                {{ field.label(class_="control-label col-xs-7") }}
+                <div class="panel-body">
+                    <div class="form-group">
+                        {{ form.competition.label }} {{ form.competition }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.team.label }} {{ form.team }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.scout.label }} {{ form.scout }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.match.label }} {{ form.match }}
+                    </div>
+                </div>
             </div>
-        {% endif %}
-    {%  endfor %}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-sm-6 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title">Autonomous</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        {{ form.move }} {{ form.move.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.climbers }} {{ form.climbers.label }}
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-sm-6 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title">Teleop</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        {{ form.score }} {{ form.score.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.cycles }} {{ form.cycles.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.scorelow }} {{ form.scorelow.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.scoremid }} {{ form.scoremid.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.scorehigh }} {{ form.scorehigh.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.climberlow }} {{ form.climberlow.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.climbermid }} {{ form.climbermid.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.climberhigh }} {{ form.climberhigh.label }}
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-sm-6 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title">End Game & Results</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        {{ form.hang }} {{ form.hang.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.trigger }} {{ form.trigger.label }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.win}} {{ form.win.label }}
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-xs-12">{{ form.submit(class_='form-control') }}</div>
+      </div>
   </form>
 {% endblock %}

@@ -7,16 +7,16 @@
             <th>Value</th>
         </thead>
         <tr>
-            <td>Team</td>
-            <td>tbd</td>
+            <td>Match Number</td>
+            <td>{{ data.MatchNumber }}</td>
         </tr>
         <tr>
             <td>Did the robot move?</td>
             <td>{{ data.DidRobotMove  }}</td>
         </tr>
         <tr>
-            <td>Did the robot win?</td>
-            <td>{{ data.DidRobotWin }}</td>
+            <td>Deliver Climbers?</td>
+            <td>{{ data.DeliverClimbers }}</td>
         </tr>
         <tr>
             <td>Did the robot score?</td>
@@ -26,13 +26,41 @@
             <td>How many scoring cycles?</td>
             <td>{{ data.HowManyCycles }}</td>
         </tr>
-            <tr>
+        <tr>
+            <td>Score in low zone?</td>
+            <td>{{ data.ScoreLowZone }}</td>
+        </tr>
+        <tr>
+            <td>Score in mid zone?</td>
+            <td>{{ data.ScoreMidZone }}</td>
+        </tr>
+        <tr>
+            <td>Score in high zone?</td>
+            <td>{{ data.ScoreHighZone }}</td>
+        </tr>
+        <tr>
+            <td>Release low climber?</td>
+            <td>{{ data.ReleaseLowClimber }}</td>
+        </tr>
+        <tr>
+            <td>Release mid climber?</td>
+            <td>{{ data.ReleaseMidClimber }}</td>
+        </tr>
+        <tr>
+            <td>Release high climber?</td>
+            <td>{{ data.ReleaseHighClimber }}</td>
+        </tr>
+        <tr>
             <td>Did the robot hang?</td>
             <td>{{ data.DidRobotHang }}</td>
         </tr>
         <tr>
             <td>Did the robot trigger the climbers?</td>
             <td>{{ data.DidRobotTriggerClimbers }}</td>
+        </tr>
+        <tr>
+            <td>Did the robot win?</td>
+            <td>{{ data.DidRobotWin }}</td>
         </tr>
     </table>
 {% endblock %}
