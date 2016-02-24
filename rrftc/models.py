@@ -55,7 +55,8 @@ class MatchScouting(db.Model):
     MatchNumber = db.Column(db.Integer, nullable=False)
     DidRobotMove = db.Column(db.Boolean, nullable=False)
     DeliverClimbers = db.Column(db.Boolean, nullable=False)
-
+    PushBeacon = db.Column(db.Boolean, nullable=False)
+    ParkingLevel = db.Column(db.Integer, nullable=False)
     DidRobotScoreCycles = db.Column(db.Boolean, nullable=False)
     HowManyCycles = db.Column(db.Integer, nullable=False)
     ScoreLowZone = db.Column(db.Boolean, nullable=False)
@@ -81,6 +82,8 @@ class MatchScouting(db.Model):
                  match,
                  move,
                  climbers,
+                 beacon,
+                 park,
                  score,
                  cycles,
                  scorelow,
@@ -100,6 +103,8 @@ class MatchScouting(db.Model):
         self.MatchNumber = match
         self.DidRobotMove = move
         self.DeliverClimbers = climbers
+        self.PushBeacon = beacon
+        self.ParkingLevel = park
         self.DidRobotScoreCycles = score
         self.HowManyCycles = cycles
         self.ScoreLowZone = scorelow

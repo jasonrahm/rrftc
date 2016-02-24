@@ -495,6 +495,8 @@ def match_scouting():
 
                 move = True if 'move' in request.form else False
                 climbers = True if 'climbers' in request.form else False
+                beacon = True if 'beacon' in request.form else False
+                park = postdata['park']
                 score = True if 'score' in request.form else False
                 cycles = postdata['cycles']
                 scorelow = True if 'scorelow' in request.form else False
@@ -513,6 +515,8 @@ def match_scouting():
                                                     match=match,
                                                     move=move,
                                                     climbers=climbers,
+                                                    beacon=beacon,
+                                                    park=park,
                                                     score=score,
                                                     cycles=cycles,
                                                     scorelow=scorelow,
@@ -555,6 +559,8 @@ def match_reporting():
                 sql_text = '''select MatchScouting.id, Teams.Name, Teams.Number, Scouts.Name,
                               (DidRobotMove*%d) +
                               (DeliverClimbers*%d) +
+                              (PushBeacon*%d) +
+                              (ParkingLevel*%d) +
                               (DidRobotScoreCycles*%d) +
                               (HowManyCycles*%d) +
                               (ScoreLowZone*%d) +
@@ -577,17 +583,20 @@ def match_reporting():
                               DESC''' % (int(postdata['move']),
                                          int(postdata['climbers']),
                                          int(postdata['score']),
+                                         int(postdata['beacon']),
+                                         int(postdata['park']),
                                          int(postdata['cycles']),
                                          int(postdata['scorelow']),
                                          int(postdata['scoremid']),
                                          int(postdata['scorehigh']),
-                                         int(postdata['climberlow']),
-                                         int(postdata['climbermid']),
-                                         int(postdata['climberhigh']),
+                                         int(postdata['lowclimber']),
+                                         int(postdata['midclimber']),
+                                         int(postdata['highclimber']),
                                          int(postdata['hang']),
                                          int(postdata['trigger']),
                                          int(postdata['win']),
                                          int(postdata['competition']))
+
                 result = db.engine.execute(sql_text)
                 teams = []
                 for row in result:

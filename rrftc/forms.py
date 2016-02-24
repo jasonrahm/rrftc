@@ -13,6 +13,12 @@ class MatchScoutingForm(Form):
     match = IntegerField('Match Number?', [validators.DataRequired('Please enter the match number')], default=1)
     move = BooleanField('Did the robot move?', default=False)
     climbers = BooleanField('Deliver climbers?', default=False)
+    beacon = BooleanField('Push Beacon?', default=False)
+    park = SelectField('Highest Parking Level?', choices=[(-1, 'Can\'t Park'),
+                                                          (1, 'Floor/Partial Low'),
+                                                          (2, 'Low Zone'),
+                                                          (3, 'Mid Zone'),
+                                                          (4, 'High Zone')], coerce=int)
     score = BooleanField('Did the robot score?', default=False)
     cycles = SelectField('How many scoring cycles?', choices=[(-1, '0'),
                                                                (1, '1'),
@@ -24,9 +30,9 @@ class MatchScoutingForm(Form):
     scorelow = BooleanField('Score in low zone?', default=False)
     scoremid = BooleanField('Score in mid zone?', default=False)
     scorehigh = BooleanField('Score in high zone?', default=False)
-    climberlow = BooleanField('Release low climber?', default=False)
-    climbermid = BooleanField('Release mid climber?', default=False)
-    climberhigh = BooleanField('Release high climber?', default=False)
+    lowclimber = BooleanField('Release low climber?', default=False)
+    midclimber = BooleanField('Release mid climber?', default=False)
+    highclimber = BooleanField('Release high climber?', default=False)
     hang = BooleanField('Did the robot hang?', default=False)
     trigger = BooleanField('Did the robot trigger the climbers?', default=False)
     win = BooleanField('Did the robot win?', default=False)
@@ -118,7 +124,7 @@ class PitScoutingForm(Form):
                                                               (2, '26% - 50%'),
                                                               (3, '51% - 75%'),
                                                               (4, '76% - 100%')], coerce=int)
-    hang = BooleanField('Can Hang?', default=False)
+    hang = BooleanField('Can it Hang?', default=False)
     allclear = BooleanField('Trigger All Clear?', default=False)
     comments = TextAreaField('General Comments', [validators.DataRequired('Please enter comments')], default='Comments:')
     watchlist = BooleanField('Add to Watch List?', default=False)
@@ -139,14 +145,16 @@ class MatchReportingForm(Form):
     competition = QuerySelectField(query_factory=lambda: Competition.query.all(), get_label='Name')
     move = SelectField('Did the robot move?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
     climbers = SelectField('Deliver climbers?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    beacon = SelectField('Push beacon?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    park = SelectField('Highest parking level?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
     score = SelectField('Did the robot score?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
     cycles = SelectField('How many scoring cycles?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
     scorelow = SelectField('Score in the low zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
     scoremid = SelectField('Score in the mid zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
     scorehigh = SelectField('Score in the high zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    climberlow = SelectField('Release low climber?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    climbermid = SelectField('Release mid climber?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    climberhigh = SelectField('Release high climber?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    lowclimber = SelectField('Release low climber?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    midclimber = SelectField('Release mid climber?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    highclimber = SelectField('Release high climber?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
     hang = SelectField('Did the robot hang?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
     trigger = SelectField('Did the robot trigger the all clear?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
     win = SelectField('Did the robot win?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
@@ -185,7 +193,7 @@ class PitReportingForm(Form):
     t_lowpark = SelectField('Park on Low Zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
     t_midpark = SelectField('Park on Mid Zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
     t_highpark = SelectField('Park on High Zone?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
-    hang = SelectField('Can Hang?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
+    hang = SelectField('Can it Hang?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
     allclear = SelectField('Trigger All Clear?', choices=[(1,'1'),(3,'3'),(9,'9')], coerce=int)
 
     submit = SubmitField('Get Report')
