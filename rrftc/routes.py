@@ -389,32 +389,32 @@ def pit_scouting():
                 auto_offense = True if 'auto_offense' in request.form else False
                 auto_defense = True if 'auto_defense' in request.form else False
                 a_climbers = True if 'a_climbers' in request.form else False
-                a_climbers_acc = postdata['a_climbers_acc']
+                a_climbers_acc = 0 if int(postdata['a_climbers_acc']) == -1 else postdata['a_climbers_acc']
                 beacon = True if 'beacon' in request.form else False
                 a_floorpark = True if 'a_floorpark' in request.form else False
                 a_lowpark = True if 'a_lowpark' in request.form else False
                 a_midpark = True if 'a_midpark' in request.form else False
                 a_midpark_acc = postdata['a_midpark_acc']
                 a_highpark = True if 'a_highpark' in request.form else False
-                a_highpark_acc = postdata['a_highpark_acc']
-                cycles = postdata['cycles']
+                a_highpark_acc = 0 if int(postdata['a_highpark_acc']) == -1 else postdata['a_highpark_acc']
+                cycles = 0 if int(postdata['cycles']) == -1 else postdata['cycles']
                 scorelow = True if 'scorelow' in request.form else False
                 scoremid = True if 'scoremid' in request.form else False
                 scorehigh = True if 'scorehigh' in request.form else False
                 t_climbers = True if 't_climbers' in request.form else False
-                t_climbers_acc = postdata['t_climbers_acc']
+                t_climbers_acc = 0 if int(postdata['t_climbers_acc']) == -1 else postdata['t_climbers_acc']
                 lowclimber = True if 'lowclimber' in request.form else False
-                lowclimber_acc = postdata['lowclimber_acc']
+                lowclimber_acc = 0 if int(postdata['lowclimber_acc']) == -1 else postdata['lowclimber_acc']
                 midclimber = True if 'midclimber' in request.form else False
-                midclimber_acc = postdata['midclimber_acc']
+                midclimber_acc = 0 if int(postdata['midclimber_acc']) == -1 else postdata['midclimber_acc']
                 highclimber = True if 'highclimber' in request.form else False
-                highclimber_acc = postdata['highclimber_acc']
+                highclimber_acc = 0 if int(postdata['highclimber_acc']) == -1 else postdata['highclimber_acc']
                 t_floorpark = True if 't_floorpark' in request.form else False
                 t_lowpark = True if 't_lowpark' in request.form else False
                 t_midpark = True if 't_midpark' in request.form else False
-                t_midpark_acc = postdata['t_midpark_acc']
+                t_midpark_acc = 0 if int(postdata['t_midpark_acc']) == -1 else postdata['t_midpark_acc']
                 t_highpark = True if 't_highpark' in request.form else False
-                t_highpark_acc = postdata['t_highpark_acc']
+                t_highpark_acc = 0 if int(postdata['t_highpark_acc']) == -1 else postdata['t_highpark_acc']
                 hang = True if 'hang' in request.form else False
                 allclear = True if 'allclear' in request.form else False
                 comments = postdata['comments']
@@ -496,9 +496,9 @@ def match_scouting():
                 move = True if 'move' in request.form else False
                 climbers = True if 'climbers' in request.form else False
                 beacon = True if 'beacon' in request.form else False
-                park = postdata['park']
+                park = 0 if int(postdata['park']) == -1 else postdata['park']
                 score = True if 'score' in request.form else False
-                cycles = postdata['cycles']
+                cycles = 0 if int(postdata['cycles']) == -1 else postdata['cycles']
                 scorelow = True if 'scorelow' in request.form else False
                 scoremid = True if 'scoremid' in request.form else False
                 scorehigh = True if 'scorehigh' in request.form else False
