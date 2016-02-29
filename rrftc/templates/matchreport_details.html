@@ -16,7 +16,7 @@
         </tr>
         <tr>
             <td>Deliver Climbers?</td>
-            <td>{{ data.DeliverClimbers }}</td>
+            <td>{{ data.a_DeliverClimbers }}</td>
         </tr>
         <tr>
             <td>Did the robot move?</td>
@@ -28,7 +28,19 @@
         </tr>
         <tr>
             <td>Highest Parking Level?</td>
-            <td>{{ data.ParkingLevel }}</td>
+            <td>{{ data.a_ParkingLevel }}</td>
+        </tr>
+        <tr>
+            <td>Deliver Climbers?</td>
+            <td>{{ data.t_DeliverClimbers }}</td>
+        </tr>
+        <tr>
+            <td>Deliver Climbers?</td>
+            <td>{{ data.t_DeliverClimbers }}</td>
+        </tr>
+        <tr>
+            <td>Did the robot score?</td>
+            <td>{{ data.DidRobotScoreCycles }}</td>
         </tr>
         <tr>
             <td>How many scoring cycles?</td>
@@ -59,16 +71,20 @@
             <td>{{ data.ReleaseHighClimber }}</td>
         </tr>
         <tr>
+            <td>Highest Parking Level?</td>
+            <td>{{ data.t_ParkingLevel }}</td>
+        </tr>
+        <tr>
             <td>Did the robot hang?</td>
             <td>{{ data.DidRobotHang }}</td>
         </tr>
         <tr>
-            <td>Did the robot trigger the climbers?</td>
-            <td>{{ data.DidRobotTriggerClimbers }}</td>
+            <td>Did the robot trigger the all clear?</td>
+            <td>{{ data.DidRobotTriggerAllClear }}</td>
         </tr>
         <tr>
-            <td>Did the robot win?</td>
-            <td>{{ data.DidRobotWin }}</td>
+            <td>Comments</td>
+            <td>{{ data.Comments }}</td>
         </tr>
     </table>
 {% endblock %}

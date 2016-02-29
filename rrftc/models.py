@@ -10,15 +10,15 @@ class CompetitionTeam(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     Competitions = db.Column(db.ForeignKey(u'Competitions.id'), nullable=False, index=True)
     Teams = db.Column(db.ForeignKey(u'Teams.id'), nullable=False, index=True)
-    CreateDate = db.Column(db.DateTime, nullable=False)
+    TimeStamp = db.Column(db.DateTime, nullable=False)
 
     Competition = db.relationship(u'Competition')
     Team = db.relationship(u'Team')
 
-    def __init__(self, competitions, teams, createdate=time.strftime('%Y-%m-%d %H:%M:%S')):
+    def __init__(self, competitions, teams, timestamp):
         self.Competitions = competitions
         self.Teams = teams
-        self.CreateDate = createdate
+        self.TimeStamp = timestamp
 
     def __repr__(self):
         return '<CompetitionTeam %r %r %r>' % (self.id, self.Competitions, self.Teams)
@@ -31,15 +31,13 @@ class Competition(db.Model):
     Name = db.Column(db.String(120), nullable=False)
     Date = db.Column(db.Date, nullable=False)
     Location = db.Column(db.String(120))
-    CreateDate = db.Column(db.DateTime, nullable=False)
-    LastModifiedDate = db.Column(db.DateTime, nullable=False)
+    TimeStamp = db.Column(db.DateTime, nullable=False)
 
-    def __init__(self, name, date, location, createdate=time.strftime('%Y-%m-%d %H:%M:%S'), moddate=time.strftime('%Y-%m-%d %H:%M:%S')):
+    def __init__(self, name, date, location, timestamp):
         self.Name = name
         self.Date = date
         self.Location = location
-        self.CreateDate = createdate
-        self.LastModifiedDate = moddate
+        self.TimeStamp = timestamp
 
     def __repr__(self):
         return '<Competition %r>' % self.id
@@ -54,9 +52,10 @@ class MatchScouting(db.Model):
     Competition = db.Column(db.ForeignKey(u'Competitions.id'), nullable=False, index=True)
     MatchNumber = db.Column(db.Integer, nullable=False)
     DidRobotMove = db.Column(db.Boolean, nullable=False)
-    DeliverClimbers = db.Column(db.Boolean, nullable=False)
+    a_DeliverClimbers = db.Column(db.Boolean, nullable=False)
     PushBeacon = db.Column(db.Boolean, nullable=False)
-    ParkingLevel = db.Column(db.Integer, nullable=False)
+    a_ParkingLevel = db.Column(db.Integer, nullable=False)
+    t_DeliverClimbers = db.Column(db.Boolean, nullable=False)
     DidRobotScoreCycles = db.Column(db.Boolean, nullable=False)
     HowManyCycles = db.Column(db.Integer, nullable=False)
     ScoreLowZone = db.Column(db.Boolean, nullable=False)
@@ -65,11 +64,11 @@ class MatchScouting(db.Model):
     ReleaseLowClimber = db.Column(db.Boolean, nullable=False)
     ReleaseMidClimber = db.Column(db.Boolean, nullable=False)
     ReleaseHighClimber = db.Column(db.Boolean, nullable=False)
+    t_ParkingLevel = db.Column(db.Integer, nullable=False)
     DidRobotHang = db.Column(db.Boolean, nullable=False)
-    DidRobotTriggerClimbers = db.Column(db.Boolean, nullable=False)
-    DidRobotWin = db.Column(db.Boolean, nullable=False)
-    CreateDate = db.Column(db.DateTime, nullable=False)
-    LastModifiedDate = db.Column(db.DateTime, nullable=False)
+    DidRobotTriggerAllClear = db.Column(db.Boolean, nullable=False)
+    Comments = db.Column(db.Text, nullable=True)
+    TimeStamp = db.Column(db.DateTime, nullable=False)
 
     Competition1 = db.relationship(u'Competition')
     Scout1 = db.relationship(u'Scout')
@@ -81,9 +80,10 @@ class MatchScouting(db.Model):
                  comp,
                  match,
                  move,
-                 climbers,
+                 a_climbers,
                  beacon,
-                 park,
+                 a_park,
+                 t_climbers,
                  score,
                  cycles,
                  scorelow,
@@ -92,19 +92,20 @@ class MatchScouting(db.Model):
                  lowclimber,
                  midclimber,
                  highclimber,
+                 t_park,
                  hang,
-                 trigger,
-                 win,
-                 createdate=time.strftime('%Y-%m-%d %H:%M:%S'),
-                 moddate=time.strftime('%Y-%m-%d %H:%M:%S')):
+                 allclear,
+                 comments,
+                 timestamp):
         self.Scout = scout
         self.Team = team
         self.Competition = comp
         self.MatchNumber = match
         self.DidRobotMove = move
-        self.DeliverClimbers = climbers
+        self.a_DeliverClimbers = a_climbers
         self.PushBeacon = beacon
-        self.ParkingLevel = park
+        self.a_ParkingLevel = a_park
+        self.t_DeliverClimbers = t_climbers
         self.DidRobotScoreCycles = score
         self.HowManyCycles = cycles
         self.ScoreLowZone = scorelow
@@ -113,11 +114,11 @@ class MatchScouting(db.Model):
         self.ReleaseLowClimber = lowclimber
         self.ReleaseMidClimber = midclimber
         self.ReleaseHighClimber = highclimber
+        self.t_ParkingLevel = t_park
         self.DidRobotHang = hang
-        self.DidRobotTriggerClimbers = trigger
-        self.DidRobotWin = win
-        self.CreateDate = createdate
-        self.LastModifiedDate = moddate
+        self.DidRobotTriggerAllClear = allclear
+        self.Comments = comments
+        self.TimeStamp = timestamp
 
     def __repr__(self):
         return '<Match Scouting Report %r>' % self.id
@@ -165,11 +166,10 @@ class PitScouting(db.Model):
     CanHang = db.Column(db.Boolean, nullable=False)
     CanTriggerAllClear = db.Column(db.Boolean, nullable=False)
     #general
-    Comments = db.Column(db.Text, nullable=False)
+    Comments = db.Column(db.Text, nullable=True)
     AddToWatchList = db.Column(db.Boolean, nullable=False)
     #timestamps
-    CreateDate = db.Column(db.DateTime, nullable=False)
-    LastModifiedDate = db.Column(db.DateTime, nullable=False)
+    TimeStamp = db.Column(db.DateTime, nullable=False)
     #relational table info
     Team1 = db.relationship(u'Team')
     Competition1 = db.relationship(u'Competition')
@@ -212,8 +212,7 @@ class PitScouting(db.Model):
                  allclear,
                  comments,
                  watchlist,
-                 createdate=time.strftime('%Y-%m-%d %H:%M:%S'),
-                 moddate=time.strftime('%Y-%m-%d %H:%M:%S')):
+                 timestamp):
         self.Competition = comp
         self.Team = team
         self.Scout = scout
@@ -250,8 +249,7 @@ class PitScouting(db.Model):
         self.CanTriggerAllClear = allclear
         self.Comments = comments
         self.AddToWatchList = watchlist
-        self.CreateDate = createdate
-        self.LastModifiedDate = moddate
+        self.TimeStamp = timestamp
 
     def __repr__(self):
         return '<Pit Scouting Report %r>' % self.id
@@ -262,16 +260,13 @@ class Scout(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     Name = db.Column(db.String(120), nullable=False)
-    CreateDate = db.Column(db.DateTime, nullable=False)
-    LastModifiedDate = db.Column(db.DateTime, nullable=False)
+    TimeStamp = db.Column(db.DateTime, nullable=False)
 
     def __init__(self,
                  name,
-                 createdate=time.strftime('%Y-%m-%d %H:%M:%S'),
-                 moddate=time.strftime('%Y-%m-%d %H:%M:%S')):
+                 timestamp):
         self.Name = name
-        self.CreateDate = createdate
-        self.LastModifiedDate = moddate
+        self.TimeStamp = timestamp
 
     def __repr__(self):
         return '<Scout %r>' % self.id
@@ -284,20 +279,17 @@ class Team(db.Model):
     Number = db.Column(db.Integer, nullable=False)
     Name = db.Column(db.String(120), nullable=False)
     Website = db.Column(db.String(120))
-    CreateDate = db.Column(db.DateTime, nullable=False)
-    LastModifiedDate = db.Column(db.DateTime, nullable=False)
+    TimeStamp = db.Column(db.DateTime, nullable=False)
 
     def __init__(self,
                  number,
                  name,
                  website,
-                 createdate=time.strftime('%Y-%m-%d %H:%M:%S'),
-                 moddate=time.strftime('%Y-%m-%d %H:%M:%S')):
+                 timestamp):
         self.Number = number
         self.Name = name
         self.Website = website
-        self.CreateDate = createdate
-        self.LastModifiedDate = moddate
+        self.TimeStamp = timestamp
 
     def __repr__(self):
         return '<Team %r %r %r>' % (self.id, self.Number, self.Name)

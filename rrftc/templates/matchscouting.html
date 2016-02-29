@@ -50,13 +50,13 @@
                         {{ form.move }} {{ form.move.label }}
                     </div>
                     <div class="form-group">
-                        {{ form.climbers }} {{ form.climbers.label }}
+                        {{ form.a_climbers }} {{ form.a_climbers.label }}
                     </div>
                     <div class="form-group">
                         {{ form.beacon }} {{ form.beacon.label }}
                     </div>
                     <div class="form-group">
-                        {{ form.park }} {{ form.park.label }}
+                        {{ form.a_park }} {{ form.a_park.label }}
                     </div>
                 </div>
             </div>
@@ -69,6 +69,9 @@
                     <h3 class="panel-title">Teleop</h3>
                 </div>
                 <div class="panel-body">
+                    <div class="form-group">
+                        {{ form.t_climbers }} {{ form.t_climbers.label }}
+                    </div>
                     <div class="form-group">
                         {{ form.score }} {{ form.score.label }}
                     </div>
@@ -101,17 +104,31 @@
         <div class="col-md-12 col-sm-6 col-xs-12">
             <div class="panel panel-default">
                 <div class="panel-heading clearfix">
-                    <h3 class="panel-title">End Game & Results</h3>
+                    <h3 class="panel-title">End Game</h3>
                 </div>
                 <div class="panel-body">
+                    <div class="form-group">
+                        {{ form.t_park }} {{ form.t_park.label }}
+                    </div>
                     <div class="form-group">
                         {{ form.hang }} {{ form.hang.label }}
                     </div>
                     <div class="form-group">
-                        {{ form.trigger }} {{ form.trigger.label }}
+                        {{ form.allclear }} {{ form.allclear.label }}
                     </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-sm-6 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title">Comments</h3>
+                </div>
+                <div class="panel-body">
                     <div class="form-group">
-                        {{ form.win}} {{ form.win.label }}
+                        {{ form.comments }}
                     </div>
                 </div>
             </div>

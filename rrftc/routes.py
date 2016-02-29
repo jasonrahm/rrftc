@@ -3,6 +3,7 @@ from flask import render_template, request, flash, session, url_for, redirect
 from forms import SigninForm, CompetitionForm, ScoutForm, TeamForm, CompetitionTeamForm, \
     PitScoutingForm, PitReportingForm, MatchScoutingForm, MatchReportingForm
 from models import db, Competition, Scout, Team, CompetitionTeam, PitScouting, MatchScouting
+import datetime
 
 
 @app.route('/')
@@ -62,7 +63,7 @@ def teams():
             if not form.validate():
                 return render_template('teams.html', teams=teams, form=form)
             else:
-                newteam = Team(number=form.number.data, name=form.name.data, website=form.website.data)
+                newteam = Team(number=form.number.data, name=form.name.data, website=form.website.data, timestamp=datetime.datetime.now())
                 db.session.add(newteam)
                 db.session.commit()
 
@@ -256,7 +257,7 @@ def competitions():
             if form.validate() == False:
                 return render_template('competitions.html', form=form)
             else:
-                newcomp = Competition(name=form.name.data, date=form.date.data, location=form.location.data)
+                newcomp = Competition(name=form.name.data, date=form.date.data, location=form.location.data, timestamp=datetime.datetime.now())
                 db.session.add(newcomp)
                 db.session.commit()
 
@@ -310,7 +311,7 @@ def manage_competition(id):
                 comp = int(postdata['competition'])
                 team = int(postdata['team'])
 
-                newteam = CompetitionTeam(competitions=comp, teams=team)
+                newteam = CompetitionTeam(competitions=comp, teams=team, timestamp=datetime.datetime.now())
                 db.session.add(newteam)
                 db.session.commit()
 
@@ -338,7 +339,7 @@ def scouts():
             if not form.validate():
                 return render_template('scouts.html', form=form)
             else:
-                newscout = Scout(name=form.name.data)
+                newscout = Scout(name=form.name.data, timestamp=datetime.datetime.now())
                 db.session.add(newscout)
                 db.session.commit()
 
@@ -389,32 +390,32 @@ def pit_scouting():
                 auto_offense = True if 'auto_offense' in request.form else False
                 auto_defense = True if 'auto_defense' in request.form else False
                 a_climbers = True if 'a_climbers' in request.form else False
-                a_climbers_acc = 0 if int(postdata['a_climbers_acc']) == -1 else postdata['a_climbers_acc']
+                a_climbers_acc = postdata['a_climbers_acc']
                 beacon = True if 'beacon' in request.form else False
                 a_floorpark = True if 'a_floorpark' in request.form else False
                 a_lowpark = True if 'a_lowpark' in request.form else False
                 a_midpark = True if 'a_midpark' in request.form else False
                 a_midpark_acc = postdata['a_midpark_acc']
                 a_highpark = True if 'a_highpark' in request.form else False
-                a_highpark_acc = 0 if int(postdata['a_highpark_acc']) == -1 else postdata['a_highpark_acc']
-                cycles = 0 if int(postdata['cycles']) == -1 else postdata['cycles']
+                a_highpark_acc = postdata['a_highpark_acc']
+                cycles = postdata['cycles']
                 scorelow = True if 'scorelow' in request.form else False
                 scoremid = True if 'scoremid' in request.form else False
                 scorehigh = True if 'scorehigh' in request.form else False
                 t_climbers = True if 't_climbers' in request.form else False
-                t_climbers_acc = 0 if int(postdata['t_climbers_acc']) == -1 else postdata['t_climbers_acc']
+                t_climbers_acc = postdata['t_climbers_acc']
                 lowclimber = True if 'lowclimber' in request.form else False
-                lowclimber_acc = 0 if int(postdata['lowclimber_acc']) == -1 else postdata['lowclimber_acc']
+                lowclimber_acc = postdata['lowclimber_acc']
                 midclimber = True if 'midclimber' in request.form else False
-                midclimber_acc = 0 if int(postdata['midclimber_acc']) == -1 else postdata['midclimber_acc']
+                midclimber_acc = postdata['midclimber_acc']
                 highclimber = True if 'highclimber' in request.form else False
-                highclimber_acc = 0 if int(postdata['highclimber_acc']) == -1 else postdata['highclimber_acc']
+                highclimber_acc = postdata['highclimber_acc']
                 t_floorpark = True if 't_floorpark' in request.form else False
                 t_lowpark = True if 't_lowpark' in request.form else False
                 t_midpark = True if 't_midpark' in request.form else False
-                t_midpark_acc = 0 if int(postdata['t_midpark_acc']) == -1 else postdata['t_midpark_acc']
+                t_midpark_acc = postdata['t_midpark_acc']
                 t_highpark = True if 't_highpark' in request.form else False
-                t_highpark_acc = 0 if int(postdata['t_highpark_acc']) == -1 else postdata['t_highpark_acc']
+                t_highpark_acc = postdata['t_highpark_acc']
                 hang = True if 'hang' in request.form else False
                 allclear = True if 'allclear' in request.form else False
                 comments = postdata['comments']
@@ -455,7 +456,8 @@ def pit_scouting():
                                                 hang=hang,
                                                 allclear=allclear,
                                                 comments=comments,
-                                                watchlist=watchlist)
+                                                watchlist=watchlist,
+                                                timestamp=datetime.datetime.now())
 
                 db.session.add(pitscoutingreport)
                 db.session.commit()
@@ -494,29 +496,32 @@ def match_scouting():
                 match = int(postdata['match'])
 
                 move = True if 'move' in request.form else False
-                climbers = True if 'climbers' in request.form else False
+                a_climbers = True if 'a_climbers' in request.form else False
                 beacon = True if 'beacon' in request.form else False
-                park = 0 if int(postdata['park']) == -1 else postdata['park']
+                a_park = postdata['a_park']
+                t_climbers = True if 't_climbers' in request.form else False
                 score = True if 'score' in request.form else False
-                cycles = 0 if int(postdata['cycles']) == -1 else postdata['cycles']
+                cycles = postdata['cycles']
                 scorelow = True if 'scorelow' in request.form else False
                 scoremid = True if 'scoremid' in request.form else False
                 scorehigh = True if 'scorehigh' in request.form else False
                 lowclimber = True if 'lowclimber' in request.form else False
                 midclimber = True if 'midclimber' in request.form else False
                 highclimber = True if 'highclimber' in request.form else False
+                t_park = postdata['t_park']
                 hang = True if 'hang' in request.form else False
-                trigger = True if 'trigger' in request.form else False
-                win = True if 'win' in request.form else False
+                allclear = True if 'allclear' in request.form else False
+                comments = postdata['comments']
 
                 matchscoutingreport = MatchScouting(scout=scout,
                                                     team=team,
                                                     comp=competition,
                                                     match=match,
                                                     move=move,
-                                                    climbers=climbers,
+                                                    a_climbers=a_climbers,
                                                     beacon=beacon,
-                                                    park=park,
+                                                    a_park=a_park,
+                                                    t_climbers=t_climbers,
                                                     score=score,
                                                     cycles=cycles,
                                                     scorelow=scorelow,
@@ -525,9 +530,11 @@ def match_scouting():
                                                     lowclimber=lowclimber,
                                                     midclimber=midclimber,
                                                     highclimber=highclimber,
+                                                    t_park=t_park,
                                                     hang=hang,
-                                                    trigger=trigger,
-                                                    win=win)
+                                                    allclear=allclear,
+                                                    comments=comments,
+                                                    timestamp=datetime.datetime.now())
                 db.session.add(matchscoutingreport)
                 db.session.commit()
 
@@ -558,9 +565,10 @@ def match_reporting():
                 postdata = request.values
                 sql_text = '''select MatchScouting.id, Teams.Name, Teams.Number, Scouts.Name,
                               (DidRobotMove*%d) +
-                              (DeliverClimbers*%d) +
+                              (a_DeliverClimbers*%d) +
                               (PushBeacon*%d) +
-                              (ParkingLevel*%d) +
+                              (a_ParkingLevel*%d) +
+                              (t_DeliverClimbers*%d) +
                               (DidRobotScoreCycles*%d) +
                               (HowManyCycles*%d) +
                               (ScoreLowZone*%d) +
@@ -569,9 +577,9 @@ def match_reporting():
                               (ReleaseLowClimber*%d) +
                               (ReleaseMidClimber*%d) +
                               (ReleaseHighClimber*%d) +
+                              (t_DeliverClimbers*%d) +
                               (DidRobotHang*%d) +
-                              (DidRobotTriggerClimbers*%d) +
-                              (DidRobotWin*%d)
+                              (DidRobotTriggerAllClear*%d)
                               AS Score
                               FROM MatchScouting
                               INNER JOIN Teams
@@ -581,10 +589,11 @@ def match_reporting():
                               WHERE Competition = %d
                               ORDER BY Score
                               DESC''' % (int(postdata['move']),
-                                         int(postdata['climbers']),
+                                         int(postdata['a_climbers']),
                                          int(postdata['score']),
                                          int(postdata['beacon']),
-                                         int(postdata['park']),
+                                         int(postdata['a_park']),
+                                         int(postdata['t_climbers']),
                                          int(postdata['cycles']),
                                          int(postdata['scorelow']),
                                          int(postdata['scoremid']),
@@ -592,9 +601,9 @@ def match_reporting():
                                          int(postdata['lowclimber']),
                                          int(postdata['midclimber']),
                                          int(postdata['highclimber']),
+                                         int(postdata['t_park']),
                                          int(postdata['hang']),
-                                         int(postdata['trigger']),
-                                         int(postdata['win']),
+                                         int(postdata['allclear']),
                                          int(postdata['competition']))
 
                 result = db.engine.execute(sql_text)
