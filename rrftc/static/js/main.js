@@ -66,4 +66,35 @@ jQuery(document).ready(function() {
             $('div#t_highpark_acc.form-group').hide();
         }
     });
+    $('input#a_climbers').change(function () {
+        if (this.checked) {
+            $('input#t_climbers').prop("disabled", true);
+        } else {
+            $('input#t_climbers').prop("disabled", false);
+        }
+    });
+    $('input#t_climbers').change(function () {
+        if (this.checked) {
+            $('input#a_climbers').prop("disabled", true);
+        } else {
+            $('input#a_climbers').prop("disabled", false);
+        }
+    });
+    $('select#t_park').change(function () {
+        if ($('option:selected',this).val() != 0) {
+            $('input#hang').prop("disabled", true);
+        } else {
+            $('input#hang').prop("disabled", false);
+        }
+    });
+    $('input#hang').change(function () {
+        if (this.checked) {
+            $('select#t_park').prop("disabled", true);
+        } else {
+            $('select#t_park').prop("disabled", false);
+        }
+    });
+    $("form#match_scouting.form-horizontal").submit(function() {
+    $("select#t_park").prop("disabled", false);
+});
 });

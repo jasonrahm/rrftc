@@ -62,3 +62,9 @@ div#t_highpark_acc.form-group {
 label {
   font-size: 14px;
 }
+input[type=checkbox][disabled] + label {
+    color: #ccc;
+}
+select[disabled] + label {
+    color: #ccc;
+}

@@ -14,7 +14,7 @@ class MatchScoutingForm(Form):
     move = BooleanField('Did the robot move?', default=False)
     a_climbers = BooleanField('Deliver climbers?', default=False)
     beacon = BooleanField('Push Beacon?', default=False)
-    a_park = SelectField('Highest Parking Level?', choices=[(0, 'Can\'t Park'),
+    a_park = SelectField('Highest Parking Level?', choices=[(0, 'Cannot Park'),
                                                           (1, 'Floor/Partial Low'),
                                                           (2, 'Low Zone'),
                                                           (3, 'Mid Zone'),
@@ -34,7 +34,7 @@ class MatchScoutingForm(Form):
     lowclimber = BooleanField('Release low climber?', default=False)
     midclimber = BooleanField('Release mid climber?', default=False)
     highclimber = BooleanField('Release high climber?', default=False)
-    t_park = SelectField('Highest Parking Level?', choices=[(0, 'Can\'t Park'),
+    t_park = SelectField('Highest Parking Level?', choices=[(0, 'Cannot Park'),
                                                             (1, 'Floor/Partial Low'),
                                                             (2, 'Low Zone'),
                                                             (3, 'Mid Zone'),
