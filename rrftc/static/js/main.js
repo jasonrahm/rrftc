@@ -96,5 +96,5 @@ jQuery(document).ready(function() {
     });
     $("form#match_scouting.form-horizontal").submit(function() {
     $("select#t_park").prop("disabled", false);
-});
+    });
 });
