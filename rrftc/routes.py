@@ -5,6 +5,11 @@ from forms import SigninForm, CompetitionForm, ScoutForm, TeamForm, CompetitionT
 from models import db, Competition, Scout, Team, CompetitionTeam, PitScouting, MatchScouting
 import datetime
 
+import sqlite3
+
+
+
+
 
 @app.route('/')
 def home():
@@ -39,6 +44,7 @@ def signout():
     session.pop('username', None)
     session['pitreport'] = ''
     session['matchreport'] = ''
+    session['matchrank'] = ''
 
     flash('You have been logged out.')
     return redirect(url_for('home'))
@@ -184,6 +190,8 @@ def pit_reporting():
                 teams = []
                 for row in result:
                     teams.append([row[0], row[1], row[2], row[3], row[4]])
+
+
                 session['pitreport'] = teams
 
                 sql_text1 = '''select PitScouting.id, Teams.Name, Teams.Number, Scouts.Name
@@ -612,6 +620,25 @@ def match_reporting():
                     teams.append([row[0], row[1], row[2], row[3], row[4]])
                 session['matchreport'] = teams
 
+                con = sqlite3.connect(":memory:")
+                cur = con.cursor()
+                cur.execute("create table t (id int, team_name text, team_number int, scout text, team_score int)");
+                cur.executemany("insert into t values(?, ?, ?, ?, ?)", teams)
+                con.commit()
+
+                res = cur.execute("""
+                  SELECT team_number, team_name, min(team_score), max(team_score), avg(team_score) as average
+                    FROM t
+                GROUP BY team_number
+                ORDER BY average DESC""")
+
+                print "team_number, team_name, min, max, avg"
+                rank = []
+                for row in res:
+                    print row
+                    rank.append(row)
+                session['matchrank'] = rank
+
                 return redirect(url_for('match_report'))
 
         elif request.method == 'GET':
@@ -628,11 +655,12 @@ def match_report():
     if user is None:
         redirect(url_for('signin'))
     else:
-        data = session['matchreport']
-        if data == '':
+        matchdata = session['matchreport']
+        matchrank = session['matchrank']
+        if matchdata == '' or matchrank == '':
             redirect(url_for('match_reporting'))
         else:
-            return render_template('matchreport.html', data=data)
+            return render_template('matchreport.html', matchdata=matchdata, matchrank=matchrank)
 
 
 @app.route('/match-report/<int:id>',)
