@@ -647,16 +647,15 @@ def match_reporting():
                 con.commit()
 
                 res = cur.execute("""
-                  SELECT team_number, team_name, min(team_score), max(team_score), avg(team_score) as average
+                  SELECT team_number, team_name, min(team_score), max(team_score), round(avg(team_score)) as average, count(team_score)
                     FROM t
                 GROUP BY team_number
                 ORDER BY average DESC""")
 
-                print "team_number, team_name, min, max, avg"
                 rank = []
                 for row in res:
-                    print row
                     rank.append(row)
+
                 session['matchrank'] = rank
 
                 return redirect(url_for('match_report'))
