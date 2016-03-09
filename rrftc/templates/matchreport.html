@@ -7,15 +7,17 @@
     <thead>
         <tr>
             <th>Team</th>
-            <th>Average</th>
-            <th>Min / Max</th>
+            <th>Avg</th>
+            <th>Min/Max</th>
+            <th>Count</th>
         </tr>
     </thead>
     {% for x in  matchrank %}
         <tr>
             <td>{{ x[0] }}: {{ x[1] }}</td>
-            <td>{{ x[4] }}</td>
-            <td>({{ x[2] }}/{{ x[3] }})</td>
+            <td><strong>{{ x[4] }}</strong></td>
+            <td>{{ x[2] }} / {{ x[3] }}</td>
+            <td>{{ x[5] }}</td>
         </tr>
   {% endfor %}
   </table>
