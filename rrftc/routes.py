@@ -8,7 +8,17 @@ import datetime
 import sqlite3
 
 
+def score_rollup(a, b, c):
+    b = True if c is True else b
+    a = True if b is True else a
+    return a, b, c
 
+
+def park_rollup(a, b, c, d):
+    c = True if d is True else c
+    b = True if c is True else b
+    a = True if b is True else a
+    return a, b, c, d
 
 
 @app.route('/')
@@ -90,9 +100,10 @@ def team(id):
         redirect(url_for('signin'))
     else:
         team = db.session.query(Team).filter(Team.id == id).all()
-        reports = db.session.query(Scouting).filter(Scouting.Team == id).all()
+        pitreports = db.session.query(PitScouting).filter(PitScouting.Team == id).all()
+        matchreports = db.session.query(MatchScouting).filter(MatchScouting.Team == id).all()
 
-        return render_template('team.html', id=id, reports=reports, team=team)
+        return render_template('team.html', id=id, pitreports=pitreports, team=team, matchreports=matchreports)
 
 
 @app.route('/pit-reporting', methods=['GET', 'POST'])
@@ -429,6 +440,12 @@ def pit_scouting():
                 comments = postdata['comments']
                 watchlist = True if 'watchlist' in request.form else False
 
+                # Roll up scoring data to highest level
+                scorelow, scoremid, scorehigh = score_rollup(scorelow, scoremid, scorehigh)
+                # Roll up parking data to highest level (auto & teleop)
+                a_floorpark, a_lowpark, a_midpark, a_highpark = park_rollup(a_floorpark, a_lowpark, a_midpark, a_highpark)
+                t_floorpark, t_lowpark, t_midpark, t_highpark = park_rollup(t_floorpark, t_lowpark, t_midpark, t_highpark)
+
                 pitscoutingreport = PitScouting(comp=competition,
                                                 team=team,
                                                 scout=scout,
@@ -520,6 +537,9 @@ def match_scouting():
                 hang = True if 'hang' in request.form else False
                 allclear = True if 'allclear' in request.form else False
                 comments = postdata['comments']
+
+                #rollup scoring levels to highest level
+                scorelow, scoremid, scorehigh = score_rollup(scorelow, scoremid, scorehigh)
 
                 matchscoutingreport = MatchScouting(scout=scout,
                                                     team=team,
