@@ -22,7 +22,8 @@ body {
   width: 350px;
   margin: 0 auto;
 }
-textarea#comments {
+textarea#comments,
+textarea#a_comments {
   height: 100px;
   display: block;
   width: 100%;

@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h2>FTC Competition Scouting</h2>
+    <h2>Roboraiders.net Home</h2>
+    <img src="{{ url_for('static', filename='img/rr_front.png') }}">
     <p>Manage competitions, teams, and scouting with this application. After scouting is complete,
         you can run reports for assistance with alliance selection. This application is a work in
         progress. Match scoring is not yet supported, and validation/error correction is sorely
@@ -13,15 +14,14 @@
         <li>Add competition (if not already present)</li>
         <li>Add team (if not already present)</li>
         <li>Add teams to the appropriate competition</li>
-        <li>Scout all the teams</li>
-        <li>Run Reports</li>
-        <li>Add Matches (future)</li>
-        <li>Score Matches (future)</li>
-        <li>Run Refined Reports (future)</li>
+        <li>Scout all the teams in pits</li>
+        <li>Run Pit Scouting Reports</li>
+        <li>Score Matches</li>
+        <li>Run Match Scoring Reports</li>
     </ol>
     <h3>Resources</h3>
     <ul class="list-unstyled">
-        <li><a href="{{ url_for('scouts') }}">Scouts</a></li>
+        <li><a href="{{ url_for('add_user') }}">Scouts</a></li>
         <li><a href="{{ url_for('teams') }}">Teams</a></li>
         <li><a href="{{ url_for('competitions') }}">Competitions</a></li>
         <li><a href="{{ url_for('pit_scouting') }}">Pit Scouting</a></li>

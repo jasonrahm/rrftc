@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>RRFTC</title>
+    <title>rrftc</title>
     <link rel="stylesheet" href="{{  url_for('static', filename='css/bootstrap.min.css') }}" media="screen">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <script src="{{  url_for('static', filename='js/jquery-2.1.4.min.js') }}"></script>
@@ -21,7 +21,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="{{ url_for('home') }}">Home</a></li>
                     {% if 'username' in session %}
-                    <li><a href="{{ url_for('scouts') }}">Scouts</a></li>
+                    <li><a href="{{ url_for('add_user') }}">Scouts</a></li>
                     <li><a href="{{ url_for('teams') }}">Teams</a></li>
                     <li><a href="{{ url_for('competitions') }}">Competitions</a></li>
                     <li><a href="{{ url_for('pit_scouting') }}">Pit Scouting</a></li>

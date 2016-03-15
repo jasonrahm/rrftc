@@ -3,7 +3,7 @@
   <div class="jumbo">
     <h2>Team: {{ team }}<h2>
   </div>
-  {% for report in reports  %}
+  {% for report in pitreports  %}
       Report: {{  report.id  }}, Competition: {{ report.Competition1.Name }}, (Scout: {{ report.Scout1.Name }})<br>
   {% endfor %}
 

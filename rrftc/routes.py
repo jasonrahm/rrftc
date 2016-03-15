@@ -1,24 +1,22 @@
 from rrftc import app
 from flask import render_template, request, flash, session, url_for, redirect
-from forms import SigninForm, CompetitionForm, ScoutForm, TeamForm, CompetitionTeamForm, \
-    PitScoutingForm, PitReportingForm, MatchScoutingForm, MatchReportingForm
-from models import db, Competition, Scout, Team, CompetitionTeam, PitScouting, MatchScouting
+from forms import SigninForm, CompetitionForm, TeamForm, CompetitionTeamForm, \
+    PitScoutingForm, PitReportingForm, MatchScoutingForm, MatchReportingForm, AddUserForm
+from models import db, Competition, Team, CompetitionTeam, PitScouting, MatchScouting, Users
 import datetime
-
 import sqlite3
 
 
-def score_rollup(a, b, c):
-    b = True if c is True else b
-    a = True if b is True else a
-    return a, b, c
-
-
-def park_rollup(a, b, c, d):
-    c = True if d is True else c
-    b = True if c is True else b
-    a = True if b is True else a
-    return a, b, c, d
+def rollup(a, b, c, d=None):
+    if d is not None:
+        c = True if d is True else c
+        b = True if c is True else b
+        a = True if b is True else a
+        return a, b, c, d
+    else:
+        b = True if c is True else b
+        a = True if b is True else a
+        return a, b, c
 
 
 @app.route('/')
@@ -26,12 +24,22 @@ def home():
     return render_template('home.html')
 
 
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('servererror.html')
+
+
+@app.errorhandler(404)
+def missing_file(error):
+    return render_template('servererror.html')
+
+
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():
     form = SigninForm()
 
     if 'username' in session:
-        return redirect(url_for('adminPanel'))
+        return redirect(url_for('home'))
 
     if request.method == 'POST':
         if not form.validate():
@@ -52,9 +60,9 @@ def signout():
         redirect(url_for('signin'))
 
     session.pop('username', None)
-    session['pitreport'] = ''
-    session['matchreport'] = ''
-    session['matchrank'] = ''
+    session.pop('pitreport', None)
+    session.pop('matchreport', None)
+    session.pop('matchrank', None)
 
     flash('You have been logged out.')
     return redirect(url_for('home'))
@@ -124,7 +132,7 @@ def pit_reporting():
                 return render_template('pitreporting.html', form=form)
             else:
                 postdata = request.values
-                sql_text = '''select PitScouting.id, Teams.Name, Teams.Number, Scouts.Name,
+                sql_text = '''select PitScouting.id, Teams.Name, Teams.Number, Users.username,
                               (CanDoAutonomous*%d) +
                               (DefensiveAutonomous*%d) +
                               (a_CanDeliverClimbers*%d) +
@@ -160,8 +168,8 @@ def pit_reporting():
                               FROM PitScouting
                               INNER JOIN Teams
                                 On PitScouting.Team = Teams.id
-                              INNER JOIN Scouts
-                                On PitScouting.Scout = Scouts.id
+                              INNER JOIN Users
+                                On PitScouting.Scout = Users.id
                               WHERE Competition = %d
                               ORDER BY Score
                               DESC''' % (int(postdata['auto_offense']),
@@ -205,12 +213,12 @@ def pit_reporting():
 
                 session['pitreport'] = teams
 
-                sql_text1 = '''select PitScouting.id, Teams.Name, Teams.Number, Scouts.Name
+                sql_text1 = '''select PitScouting.id, Teams.Name, Teams.Number, Users.username
                               FROM PitScouting
                               INNER JOIN Teams
                                   On PitScouting.Team = Teams.id
-                              INNER JOIN Scouts
-                                  On PitScouting.Scout = Scouts.id
+                              INNER JOIN Users
+                                  On PitScouting.Scout = Users.id
                               WHERE (Competition = %d AND AddToWatchList = 1)''' % int(postdata['competition'])
 
                 result1 = db.engine.execute(sql_text1)
@@ -341,10 +349,9 @@ def manage_competition(id):
             return render_template('competition_details.html', form=form, id=id, team_data=team_data)
 
 
-@app.route('/scouts', methods=['GET', 'POST'])
-def scouts():
-
-    form = ScoutForm()
+@app.route('/add-user', methods=['GET', 'POST'])
+def add_user():
+    form = AddUserForm()
 
     if 'username' not in session:
         return redirect(url_for('signin'))
@@ -356,28 +363,21 @@ def scouts():
     else:
         if request.method == 'POST':
             if not form.validate():
-                return render_template('scouts.html', form=form)
+                return render_template('adduser.html', form=form)
             else:
-                newscout = Scout(name=form.name.data, timestamp=datetime.datetime.now())
-                db.session.add(newscout)
+                newuser = Users(username=form.username.data.lower(),
+                                password_hash=form.password.data,
+                                role=form.role.data,
+                                timestamp=datetime.datetime.now())
+                db.session.add(newuser)
                 db.session.commit()
 
-                flash('Scout successfully added.')
-                return redirect(url_for('scouts'))
+                flash('User added.')
+                return redirect(url_for('add_user'))
 
-        elif request.method == 'GET' :
-            scouts = db.session.query(Scout).all()
-            return render_template('scouts.html', scouts=scouts, form=form)
-
-
-@app.route('/scouts/delete/<int:id>',)
-def delete_scout_entry(id):
-    scout = Scout.query.get(id)
-    db.session.delete(scout)
-    db.session.commit()
-
-    flash('Scout deleted.')
-    return redirect(url_for('scouts'))
+        elif request.method == 'GET':
+            users = db.session.query(Users).filter(Users.role != 'admin').all()
+            return render_template('adduser.html', form=form, users=users)
 
 
 @app.route('/pit-scouting', methods=['GET', 'POST'])
@@ -386,12 +386,16 @@ def pit_scouting():
     form = PitScoutingForm(request.values)
     form.competition.choices = [(a.id, a.Name) for a in Competition.query.order_by('Name')]
     form.team.choices = [(a.id, a.Number) for a in Team.query.order_by('Number')]
-    form.scout.choices = [(a.id, a.Name) for a in Scout.query.order_by('Name')]
+    form.scout.choices = [(a.id, a.username) for a in Users.query.order_by('username')]
 
     if 'username' not in session:
         return redirect(url_for('signin'))
 
     user = session['username']
+
+    # For role and form pre-select #
+    match = db.session.query(Users).filter(Users.username == user).first()
+    print match.username, match.id, match.role
 
     if user is None:
         redirect(url_for('signin'))
@@ -417,6 +421,7 @@ def pit_scouting():
                 a_midpark_acc = postdata['a_midpark_acc']
                 a_highpark = True if 'a_highpark' in request.form else False
                 a_highpark_acc = postdata['a_highpark_acc']
+                a_comments = postdata['a_comments']
                 cycles = postdata['cycles']
                 scorelow = True if 'scorelow' in request.form else False
                 scoremid = True if 'scoremid' in request.form else False
@@ -441,10 +446,10 @@ def pit_scouting():
                 watchlist = True if 'watchlist' in request.form else False
 
                 # Roll up scoring data to highest level
-                scorelow, scoremid, scorehigh = score_rollup(scorelow, scoremid, scorehigh)
+                scorelow, scoremid, scorehigh = rollup(scorelow, scoremid, scorehigh)
                 # Roll up parking data to highest level (auto & teleop)
-                a_floorpark, a_lowpark, a_midpark, a_highpark = park_rollup(a_floorpark, a_lowpark, a_midpark, a_highpark)
-                t_floorpark, t_lowpark, t_midpark, t_highpark = park_rollup(t_floorpark, t_lowpark, t_midpark, t_highpark)
+                a_floorpark, a_lowpark, a_midpark, a_highpark = rollup(a_floorpark, a_lowpark, a_midpark, a_highpark)
+                t_floorpark, t_lowpark, t_midpark, t_highpark = rollup(t_floorpark, t_lowpark, t_midpark, t_highpark)
 
                 pitscoutingreport = PitScouting(comp=competition,
                                                 team=team,
@@ -460,6 +465,7 @@ def pit_scouting():
                                                 a_midpark_acc=a_midpark_acc,
                                                 a_highpark=a_highpark,
                                                 a_highpark_acc=a_highpark_acc,
+                                                a_comments=a_comments,
                                                 cycles=cycles,
                                                 scorelow=scorelow,
                                                 scoremid=scoremid,
@@ -500,7 +506,7 @@ def match_scouting():
     form = MatchScoutingForm(request.values)
     form.competition.choices = [(a.id, a.Name) for a in Competition.query.order_by('Name')]
     form.team.choices = [(a.id, a.Number) for a in Team.query.order_by('Number')]
-    form.scout.choices = [(a.id, a.Name) for a in Scout.query.order_by('Name')]
+    form.scout.choices = [(a.id, a.username) for a in Users.query.order_by('username')]
 
     if 'username' not in session:
         return redirect(url_for('signin'))
@@ -539,7 +545,7 @@ def match_scouting():
                 comments = postdata['comments']
 
                 #rollup scoring levels to highest level
-                scorelow, scoremid, scorehigh = score_rollup(scorelow, scoremid, scorehigh)
+                scorelow, scoremid, scorehigh = rollup(scorelow, scoremid, scorehigh)
 
                 matchscoutingreport = MatchScouting(scout=scout,
                                                     team=team,
@@ -591,7 +597,7 @@ def match_reporting():
                 return render_template('matchreporting.html', form=form)
             else:
                 postdata = request.values
-                sql_text = '''select MatchScouting.id, Teams.Name, Teams.Number, Scouts.Name,
+                sql_text = '''select MatchScouting.id, Teams.Name, Teams.Number, Users.username,
                               (DidRobotMove*%d) +
                               (a_DeliverClimbers*%d) +
                               (PushBeacon*%d) +
@@ -612,8 +618,8 @@ def match_reporting():
                               FROM MatchScouting
                               INNER JOIN Teams
                                 On MatchScouting.Team = Teams.id
-                              INNER JOIN Scouts
-                                On MatchScouting.Scout = Scouts.id
+                              INNER JOIN Users
+                                On MatchScouting.Scout = Users.id
                               WHERE Competition = %d
                               ORDER BY Score
                               DESC''' % (int(postdata['move']),

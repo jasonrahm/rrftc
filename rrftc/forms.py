@@ -3,13 +3,13 @@ from wtforms import StringField, SubmitField, PasswordField, IntegerField, valid
     TextAreaField, SelectField, BooleanField
 from wtforms_sqlalchemy.fields import QuerySelectField
 
-from models import Team, Scout, Competition, CompetitionTeam
+from models import Team, Competition, CompetitionTeam, Users
 
 
 class MatchScoutingForm(Form):
     competition = QuerySelectField(query_factory=lambda: Competition.query.all(), get_label='Name')
     team = QuerySelectField(query_factory=lambda: Team.query.all(), get_label='Number')
-    scout = QuerySelectField(query_factory=lambda: Scout.query.all(), get_label='Name')
+    scout = QuerySelectField(query_factory=lambda: Users.query.filter(Users.username != 'admin').all(), get_label='username')
     match = IntegerField('Match Number?', [validators.DataRequired('Please enter the match number')], default=1)
     move = BooleanField('Did the robot move?', default=False)
     a_climbers = BooleanField('Deliver climbers?', default=False)
@@ -58,7 +58,7 @@ class MatchScoutingForm(Form):
 class PitScoutingForm(Form):
     competition = QuerySelectField(query_factory=lambda: Competition.query.all(), get_label='Name')
     team = QuerySelectField(query_factory=lambda: Team.query.all(), get_label='Number')
-    scout = QuerySelectField(query_factory=lambda: Scout.query.all(), get_label='Name')
+    scout = QuerySelectField(query_factory=lambda: Users.query.filter(Users.username != 'admin').all(), get_label='username')
     auto_offense = BooleanField('Autonomous?', default=False)
     auto_defense = BooleanField('Defensive Autonomous?', default=False)
     a_climbers = BooleanField('Deliver Climbers?', default=False)
@@ -82,6 +82,7 @@ class PitScoutingForm(Form):
                                                               (2, '26% - 50%'),
                                                               (3, '51% - 75%'),
                                                               (4, '76% - 100%')], coerce=int)
+    a_comments = TextAreaField('Autonomous Comments')
     cycles = SelectField('Debris Scoring Cycles', choices=[(0,'0'),
                                                            (1,'1'),
                                                            (2,'2'),
@@ -247,7 +248,8 @@ class SigninForm(Form):
         if not Form.validate(self):
             return False
 
-        if self.username.data.lower() == 'admin' and self.password.data == 'admin':
+        user = Users.query.filter_by(username=self.username.data.lower()).first()
+        if user and user.verify_password(self.password.data):
             return True
         else:
             self.username.errors.append('Invalid username or password')
@@ -270,9 +272,11 @@ class CompetitionForm(Form):
             return True
 
 
-class ScoutForm(Form):
-    name = StringField('Name', [validators.DataRequired('Please enter the scout\'s name.')])
-    submit = SubmitField('Add Scout')
+class AddUserForm(Form):
+    username = StringField('Username', [validators.DataRequired('Please enter a username.')])
+    password = PasswordField('Password', [validators.DataRequired('Please enter a password')])
+    role = SelectField('Role', choices=[('Full Scout', 'Full Scout'), ('Match Scout', 'Match Scout')])
+    submit = SubmitField('Add User')
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
@@ -280,8 +284,13 @@ class ScoutForm(Form):
     def validate(self):
         if not Form.validate(self):
             return False
-        else:
+
+        user = Users.query.filter_by(username=self.username.data.lower()).first()
+        if not user:
             return True
+        else:
+            self.username.errors.append('Username already exists.')
+            return False
 
 
 class TeamForm(Form):

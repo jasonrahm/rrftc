@@ -1,6 +1,32 @@
 from flask_sqlalchemy import SQLAlchemy
+from passlib.apps import custom_app_context as pwd_context
+
 
 db = SQLAlchemy()
+
+
+class Users(db.Model):
+    __tablename__ = 'Users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(32), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+    role = db.Column(db.String(32), nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False)
+
+    #def hash_password(self, password):
+    #    self.password_hash = pwd_context.encrypt(password)
+
+    def verify_password(self, password):
+        return pwd_context.verify(password, self.password_hash)
+
+    def __init__(self, username, password_hash, role, timestamp):
+        self.username = username
+        self.password_hash = pwd_context.encrypt(password_hash)
+        self.role = role
+        self.timestamp = timestamp
+
+    def __repr__(self):
+        return '<Users %r>' % self.username
 
 
 class CompetitionTeam(db.Model):
@@ -46,7 +72,7 @@ class MatchScouting(db.Model):
     __tablename__ = 'MatchScouting'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    Scout = db.Column(db.ForeignKey(u'Scouts.id'), nullable=False, index=True)
+    Scout = db.Column(db.ForeignKey(u'Users.id'), nullable=False, index=True)
     Team = db.Column(db.ForeignKey(u'Teams.id'), nullable=False, index=True)
     Competition = db.Column(db.ForeignKey(u'Competitions.id'), nullable=False, index=True)
     MatchNumber = db.Column(db.Integer, nullable=False)
@@ -70,7 +96,7 @@ class MatchScouting(db.Model):
     TimeStamp = db.Column(db.DateTime, nullable=False)
 
     Competition1 = db.relationship(u'Competition')
-    Scout1 = db.relationship(u'Scout')
+    Scout1 = db.relationship(u'Users')
     Team1 = db.relationship(u'Team')
 
     def __init__(self,
@@ -129,7 +155,7 @@ class PitScouting(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     Competition = db.Column(db.ForeignKey(u'Competitions.id'), nullable=False, index=True)
     Team = db.Column(db.ForeignKey(u'Teams.id'), nullable=False, index=True)
-    Scout = db.Column(db.ForeignKey(u'Scouts.id'), nullable=False, index=True)
+    Scout = db.Column(db.ForeignKey(u'Users.id'), nullable=False, index=True)
     #autonomous
     CanDoAutonomous = db.Column(db.Boolean, nullable=False)
     DefensiveAutonomous = db.Column(db.Boolean, nullable=False)
@@ -142,6 +168,7 @@ class PitScouting(db.Model):
     a_CanParkMid_accuracy = db.Column(db.Integer, nullable=False)
     a_CanParkHigh = db.Column(db.Boolean, nullable=False)
     a_CanParkHigh_accuracy = db.Column(db.Integer, nullable=False)
+    a_Comments = db.Column(db.Text, nullable=True)
     #teleop
     DebrisScoringCycles = db.Column(db.Integer, nullable=False)
     CanScoreLow = db.Column(db.Boolean, nullable=False)
@@ -172,7 +199,7 @@ class PitScouting(db.Model):
     #relational table info
     Team1 = db.relationship(u'Team')
     Competition1 = db.relationship(u'Competition')
-    Scout1 = db.relationship(u'Scout')
+    Scout1 = db.relationship(u'Users')
 
     def __init__(self,
                  comp,
@@ -189,6 +216,7 @@ class PitScouting(db.Model):
                  a_midpark_acc,
                  a_highpark,
                  a_highpark_acc,
+                 a_comments,
                  cycles,
                  scorelow,
                  scoremid,
@@ -226,6 +254,7 @@ class PitScouting(db.Model):
         self.a_CanParkMid_accuracy = a_midpark_acc
         self.a_CanParkHigh = a_highpark
         self.a_CanParkHigh_accuracy = a_highpark_acc
+        self.a_Comments = a_comments
         self.DebrisScoringCycles = cycles
         self.CanScoreLow = scorelow
         self.CanScoreMid = scoremid
@@ -252,23 +281,6 @@ class PitScouting(db.Model):
 
     def __repr__(self):
         return '<Pit Scouting Report %r>' % self.id
-
-
-class Scout(db.Model):
-    __tablename__ = 'Scouts'
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    Name = db.Column(db.String(120), nullable=False)
-    TimeStamp = db.Column(db.DateTime, nullable=False)
-
-    def __init__(self,
-                 name,
-                 timestamp):
-        self.Name = name
-        self.TimeStamp = timestamp
-
-    def __repr__(self):
-        return '<Scout %r>' % self.id
 
 
 class Team(db.Model):
